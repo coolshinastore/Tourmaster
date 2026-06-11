@@ -1,0 +1,164 @@
+<div class="auth-layout">
+
+  <!-- ═══ LEFT PANEL ═══ -->
+  <div class="auth-left">
+    <img class="auth-left__img"
+         src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&q=80"
+         alt="Зареєструйтесь у TourMaster" />
+    <div class="auth-left__overlay"></div>
+    <div class="auth-left__content">
+      <a routerLink="/" class="flex items-center gap-2 mb-auto">
+        <div class="logo-tile">T</div>
+        <span class="logo-text">TourMaster</span>
+      </a>
+      <div>
+        <h2 class="auth-left__heading">Розпочніть свою подорож сьогодні</h2>
+        <p class="auth-left__sub">Зареєструйтесь і отримайте доступ до ексклюзивних пропозицій та знижок до 30%.</p>
+      </div>
+      <div class="auth-left__stats">
+        @for (s of stats; track s.label) {
+          <div>
+            <div class="text-white font-black text-2xl" style="font-family:'Nunito Sans',sans-serif">{{ s.value }}</div>
+            <div class="text-white/60 text-xs">{{ s.label }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <div class="auth-right">
+    <div class="auth-card">
+
+      <!-- Segmented tabs -->
+      <div class="auth-tabs">
+        <a routerLink="/auth/login" class="auth-tab">Вхід</a>
+        <a routerLink="/auth/register" class="auth-tab auth-tab--active">Реєстрація</a>
+      </div>
+
+      <h1 class="auth-title">Створіть акаунт</h1>
+      <p class="auth-subtitle">Приєднуйтесь до 12 000+ мандрівників</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="flex flex-col gap-3 mt-6">
+
+        <!-- Name row -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="field-group">
+            <label class="field-label">Ім'я</label>
+            <input pInputText formControlName="firstName"
+                   placeholder="Іван"
+                   [class.p-invalid]="f['firstName'].invalid && f['firstName'].touched"
+                   class="w-full" autocomplete="given-name" />
+            @if (f['firstName'].invalid && f['firstName'].touched) {
+              <span class="field-error">Мінімум 2 символи</span>
+            }
+          </div>
+          <div class="field-group">
+            <label class="field-label">Прізвище</label>
+            <input pInputText formControlName="lastName"
+                   placeholder="Петренко"
+                   [class.p-invalid]="f['lastName'].invalid && f['lastName'].touched"
+                   class="w-full" autocomplete="family-name" />
+            @if (f['lastName'].invalid && f['lastName'].touched) {
+              <span class="field-error">Мінімум 2 символи</span>
+            }
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="field-group">
+          <label class="field-label">Телефон <span class="text-ink-2 font-normal">(необов'язково)</span></label>
+          <input pInputText formControlName="phone"
+                 placeholder="+380 XX XXX XX XX"
+                 type="tel" class="w-full" autocomplete="tel" />
+        </div>
+
+        <!-- Email -->
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <input pInputText formControlName="email" type="email"
+                 placeholder="your@email.com"
+                 [class.p-invalid]="f['email'].invalid && f['email'].touched"
+                 class="w-full" autocomplete="email" />
+          @if (f['email'].invalid && f['email'].touched) {
+            <span class="field-error">
+              {{ f['email'].errors?.['required'] ? 'Введіть email' : 'Невірний формат email' }}
+            </span>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="field-group">
+          <label class="field-label">Пароль</label>
+          <p-password formControlName="password"
+                      [toggleMask]="true" [feedback]="true"
+                      placeholder="Мінімум 8 символів"
+                      promptLabel="Введіть пароль" weakLabel="Слабкий"
+                      mediumLabel="Середній" strongLabel="Надійний"
+                      [class.p-invalid]="f['password'].invalid && f['password'].touched"
+                      styleClass="w-full" inputStyleClass="w-full"
+                      autocomplete="new-password" />
+          @if (f['password'].invalid && f['password'].touched) {
+            <span class="field-error">Мінімум 8 символів</span>
+          }
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="field-group">
+          <label class="field-label">Підтвердіть пароль</label>
+          <p-password formControlName="confirmPassword"
+                      [feedback]="false" [toggleMask]="true"
+                      placeholder="Повторіть пароль"
+                      [class.p-invalid]="(f['confirmPassword'].touched && form.errors?.['passwordMismatch'])"
+                      styleClass="w-full" inputStyleClass="w-full"
+                      autocomplete="new-password" />
+          @if (f['confirmPassword'].touched && form.errors?.['passwordMismatch']) {
+            <span class="field-error">Паролі не співпадають</span>
+          }
+        </div>
+
+        <!-- Terms -->
+        <div class="flex items-start gap-2 mt-1">
+          <p-checkbox formControlName="agree" [binary]="true" inputId="agree" />
+          <label for="agree" class="text-sm text-ink-2 cursor-pointer leading-relaxed">
+            Я погоджуюсь із
+            <a href="#" class="text-primary hover:underline" (click)="$event.preventDefault()">умовами використання</a>
+            та
+            <a href="#" class="text-primary hover:underline" (click)="$event.preventDefault()">політикою конфіденційності</a>
+          </label>
+        </div>
+        @if (f['agree'].invalid && f['agree'].touched) {
+          <span class="field-error -mt-2">Необхідно погодитись з умовами</span>
+        }
+
+        <!-- Submit -->
+        <button type="submit" [disabled]="loading()"
+                class="btn-primary w-full flex items-center justify-center gap-2 mt-1">
+          @if (loading()) {
+            <i class="pi pi-spin pi-spinner"></i>
+          }
+          Зареєструватися
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="auth-divider"><span>або</span></div>
+
+      <!-- Google OAuth -->
+      <button class="btn-oauth w-full flex items-center justify-center gap-3">
+        <svg width="18" height="18" viewBox="0 0 18 18">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+          <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+        </svg>
+        Зареєструватись через Google
+      </button>
+
+      <p class="text-center text-sm text-ink-2 mt-6">
+        Вже є акаунт?
+        <a routerLink="/auth/login" class="text-primary font-semibold hover:underline">Увійти</a>
+      </p>
+    </div>
+  </div>
+</div>

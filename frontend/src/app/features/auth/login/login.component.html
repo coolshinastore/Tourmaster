@@ -1,0 +1,111 @@
+<div class="auth-layout">
+
+  <!-- ═══ LEFT PANEL ═══ -->
+  <div class="auth-left">
+    <img class="auth-left__img"
+         src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=900&q=80"
+         alt="Подорожуйте з TourMaster" />
+    <div class="auth-left__overlay"></div>
+    <div class="auth-left__content">
+      <a routerLink="/" class="flex items-center gap-2 mb-auto">
+        <div class="logo-tile">T</div>
+        <span class="logo-text">TourMaster</span>
+      </a>
+      <div>
+        <h2 class="auth-left__heading">Мандруйте більше, турбуйтесь менше</h2>
+        <p class="auth-left__sub">Понад 500 турів у найкращих напрямках. Підберемо ідеальний відпочинок саме для вас.</p>
+      </div>
+      <div class="auth-left__stats">
+        @for (s of stats; track s.label) {
+          <div>
+            <div class="text-white font-black text-2xl" style="font-family:'Nunito Sans',sans-serif">{{ s.value }}</div>
+            <div class="text-white/60 text-xs">{{ s.label }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <div class="auth-right">
+    <div class="auth-card">
+
+      <!-- Segmented tabs -->
+      <div class="auth-tabs">
+        <a routerLink="/auth/login" class="auth-tab auth-tab--active">Вхід</a>
+        <a routerLink="/auth/register" class="auth-tab">Реєстрація</a>
+      </div>
+
+      <h1 class="auth-title">З поверненням!</h1>
+      <p class="auth-subtitle">Увійдіть, щоб продовжити бронювання</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="flex flex-col gap-4 mt-6">
+
+        <!-- Email -->
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <input pInputText formControlName="email" type="email"
+                 placeholder="your@email.com"
+                 [class.p-invalid]="email.invalid && email.touched"
+                 class="w-full" autocomplete="email" />
+          @if (email.invalid && email.touched) {
+            <span class="field-error">
+              {{ email.errors?.['required'] ? 'Введіть email' : 'Невірний формат email' }}
+            </span>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="field-group">
+          <div class="flex items-center justify-between mb-1">
+            <label class="field-label mb-0">Пароль</label>
+            <a href="#" class="text-xs text-primary hover:underline" (click)="$event.preventDefault()">
+              Забули пароль?
+            </a>
+          </div>
+          <p-password formControlName="password"
+                      [feedback]="false" [toggleMask]="true"
+                      placeholder="Мінімум 6 символів"
+                      [class.p-invalid]="password.invalid && password.touched"
+                      styleClass="w-full" inputStyleClass="w-full"
+                      autocomplete="current-password" />
+          @if (password.invalid && password.touched) {
+            <span class="field-error">
+              {{ password.errors?.['required'] ? 'Введіть пароль' : 'Мінімум 6 символів' }}
+            </span>
+          }
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" [disabled]="loading()"
+                class="btn-primary w-full flex items-center justify-center gap-2 mt-2">
+          @if (loading()) {
+            <i class="pi pi-spin pi-spinner"></i>
+          }
+          Увійти
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="auth-divider">
+        <span>або</span>
+      </div>
+
+      <!-- Google OAuth -->
+      <button class="btn-oauth w-full flex items-center justify-center gap-3">
+        <svg width="18" height="18" viewBox="0 0 18 18">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+          <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+        </svg>
+        Увійти через Google
+      </button>
+
+      <p class="text-center text-sm text-ink-2 mt-6">
+        Немає акаунту?
+        <a routerLink="/auth/register" class="text-primary font-semibold hover:underline">Зареєструватися</a>
+      </p>
+    </div>
+  </div>
+</div>

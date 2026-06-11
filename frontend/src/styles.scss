@@ -1,0 +1,121 @@
+@use "primeicons/primeicons.css";
+
+/* ── Design tokens via CSS custom properties ────────────── */
+:root {
+  /* Colors */
+  --color-primary:        #1A6FBF;
+  --color-primary-600:    #15598F;
+  --color-primary-700:    #0F4570;
+  --color-primary-50:     #E9F2FB;
+  --color-primary-100:    #D2E5F6;
+  --color-secondary:      #F97316;
+  --color-secondary-600:  #EA580C;
+  --color-secondary-50:   #FFF3EA;
+  --color-ink:            #1C1C1E;
+  --color-ink-2:          #6B7280;
+  --color-line:           #E7E9EE;
+  --color-bg:             #F8F9FA;
+  --color-surface:        #FFFFFF;
+  --color-success:        #22C55E;
+  --color-warning:        #F59E0B;
+  --color-error:          #EF4444;
+  --color-admin-nav:      #10243A;
+
+  /* Shadows */
+  --shadow-1:   0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.05);
+  --shadow-2:   0 4px 12px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.04);
+  --shadow-3:   0 18px 40px rgba(16,24,40,.14), 0 6px 14px rgba(16,24,40,.07);
+  --shadow-cta: 0 6px 16px rgba(249,115,22,.35);
+
+  /* PrimeNG overrides */
+  --p-primary-color: #1A6FBF;
+  --p-primary-contrast-color: #ffffff;
+  --p-primary-hover-color: #15598F;
+  --p-focus-ring-color: rgba(26,111,191,.25);
+}
+
+/* ── Global base ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Nunito Sans', sans-serif;
+  line-height: 1.2;
+}
+
+/* ── PrimeNG component overrides ───────────────────────── */
+.p-button {
+  border-radius: 12px !important;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  transition: all .2s;
+}
+
+.p-button-cta {
+  background: var(--color-secondary) !important;
+  border-color: var(--color-secondary) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  box-shadow: var(--shadow-cta) !important;
+
+  &:hover {
+    background: var(--color-secondary-600) !important;
+    border-color: var(--color-secondary-600) !important;
+  }
+}
+
+.p-inputtext, .p-select, .p-multiselect, .p-datepicker-input {
+  border-radius: 12px !important;
+  border-width: 1.5px !important;
+  border-color: var(--color-line) !important;
+  font-family: 'Inter', sans-serif !important;
+
+  &:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px var(--color-primary-50) !important;
+  }
+}
+
+/* ── Tour card ──────────────────────────────────────────── */
+.tour-card {
+  border-radius: 16px;
+  box-shadow: var(--shadow-1);
+  background: var(--color-surface);
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-3);
+  }
+}
+
+/* ── Skeleton shimmer ───────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -460px 0; }
+  100% { background-position:  460px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #EDEFF2 25%, #F6F7F9 37%, #EDEFF2 63%);
+  background-size: 920px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 8px;
+}
+
+/* ── Layout utility ─────────────────────────────────────── */
+.container-app {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}

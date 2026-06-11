@@ -1,0 +1,329 @@
+<app-header />
+
+<main class="pb-20 md:pb-8" style="background: var(--color-bg); min-height: 100svh">
+
+  <!-- ═══ TOOLBAR ═══ -->
+  <div class="bg-surface border-b border-line sticky top-0 z-30" style="box-shadow: var(--shadow-1)">
+    <div class="container-app py-3 flex items-center gap-4 flex-wrap">
+      <!-- Breadcrumb -->
+      <nav class="text-sm text-ink-2 hidden md:flex items-center gap-1 mr-auto">
+        <a routerLink="/" class="hover:text-primary transition-colors">Головна</a>
+        <i class="pi pi-angle-right text-xs"></i>
+        <span class="text-ink font-medium">Тури</span>
+      </nav>
+
+      <!-- Count -->
+      <span class="text-sm font-medium text-ink-2 mr-auto md:mr-0">
+        Знайдено <span class="text-ink font-bold">{{ totalElements() || tours().length }}</span> турів
+      </span>
+
+      <!-- Sort -->
+      <p-select [options]="sortOptions" [(ngModel)]="selectedSort"
+                optionLabel="label" optionValue="value"
+                (ngModelChange)="onFilterChange()"
+                placeholder="Сортування"
+                styleClass="sort-select"
+                class="hidden md:block" />
+
+      <!-- View toggle -->
+      <div class="hidden md:flex items-center border border-line rounded-xl overflow-hidden">
+        <button (click)="viewMode.set('grid')"
+                [class.active-view]="viewMode() === 'grid'"
+                class="view-btn" title="Сітка">
+          <i class="pi pi-th-large text-sm"></i>
+        </button>
+        <button (click)="viewMode.set('list')"
+                [class.active-view]="viewMode() === 'list'"
+                class="view-btn" title="Список">
+          <i class="pi pi-list text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Mobile filter btn -->
+      <button (click)="filtersOpen = true"
+              class="md:hidden flex items-center gap-2 px-4 py-2 rounded-xl border border-line bg-surface text-sm font-semibold text-ink">
+        <i class="pi pi-sliders-h"></i>
+        Фільтри
+        @if (activeFiltersCount > 0) {
+          <span class="badge-count">{{ activeFiltersCount }}</span>
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ CONTENT ═══ -->
+  <div class="container-app py-6">
+    <div class="flex gap-6 items-start">
+
+      <!-- ─── SIDEBAR ─── -->
+      <aside class="hidden md:block flex-none" style="width: 272px">
+        <div class="bg-surface rounded-xl p-5 sticky top-[65px]" style="box-shadow: var(--shadow-1)">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="font-bold text-ink text-base">Фільтри</h2>
+            @if (activeFiltersCount > 0) {
+              <button (click)="resetFilters()"
+                      class="text-xs text-primary font-semibold hover:underline">
+                Скинути ({{ activeFiltersCount }})
+              </button>
+            }
+          </div>
+          <ng-container *ngTemplateOutlet="filtersTemplate" />
+        </div>
+      </aside>
+
+      <!-- ─── MAIN GRID ─── -->
+      <div class="flex-1 min-w-0">
+
+        @if (loading()) {
+          <!-- Skeleton -->
+          <div [class]="viewMode() === 'grid'
+              ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'
+              : 'flex flex-col gap-3'">
+            @for (i of skeletons; track i) {
+              <div class="bg-surface rounded-xl overflow-hidden" style="box-shadow: var(--shadow-1)">
+                @if (viewMode() === 'list') {
+                  <div class="flex gap-4 p-3">
+                    <div class="skeleton rounded-lg flex-none" style="width:150px; height:110px"></div>
+                    <div class="flex-1 flex flex-col gap-3 py-1">
+                      <div class="skeleton h-4 w-2/3 rounded"></div>
+                      <div class="skeleton h-3 w-1/2 rounded"></div>
+                      <div class="skeleton h-3 w-1/3 rounded"></div>
+                      <div class="skeleton h-8 w-full rounded-xl mt-auto"></div>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="skeleton w-full" style="height:175px"></div>
+                  <div class="p-4 flex flex-col gap-3">
+                    <div class="skeleton h-4 w-3/4 rounded"></div>
+                    <div class="skeleton h-3 w-1/2 rounded"></div>
+                    <div class="skeleton h-8 w-full rounded-xl"></div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+        } @else if (tours().length === 0) {
+          <!-- Empty state -->
+          <div class="flex flex-col items-center justify-center py-20 text-center">
+            <div class="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+                 style="background: var(--color-primary-50)">
+              <i class="pi pi-search text-3xl text-primary"></i>
+            </div>
+            <h3 class="font-bold text-xl text-ink mb-2">Тури не знайдено</h3>
+            <p class="text-ink-2 text-sm mb-6 max-w-xs">Спробуйте змінити фільтри або розширити діапазон параметрів пошуку</p>
+            <button (click)="resetFilters()"
+                    class="px-6 py-2.5 rounded-xl font-semibold text-white text-sm"
+                    style="background: var(--color-primary)">
+              Скинути фільтри
+            </button>
+          </div>
+
+        } @else {
+          <!-- Tour grid/list -->
+          <div [class]="viewMode() === 'grid'
+              ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'
+              : 'flex flex-col gap-3'">
+            @for (tour of tours(); track tour.id) {
+              @if (viewMode() === 'list') {
+                <!-- List card -->
+                <div class="tour-card tour-card--list" [routerLink]="['/tours', tour.id]">
+                  <div class="relative flex-none overflow-hidden rounded-l-xl" style="width:190px; min-height:140px">
+                    <img [src]="tour.imageUrl || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80'"
+                         [alt]="tour.title" class="w-full h-full object-cover" style="min-height:140px" />
+                    @if (tour.badge) {
+                      <span class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold"
+                            [class]="badgeClass(tour.badge)">{{ badgeLabel(tour.badge) }}</span>
+                    }
+                  </div>
+                  <div class="flex-1 p-4 flex flex-col justify-between">
+                    <div>
+                      <div class="flex items-center gap-1 mb-1">
+                        <i class="pi pi-star-fill text-warning text-xs"></i>
+                        <span class="text-xs font-semibold text-ink">{{ tour.rating | number:'1.1-1' }}</span>
+                        <span class="text-xs text-ink-2">({{ tour.reviewsCount }})</span>
+                        <span class="ml-2 text-xs text-ink-2">{{ tour.hotelStars }}★ {{ tour.hotelName }}</span>
+                      </div>
+                      <h3 class="font-bold text-ink text-sm leading-snug mb-1">{{ tour.title }}</h3>
+                      <p class="text-xs text-ink-2">
+                        <i class="pi pi-map-marker mr-1"></i>{{ tour.country }}, {{ tour.city }}
+                        &nbsp;·&nbsp;{{ tour.durationNights }} ночей
+                        &nbsp;·&nbsp;{{ tour.mealType }}
+                      </p>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                      <div>
+                        @if (tour.oldPrice) {
+                          <span class="text-xs text-ink-2 line-through block">{{ tour.oldPrice | number }} ₴</span>
+                        }
+                        <span class="font-black text-primary text-base">від {{ tour.priceFrom | number }} ₴</span>
+                      </div>
+                      <a [routerLink]="['/tours', tour.id]"
+                         class="px-4 py-1.5 rounded-xl text-xs font-semibold text-primary border border-primary hover:bg-primary-50 transition-colors">
+                        Детальніше
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              } @else {
+                <!-- Grid card -->
+                <div class="tour-card" [routerLink]="['/tours', tour.id]">
+                  <div class="relative overflow-hidden" style="height: 175px">
+                    <img [src]="tour.imageUrl || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'"
+                         [alt]="tour.title" class="w-full h-full object-cover" />
+                    @if (tour.badge) {
+                      <span class="absolute top-3 left-3 px-2 py-0.5 rounded-full text-xs font-bold"
+                            [class]="badgeClass(tour.badge)">{{ badgeLabel(tour.badge) }}</span>
+                    }
+                    <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-ink-2 hover:text-error transition-colors"
+                            (click)="$event.stopPropagation()">
+                      <i class="pi pi-heart text-sm"></i>
+                    </button>
+                  </div>
+                  <div class="p-4">
+                    <div class="flex items-center gap-1 mb-1">
+                      <i class="pi pi-star-fill text-warning text-xs"></i>
+                      <span class="text-xs font-semibold text-ink">{{ tour.rating | number:'1.1-1' }}</span>
+                      <span class="text-xs text-ink-2">({{ tour.reviewsCount }})</span>
+                    </div>
+                    <h3 class="font-bold text-ink text-sm leading-snug mb-1 line-clamp-2">{{ tour.title }}</h3>
+                    <p class="text-xs text-ink-2 mb-3">
+                      <i class="pi pi-map-marker mr-1"></i>{{ tour.country }}
+                      &nbsp;·&nbsp;{{ tour.durationNights }} н
+                      &nbsp;·&nbsp;{{ tour.mealType }}
+                    </p>
+                    <div class="flex items-center justify-between">
+                      <div>
+                        @if (tour.oldPrice) {
+                          <span class="text-xs text-ink-2 line-through block">{{ tour.oldPrice | number }} ₴</span>
+                        }
+                        <span class="font-black text-primary text-base">від {{ tour.priceFrom | number }} ₴</span>
+                      </div>
+                      <a [routerLink]="['/tours', tour.id]"
+                         class="px-3 py-1.5 rounded-xl text-xs font-semibold text-primary border border-primary hover:bg-primary-50 transition-colors">
+                        Детальніше
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+
+          <!-- Paginator -->
+          @if (totalElements() > pageSize) {
+            <div class="mt-8 flex justify-center">
+              <p-paginator [totalRecords]="totalElements()" [rows]="pageSize"
+                           [first]="currentPage() * pageSize"
+                           (onPageChange)="onPageChange($event)"
+                           [rowsPerPageOptions]="[]"
+                           styleClass="catalog-paginator" />
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ═══ MOBILE FILTER DRAWER ═══ -->
+<p-drawer [(visible)]="filtersOpen" position="bottom" styleClass="filter-drawer"
+          [style]="{'height': 'auto', 'max-height': '90dvh'}">
+  <ng-template #header>
+    <div class="flex items-center justify-between w-full">
+      <span class="font-bold text-ink">Фільтри</span>
+      @if (activeFiltersCount > 0) {
+        <button (click)="resetFilters()"
+                class="text-xs text-primary font-semibold hover:underline">
+          Скинути ({{ activeFiltersCount }})
+        </button>
+      }
+    </div>
+  </ng-template>
+  <div class="overflow-y-auto pb-6">
+    <ng-container *ngTemplateOutlet="filtersTemplate" />
+  </div>
+  <ng-template #footer>
+    <button (click)="filtersOpen = false"
+            class="w-full py-3 rounded-xl font-bold text-white text-sm"
+            style="background: var(--color-primary)">
+      Показати {{ tours().length }} турів
+    </button>
+  </ng-template>
+</p-drawer>
+
+<!-- ═══ FILTERS TEMPLATE (shared sidebar + drawer) ═══ -->
+<ng-template #filtersTemplate>
+  <div class="filters-container flex flex-col gap-6">
+
+    <!-- Countries -->
+    <div class="filter-group">
+      <h4 class="filter-title">Країна</h4>
+      <div class="flex flex-wrap gap-2">
+        @for (country of availableCountries; track country) {
+          <button (click)="toggleCountry(country)"
+                  [class.active]="filters.countries.includes(country)"
+                  class="filter-chip">{{ country }}</button>
+        }
+      </div>
+    </div>
+
+    <!-- Price range -->
+    <div class="filter-group">
+      <h4 class="filter-title">Ціна за тур</h4>
+      <div class="flex items-center justify-between text-xs text-ink-2 mb-3">
+        <span>{{ filters.priceRange[0] | number }} ₴</span>
+        <span>{{ filters.priceRange[1] | number }} ₴</span>
+      </div>
+      <p-slider [(ngModel)]="filters.priceRange"
+                [range]="true" [min]="10000" [max]="200000" [step]="5000"
+                (onSlideEnd)="onFilterChange()"
+                styleClass="price-slider" />
+    </div>
+
+    <!-- Hotel stars -->
+    <div class="filter-group">
+      <h4 class="filter-title">Зірки готелю</h4>
+      <div class="flex gap-2">
+        @for (star of starOptions; track star) {
+          <button (click)="toggleStar(star)"
+                  [class.active]="filters.stars.includes(star)"
+                  class="star-chip">
+            {{ star }}★
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Meal type -->
+    <div class="filter-group">
+      <h4 class="filter-title">Харчування</h4>
+      <div class="flex flex-col gap-2">
+        @for (meal of mealOptions; track meal.value) {
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox"
+                   [checked]="filters.mealTypes.includes(meal.value)"
+                   (change)="toggleMealType(meal.value)"
+                   class="meal-checkbox" />
+            <span class="text-sm text-ink">{{ meal.label }}</span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- Duration -->
+    <div class="filter-group">
+      <h4 class="filter-title">Тривалість (ночей)</h4>
+      <div class="flex flex-wrap gap-2">
+        @for (d of durationOptions; track d) {
+          <button (click)="toggleDuration(d)"
+                  [class.active]="filters.durationNights.includes(d)"
+                  class="filter-chip">{{ d }} н</button>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-footer />
+<app-mobile-tab-bar />

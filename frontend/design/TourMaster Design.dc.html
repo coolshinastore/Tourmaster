@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --c-primary:#1A6FBF; --c-primary-600:#15598F; --c-primary-700:#0F4570; --c-primary-50:#E9F2FB; --c-primary-100:#D2E5F6;
+    --c-secondary:#F97316; --c-secondary-600:#EA580C; --c-secondary-50:#FFF3EA; --c-secondary-100:#FFE3CC;
+    --c-bg:#F8F9FA; --c-surface:#FFFFFF; --c-ink:#1C1C1E; --c-ink-2:#6B7280; --c-line:#E7E9EE;
+    --c-success:#22C55E; --c-success-50:#E9FAEF; --c-warning:#F59E0B; --c-warning-50:#FEF6E7; --c-error:#EF4444; --c-error-50:#FDECEC;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px; --r-pill:999px;
+    --sh-1:0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.05);
+    --sh-2:0 4px 12px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.04);
+    --sh-3:0 18px 40px rgba(16,24,40,.14), 0 6px 14px rgba(16,24,40,.07);
+    --f-head:'Nunito Sans',system-ui,sans-serif; --f-body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#E7ECF1;font-family:var(--f-body);color:var(--c-ink);-webkit-font-smoothing:antialiased;}
+  @keyframes shimmer{0%{background-position:-460px 0;}100%{background-position:460px 0;}}
+  @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+</style>
+</helmet>
+
+<div style="max-width:1440px;margin:0 auto;padding:56px 40px 56px;">
+
+  <!-- ===== COVER ===== -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="max-width:760px;">
+      <div style="display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-pill);padding:7px 14px 7px 8px;box-shadow:var(--sh-1);margin-bottom:24px;">
+        <span style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:900;font-size:16px;">T</span>
+        <span style="font-weight:600;font-size:13px;letter-spacing:.04em;color:var(--c-ink-2);">TOURMASTER · DESIGN SYSTEM</span>
+      </div>
+      <h1 style="font-family:var(--f-head);font-weight:900;font-size:56px;line-height:1.04;letter-spacing:-.02em;margin:0 0 18px;">Інформаційна система<br>підбору та бронювання турів</h1>
+      <p style="font-size:18px;line-height:1.6;color:var(--c-ink-2);margin:0;max-width:660px;">Повний дизайн-пакет: токени, бібліотека компонентів та макети 10 сторінок клієнтської частини й адмін-панелі. Desktop 1280px та Mobile 375px.</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:16px 20px;box-shadow:var(--sh-1);min-width:120px;">
+        <div style="font-family:var(--f-head);font-weight:900;font-size:30px;line-height:1;">10</div>
+        <div style="font-size:13px;color:var(--c-ink-2);margin-top:6px;">сторінок</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:16px 20px;box-shadow:var(--sh-1);min-width:120px;">
+        <div style="font-family:var(--f-head);font-weight:900;font-size:30px;line-height:1;">2</div>
+        <div style="font-size:13px;color:var(--c-ink-2);margin-top:6px;">viewport</div>
+      </div>
+      <div style="background:linear-gradient(135deg,var(--c-secondary),var(--c-secondary-600));border-radius:var(--r-lg);padding:16px 20px;box-shadow:var(--sh-2);min-width:120px;color:#fff;">
+        <div style="font-family:var(--f-head);font-weight:900;font-size:30px;line-height:1;">PrimeNG</div>
+        <div style="font-size:13px;opacity:.92;margin-top:6px;">+ Tailwind</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== APPROACH / ASSUMPTIONS ===== -->
+  <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:32px 34px;box-shadow:var(--sh-1);margin-top:34px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <span style="font-family:var(--f-head);font-weight:800;font-size:13px;letter-spacing:.12em;color:var(--c-primary);background:var(--c-primary-50);padding:5px 11px;border-radius:var(--r-pill);">ПІДХІД</span>
+      <h2 style="font-family:var(--f-head);font-weight:800;font-size:22px;margin:0;">Припущення та дизайн-рішення</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);padding:18px 20px;">
+        <div style="font-family:var(--f-head);font-weight:800;font-size:15px;margin-bottom:7px;">Довіра передусім</div>
+        <p style="margin:0;font-size:14px;line-height:1.6;color:var(--c-ink-2);">Чистота Booking.com + теплота туристичних брендів: світлі фони, синій як основа надійності, помаранчевий лише для CTA та «гарячих» пропозицій — щоб око одразу знаходило дію.</p>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);padding:18px 20px;">
+        <div style="font-family:var(--f-head);font-weight:800;font-size:15px;margin-bottom:7px;">Конверсія = пошук + «Забронювати»</div>
+        <p style="margin:0;font-size:14px;line-height:1.6;color:var(--c-ink-2);">Форма пошуку на головній винесена поверх hero як головний акцент. CTA «Забронювати» — завжди помаранчева, sticky на десктопі та floating на мобільному.</p>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);padding:18px 20px;">
+        <div style="font-family:var(--f-head);font-weight:800;font-size:15px;margin-bottom:7px;">Статуси — кольором, не лише текстом</div>
+        <p style="margin:0;font-size:14px;line-height:1.6;color:var(--c-ink-2);">5 бейджів бронювання мають власні колірні пари (фон + текст) із контрастом ≥ 4.5:1 та іконкою-крапкою — щоб стан читався миттєво.</p>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);padding:18px 20px;">
+        <div style="font-family:var(--f-head);font-weight:800;font-size:15px;margin-bottom:7px;">Mobile First та доступність</div>
+        <p style="margin:0;font-size:14px;line-height:1.6;color:var(--c-ink-2);">Брейкпоінти 375 / 768 / 1280 / 1440. Тіло тексту ≥ 14px, hit-таргети ≥ 44px, фокус-стани на всіх інтерактивних елементах (WCAG 2.1 AA).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: TOKENS ===== -->
+  <div style="display:flex;align-items:center;gap:14px;margin:64px 0 26px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-ink);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">01</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:30px;margin:0;letter-spacing:-.01em;">Design Tokens</h2>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <!-- Colors -->
+  <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);margin-bottom:18px;">
+    <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 18px;">Кольори</h3>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--c-ink-2);margin-bottom:10px;">БРЕНД</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;">
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#1A6FBF;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Primary</div><div style="font-family:var(--f-body);font-size:12px;color:var(--c-ink-2);">#1A6FBF</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#15598F;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Primary 600</div><div style="font-size:12px;color:var(--c-ink-2);">#15598F</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#E9F2FB;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Primary 50</div><div style="font-size:12px;color:var(--c-ink-2);">#E9F2FB</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#F97316;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Secondary</div><div style="font-size:12px;color:var(--c-ink-2);">#F97316</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#FFF3EA;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Secondary 50</div><div style="font-size:12px;color:var(--c-ink-2);">#FFF3EA</div></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--c-ink-2);margin-bottom:10px;">НЕЙТРАЛЬНІ</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;">
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#1C1C1E;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Ink</div><div style="font-size:12px;color:var(--c-ink-2);">#1C1C1E</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#6B7280;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Ink 2</div><div style="font-size:12px;color:var(--c-ink-2);">#6B7280</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#E7E9EE;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Line</div><div style="font-size:12px;color:var(--c-ink-2);">#E7E9EE</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#F8F9FA;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">BG</div><div style="font-size:12px;color:var(--c-ink-2);">#F8F9FA</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#FFFFFF;border-bottom:1px solid var(--c-line);"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Surface</div><div style="font-size:12px;color:var(--c-ink-2);">#FFFFFF</div></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--c-ink-2);margin-bottom:10px;">СЕМАНТИЧНІ</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#22C55E;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Success</div><div style="font-size:12px;color:var(--c-ink-2);">#22C55E</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#F59E0B;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Warning</div><div style="font-size:12px;color:var(--c-ink-2);">#F59E0B</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#EF4444;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Error</div><div style="font-size:12px;color:var(--c-ink-2);">#EF4444</div></div>
+      </div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+        <div style="height:66px;background:#1A6FBF;"></div>
+        <div style="padding:10px 12px;"><div style="font-weight:700;font-size:13px;">Info</div><div style="font-size:12px;color:var(--c-ink-2);">#1A6FBF</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Type + Spacing + Radius + Shadow row -->
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:18px;">
+    <!-- Typography -->
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);">
+      <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 6px;">Типографіка</h3>
+      <p style="margin:0 0 20px;font-size:13px;color:var(--c-ink-2);">Nunito Sans — заголовки · Inter — текст</p>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px dashed var(--c-line);padding-bottom:14px;">
+          <span style="font-family:var(--f-head);font-weight:900;font-size:40px;line-height:1;letter-spacing:-.02em;">Подорожуй</span>
+          <span style="font-size:12px;color:var(--c-ink-2);white-space:nowrap;">H1 · 900 · 40–56</span>
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px dashed var(--c-line);padding-bottom:14px;">
+          <span style="font-family:var(--f-head);font-weight:800;font-size:26px;line-height:1;">Популярні напрямки</span>
+          <span style="font-size:12px;color:var(--c-ink-2);white-space:nowrap;">H2 · 800 · 26–30</span>
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px dashed var(--c-line);padding-bottom:14px;">
+          <span style="font-family:var(--f-head);font-weight:700;font-size:18px;line-height:1;">Назва туру</span>
+          <span style="font-size:12px;color:var(--c-ink-2);white-space:nowrap;">H3 · 700 · 18</span>
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px dashed var(--c-line);padding-bottom:14px;">
+          <span style="font-size:16px;line-height:1.5;">Опис туру звичайним текстом для читання.</span>
+          <span style="font-size:12px;color:var(--c-ink-2);white-space:nowrap;">Body · 400 · 16</span>
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;">
+          <span style="font-size:14px;line-height:1.5;color:var(--c-ink-2);">Допоміжний підпис · мінімум 14px</span>
+          <span style="font-size:12px;color:var(--c-ink-2);white-space:nowrap;">Small · 400 · 14</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spacing + Radius + Shadows -->
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:24px 26px;box-shadow:var(--sh-1);">
+        <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 16px;">Відступи · 4px grid</h3>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:var(--c-ink-2);width:34px;">4</span><span style="height:13px;width:4px;background:var(--c-primary);border-radius:3px;"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:var(--c-ink-2);width:34px;">8</span><span style="height:13px;width:8px;background:var(--c-primary);border-radius:3px;"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:var(--c-ink-2);width:34px;">12</span><span style="height:13px;width:12px;background:var(--c-primary);border-radius:3px;"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:var(--c-ink-2);width:34px;">16</span><span style="height:13px;width:16px;background:var(--c-primary);border-radius:3px;"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:var(--c-ink-2);width:34px;">24</span><span style="height:13px;width:24px;background:var(--c-primary);border-radius:3px;"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:var(--c-ink-2);width:34px;">32</span><span style="height:13px;width:32px;background:var(--c-primary);border-radius:3px;"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:var(--c-ink-2);width:34px;">48</span><span style="height:13px;width:48px;background:var(--c-primary);border-radius:3px;"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:var(--c-ink-2);width:34px;">64</span><span style="height:13px;width:64px;background:var(--c-primary);border-radius:3px;"></span></div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:24px 26px;box-shadow:var(--sh-1);">
+        <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 16px;">Скруглення</h3>
+        <div style="display:flex;gap:12px;align-items:flex-end;">
+          <div style="text-align:center;"><div style="width:48px;height:48px;background:var(--c-primary-50);border:1.5px solid var(--c-primary);border-radius:8px;"></div><div style="font-size:11px;color:var(--c-ink-2);margin-top:6px;">8</div></div>
+          <div style="text-align:center;"><div style="width:48px;height:48px;background:var(--c-primary-50);border:1.5px solid var(--c-primary);border-radius:12px;"></div><div style="font-size:11px;color:var(--c-ink-2);margin-top:6px;">12</div></div>
+          <div style="text-align:center;"><div style="width:48px;height:48px;background:var(--c-primary-50);border:1.5px solid var(--c-primary);border-radius:16px;"></div><div style="font-size:11px;color:var(--c-ink-2);margin-top:6px;">16</div></div>
+          <div style="text-align:center;"><div style="width:48px;height:48px;background:var(--c-primary-50);border:1.5px solid var(--c-primary);border-radius:20px;"></div><div style="font-size:11px;color:var(--c-ink-2);margin-top:6px;">20</div></div>
+          <div style="text-align:center;"><div style="width:48px;height:48px;background:var(--c-primary-50);border:1.5px solid var(--c-primary);border-radius:999px;"></div><div style="font-size:11px;color:var(--c-ink-2);margin-top:6px;">pill</div></div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:24px 26px;box-shadow:var(--sh-1);">
+        <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 18px;">Тіні</h3>
+        <div style="display:flex;gap:18px;">
+          <div style="text-align:center;flex:1;"><div style="height:52px;background:#fff;border-radius:12px;box-shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.05);"></div><div style="font-size:11px;color:var(--c-ink-2);margin-top:8px;">sh-1</div></div>
+          <div style="text-align:center;flex:1;"><div style="height:52px;background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(16,24,40,.08),0 2px 4px rgba(16,24,40,.04);"></div><div style="font-size:11px;color:var(--c-ink-2);margin-top:8px;">sh-2</div></div>
+          <div style="text-align:center;flex:1;"><div style="height:52px;background:#fff;border-radius:12px;box-shadow:0 18px 40px rgba(16,24,40,.14),0 6px 14px rgba(16,24,40,.07);"></div><div style="font-size:11px;color:var(--c-ink-2);margin-top:8px;">sh-3</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+
+  <div style="display:flex;align-items:center;gap:14px;margin:48px 0 26px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-ink);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">02</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:30px;margin:0;letter-spacing:-.01em;">Бібліотека компонентів</h2>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+
+    <!-- BUTTONS -->
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);">
+      <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 18px;">Кнопки</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px;">
+        <button style="font-family:var(--f-body);font-weight:600;font-size:15px;color:#fff;background:var(--c-primary);border:none;border-radius:var(--r-md);padding:12px 22px;cursor:pointer;box-shadow:var(--sh-1);" style-hover="background:var(--c-primary-600);">Primary</button>
+        <button style="font-family:var(--f-body);font-weight:600;font-size:15px;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-primary);border-radius:var(--r-md);padding:12px 22px;cursor:pointer;" style-hover="background:var(--c-primary-50);">Secondary</button>
+        <button style="font-family:var(--f-body);font-weight:600;font-size:15px;color:#fff;background:var(--c-error);border:none;border-radius:var(--r-md);padding:12px 22px;cursor:pointer;" style-hover="background:#d63b3b;">Danger</button>
+        <button style="font-family:var(--f-body);font-weight:600;font-size:15px;color:var(--c-ink-2);background:transparent;border:none;border-radius:var(--r-md);padding:12px 18px;cursor:pointer;" style-hover="background:var(--c-bg);color:var(--c-ink);">Ghost</button>
+      </div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-ink-2);margin-bottom:12px;">CTA · АКЦЕНТ · РОЗМІРИ</div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px;">
+        <button style="display:inline-flex;align-items:center;gap:9px;font-family:var(--f-body);font-weight:700;font-size:16px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:14px 26px;cursor:pointer;box-shadow:0 6px 16px rgba(249,115,22,.32);" style-hover="background:var(--c-secondary-600);">
+          <span style="font-size:18px;">✦</span> Забронювати
+        </button>
+        <button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:#fff;background:var(--c-secondary);border:none;border-radius:10px;padding:9px 16px;cursor:pointer;">Small</button>
+        <button style="font-family:var(--f-body);font-weight:600;font-size:13px;color:#fff;background:var(--c-secondary);border:none;border-radius:8px;padding:6px 12px;cursor:pointer;">XS</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+        <button disabled style="font-family:var(--f-body);font-weight:600;font-size:15px;color:#fff;background:#C5CBD3;border:none;border-radius:var(--r-md);padding:12px 22px;cursor:not-allowed;">Disabled</button>
+        <button style="display:inline-flex;align-items:center;gap:8px;font-family:var(--f-body);font-weight:600;font-size:15px;color:var(--c-ink);background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 18px;cursor:pointer;"><span style="width:18px;height:18px;border:2px solid var(--c-line);border-top-color:var(--c-primary);border-radius:50%;display:inline-block;animation:floaty 0s;"></span> Loading…</button>
+        <span style="font-size:13px;color:var(--c-ink-2);">Hover-стани вбудовані ↑</span>
+      </div>
+    </div>
+
+    <!-- FORMS -->
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);">
+      <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 18px;">Поля форм · стани валідації</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div>
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--c-ink);margin-bottom:6px;">За замовчуванням</label>
+          <input value="Туреччина" readonly style="width:100%;font-family:var(--f-body);font-size:15px;color:var(--c-ink);background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;">
+        </div>
+        <div>
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--c-primary);margin-bottom:6px;">У фокусі</label>
+          <input value="Греція" readonly style="width:100%;font-family:var(--f-body);font-size:15px;color:var(--c-ink);background:#fff;border:1.5px solid var(--c-primary);border-radius:var(--r-md);padding:11px 14px;outline:none;box-shadow:0 0 0 3px var(--c-primary-50);">
+        </div>
+        <div>
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--c-error);margin-bottom:6px;">Помилка</label>
+          <input value="" placeholder="Оберіть дати" readonly style="width:100%;font-family:var(--f-body);font-size:15px;color:var(--c-ink-2);background:#fff;border:1.5px solid var(--c-error);border-radius:var(--r-md);padding:11px 14px;outline:none;box-shadow:0 0 0 3px var(--c-error-50);">
+          <div style="font-size:12px;color:var(--c-error);margin-top:5px;">Поле обов'язкове</div>
+        </div>
+        <div>
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--c-success);margin-bottom:6px;">Успіх</label>
+          <div style="position:relative;">
+            <input value="example@mail.com" readonly style="width:100%;font-family:var(--f-body);font-size:15px;color:var(--c-ink);background:#fff;border:1.5px solid var(--c-success);border-radius:var(--r-md);padding:11px 36px 11px 14px;outline:none;">
+            <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--c-success);font-weight:700;">✓</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;background:var(--c-primary-50);color:var(--c-primary-700);border-radius:var(--r-pill);padding:7px 12px;">Туреччина <span style="cursor:pointer;opacity:.6;">✕</span></span>
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;background:var(--c-primary-50);color:var(--c-primary-700);border-radius:var(--r-pill);padding:7px 12px;">Єгипет <span style="cursor:pointer;opacity:.6;">✕</span></span>
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;background:var(--c-primary-50);color:var(--c-primary-700);border-radius:var(--r-pill);padding:7px 12px;">+ ще</span>
+      </div>
+      <div style="margin-top:18px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--c-ink-2);margin-bottom:10px;"><span style="font-weight:600;color:var(--c-ink);">Ціна, ₴</span><span>12 000 — 65 000</span></div>
+        <div style="position:relative;height:6px;background:var(--c-line);border-radius:999px;">
+          <div style="position:absolute;left:18%;right:24%;top:0;bottom:0;background:var(--c-primary);border-radius:999px;"></div>
+          <div style="position:absolute;left:18%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;background:#fff;border:2.5px solid var(--c-primary);border-radius:50%;box-shadow:var(--sh-1);"></div>
+          <div style="position:absolute;left:76%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;background:#fff;border:2.5px solid var(--c-primary);border-radius:50%;box-shadow:var(--sh-1);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:0 40px 56px;">
+
+  <!-- BADGES + TOASTS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;">
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);">
+      <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 6px;">Бейджі статусів бронювання</h3>
+      <p style="margin:0 0 18px;font-size:13px;color:var(--c-ink-2);">Колір + крапка + текст — стан читається миттєво</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:var(--c-warning-50);color:#92610A;border-radius:var(--r-pill);padding:7px 13px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--c-warning);"></span>Нове</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:var(--c-primary-50);color:var(--c-primary-700);border-radius:var(--r-pill);padding:7px 13px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--c-primary);"></span>Підтверджено</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:var(--r-pill);padding:7px 13px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--c-success);"></span>Оплачено</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:#EEF0F3;color:#4B5563;border-radius:var(--r-pill);padding:7px 13px;"><span style="width:8px;height:8px;border-radius:50%;background:#9AA3AF;"></span>Завершено</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:var(--c-error-50);color:#B42323;border-radius:var(--r-pill);padding:7px 13px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--c-error);"></span>Скасовано</span>
+      </div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-ink-2);margin:22px 0 12px;">БЕЙДЖІ ТУР-КАРТКИ</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <span style="font-size:12px;font-weight:800;letter-spacing:.04em;background:var(--c-secondary);color:#fff;border-radius:var(--r-sm);padding:5px 11px;">🔥 ХІТ</span>
+        <span style="font-size:12px;font-weight:800;letter-spacing:.04em;background:var(--c-error);color:#fff;border-radius:var(--r-sm);padding:5px 11px;">−25% АКЦІЯ</span>
+        <span style="font-size:12px;font-weight:800;letter-spacing:.04em;background:var(--c-success);color:#fff;border-radius:var(--r-sm);padding:5px 11px;">НОВИНКА</span>
+        <span style="font-size:12px;font-weight:800;letter-spacing:.04em;background:#fff;color:var(--c-ink);border:1px solid var(--c-line);border-radius:var(--r-sm);padding:5px 11px;">⏳ ОСТАННІ МІСЦЯ</span>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);">
+      <h3 style="font-family:var(--f-head);font-weight:800;font-size:17px;margin:0 0 18px;">Toast-сповіщення</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--c-line);border-left:4px solid var(--c-success);border-radius:var(--r-md);padding:13px 15px;box-shadow:var(--sh-1);">
+          <span style="width:22px;height:22px;border-radius:50%;background:var(--c-success-50);color:var(--c-success);display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0;">✓</span>
+          <div style="flex:1;"><div style="font-weight:700;font-size:14px;">Бронювання підтверджено</div><div style="font-size:13px;color:var(--c-ink-2);">Деталі надіслано на пошту</div></div>
+          <span style="color:var(--c-ink-2);cursor:pointer;font-size:15px;">✕</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--c-line);border-left:4px solid var(--c-error);border-radius:var(--r-md);padding:13px 15px;box-shadow:var(--sh-1);">
+          <span style="width:22px;height:22px;border-radius:50%;background:var(--c-error-50);color:var(--c-error);display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0;">!</span>
+          <div style="flex:1;"><div style="font-weight:700;font-size:14px;">Не вдалося обробити оплату</div><div style="font-size:13px;color:var(--c-ink-2);">Перевірте дані картки</div></div>
+          <span style="color:var(--c-ink-2);cursor:pointer;font-size:15px;">✕</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--c-line);border-left:4px solid var(--c-warning);border-radius:var(--r-md);padding:13px 15px;box-shadow:var(--sh-1);">
+          <span style="width:22px;height:22px;border-radius:50%;background:var(--c-warning-50);color:#92610A;display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0;">!</span>
+          <div style="flex:1;"><div style="font-weight:700;font-size:14px;">Залишилось 2 місця</div><div style="font-size:13px;color:var(--c-ink-2);">Поспішіть із бронюванням</div></div>
+          <span style="color:var(--c-ink-2);cursor:pointer;font-size:15px;">✕</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--c-line);border-left:4px solid var(--c-primary);border-radius:var(--r-md);padding:13px 15px;box-shadow:var(--sh-1);">
+          <span style="width:22px;height:22px;border-radius:50%;background:var(--c-primary-50);color:var(--c-primary);display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0;">i</span>
+          <div style="flex:1;"><div style="font-weight:700;font-size:14px;">Тур додано до кошика</div><div style="font-size:13px;color:var(--c-ink-2);">Завершіть бронювання протягом 30 хв</div></div>
+          <span style="color:var(--c-ink-2);cursor:pointer;font-size:15px;">✕</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div style="display:grid;grid-template-columns:300px 1fr 1fr;gap:18px;margin-top:18px;align-items:start;">
+    <!-- Tour card -->
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:20px;box-shadow:var(--sh-1);">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-ink-2);margin-bottom:12px;">ТУР-КАРТКА</div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1);transition:transform .2s,box-shadow .2s;" style-hover="transform:translateY(-4px);box-shadow:var(--sh-3);">
+        <div style="position:relative;height:150px;background:url('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80') center/cover;">
+          <span style="position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;background:var(--c-secondary);color:#fff;border-radius:var(--r-sm);padding:4px 9px;">🔥 ХІТ</span>
+          <span style="position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(255,255,255,.92);border-radius:50%;display:grid;place-items:center;font-size:15px;">♡</span>
+        </div>
+        <div style="padding:14px 15px 16px;">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:7px;"><span style="color:var(--c-warning);font-size:13px;">★★★★★</span><span style="font-size:13px;color:var(--c-ink-2);font-weight:600;">4.8</span><span style="font-size:12px;color:var(--c-ink-2);">· Греція</span></div>
+          <div style="font-family:var(--f-head);font-weight:700;font-size:16px;line-height:1.3;margin-bottom:4px;">Санторіні: біла казка Кіклад</div>
+          <div style="font-size:13px;color:var(--c-ink-2);margin-bottom:14px;">7 ночей · все включено · ✈ з Києва</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+            <div><div style="font-size:12px;color:var(--c-ink-2);">від</div><div style="font-family:var(--f-head);font-weight:900;font-size:21px;color:var(--c-ink);">38 900 ₴</div></div>
+            <button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:var(--c-primary);background:var(--c-primary-50);border:none;border-radius:10px;padding:9px 14px;cursor:pointer;">Детальніше</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking card -->
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:20px;box-shadow:var(--sh-1);">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-ink-2);margin-bottom:12px;">BOOKING-КАРТКА</div>
+      <div style="display:flex;gap:14px;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:14px;">
+        <div style="width:88px;height:88px;border-radius:var(--r-md);background:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=300&q=80') center/cover;flex-shrink:0;"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div style="font-family:var(--f-head);font-weight:700;font-size:15px;">Дубай: розкіш пустелі</div>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:var(--r-pill);padding:5px 10px;white-space:nowrap;"><span style="width:7px;height:7px;border-radius:50%;background:var(--c-success);"></span>Оплачено</span>
+          </div>
+          <div style="font-size:13px;color:var(--c-ink-2);margin:6px 0;">№ TM-10428 · 12–19 лип. 2026 · 2 дорослих</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+            <span style="font-family:var(--f-head);font-weight:800;font-size:17px;">61 200 ₴</span>
+            <div style="display:flex;gap:8px;">
+              <button style="font-size:13px;font-weight:600;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-line);border-radius:9px;padding:7px 12px;cursor:pointer;">Документи</button>
+              <button style="font-size:13px;font-weight:600;color:#fff;background:var(--c-primary);border:none;border-radius:9px;padding:7px 12px;cursor:pointer;">Деталі</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat card -->
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:20px;box-shadow:var(--sh-1);">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-ink-2);margin-bottom:12px;">STAT-КАРТКА</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="border:1px solid var(--c-line);border-radius:var(--r-lg);padding:16px 18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><span style="font-size:13px;color:var(--c-ink-2);font-weight:600;">Виручка за місяць</span><span style="width:34px;height:34px;border-radius:10px;background:var(--c-success-50);color:var(--c-success);display:grid;place-items:center;">₴</span></div>
+          <div style="font-family:var(--f-head);font-weight:900;font-size:26px;">2,84 млн</div>
+          <div style="font-size:12px;color:var(--c-success);font-weight:600;margin-top:4px;">▲ 12,4% до минулого</div>
+        </div>
+        <div style="border:1px solid var(--c-line);border-radius:var(--r-lg);padding:16px 18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><span style="font-size:13px;color:var(--c-ink-2);font-weight:600;">Бронювань сьогодні</span><span style="width:34px;height:34px;border-radius:10px;background:var(--c-primary-50);color:var(--c-primary);display:grid;place-items:center;">✦</span></div>
+          <div style="font-family:var(--f-head);font-weight:900;font-size:26px;">37</div>
+          <div style="font-size:12px;color:var(--c-success);font-weight:600;margin-top:4px;">▲ 6 за останню годину</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPTY STATES + SKELETON -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:18px;align-items:start;">
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);text-align:center;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-ink-2);margin-bottom:18px;text-align:left;">ПОРОЖНІЙ СТАН · КАТАЛОГ</div>
+      <div style="width:96px;height:96px;margin:0 auto 18px;border-radius:50%;background:var(--c-primary-50);display:grid;place-items:center;font-size:42px;">🔍</div>
+      <div style="font-family:var(--f-head);font-weight:800;font-size:18px;margin-bottom:6px;">Турів не знайдено</div>
+      <p style="font-size:14px;color:var(--c-ink-2);margin:0 0 18px;line-height:1.5;">Спробуйте змінити фільтри або розширити діапазон дат.</p>
+      <button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:#fff;background:var(--c-primary);border:none;border-radius:var(--r-md);padding:11px 20px;cursor:pointer;">Скинути фільтри</button>
+    </div>
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);text-align:center;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-ink-2);margin-bottom:18px;text-align:left;">ПОРОЖНІЙ СТАН · КАБІНЕТ</div>
+      <div style="width:96px;height:96px;margin:0 auto 18px;border-radius:50%;background:var(--c-secondary-50);display:grid;place-items:center;font-size:42px;">🧳</div>
+      <div style="font-family:var(--f-head);font-weight:800;font-size:18px;margin-bottom:6px;">Ще немає бронювань</div>
+      <p style="font-size:14px;color:var(--c-ink-2);margin:0 0 18px;line-height:1.5;">Оберіть свій перший тур — пригоди вже чекають!</p>
+      <button style="font-family:var(--f-body);font-weight:700;font-size:14px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:11px 20px;cursor:pointer;">Підібрати тур</button>
+    </div>
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);padding:28px 30px;box-shadow:var(--sh-1);">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-ink-2);margin-bottom:18px;">СКЕЛЕТОН-ЛОАДЕР</div>
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;">
+        <div style="height:120px;background:linear-gradient(90deg,#EDEFF2 25%,#F6F7F9 37%,#EDEFF2 63%);background-size:920px 100%;animation:shimmer 1.5s infinite linear;"></div>
+        <div style="padding:14px 15px;">
+          <div style="height:12px;width:45%;border-radius:6px;background:linear-gradient(90deg,#EDEFF2 25%,#F6F7F9 37%,#EDEFF2 63%);background-size:920px 100%;animation:shimmer 1.5s infinite linear;margin-bottom:10px;"></div>
+          <div style="height:14px;width:80%;border-radius:6px;background:linear-gradient(90deg,#EDEFF2 25%,#F6F7F9 37%,#EDEFF2 63%);background-size:920px 100%;animation:shimmer 1.5s infinite linear;margin-bottom:14px;"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="height:22px;width:30%;border-radius:6px;background:linear-gradient(90deg,#EDEFF2 25%,#F6F7F9 37%,#EDEFF2 63%);background-size:920px 100%;animation:shimmer 1.5s infinite linear;"></div>
+            <div style="height:32px;width:32%;border-radius:9px;background:linear-gradient(90deg,#EDEFF2 25%,#F6F7F9 37%,#EDEFF2 63%);background-size:920px 100%;animation:shimmer 1.5s infinite linear;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+
+  <div style="display:flex;align-items:center;gap:14px;margin:48px 0 26px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-ink);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">03</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:30px;margin:0;letter-spacing:-.01em;">Клієнтська частина</h2>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <span style="font-family:var(--f-body);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[1] ГОЛОВНА СТОРІНКА</span>
+    <span style="font-size:12px;color:#9AA3AF;">· Desktop 1280px</span>
+  </div>
+
+  <!-- ===== HOME DESKTOP FRAME ===== -->
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);">
+    <!-- browser bar -->
+    <div style="display:flex;align-items:center;gap:8px;background:#F1F3F6;border-bottom:1px solid var(--c-line);padding:10px 16px;">
+      <span style="width:11px;height:11px;border-radius:50%;background:#FF5F57;"></span>
+      <span style="width:11px;height:11px;border-radius:50%;background:#FEBC2E;"></span>
+      <span style="width:11px;height:11px;border-radius:50%;background:#28C840;"></span>
+      <div style="flex:1;display:flex;justify-content:center;"><span style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-pill);font-size:12px;color:var(--c-ink-2);padding:5px 16px;">tourmaster.ua</span></div>
+    </div>
+
+    <!-- header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:1px solid var(--c-line);background:#fff;">
+      <div style="display:flex;align-items:center;gap:28px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:900;font-size:17px;">T</span>
+          <span style="font-family:var(--f-head);font-weight:900;font-size:19px;letter-spacing:-.01em;">TourMaster</span>
+        </div>
+        <nav style="display:flex;align-items:center;gap:20px;font-size:14px;font-weight:600;color:var(--c-ink);white-space:nowrap;">
+          <span style="color:var(--c-secondary);">🔥 Гарячі тури</span>
+          <span>Напрямки</span>
+          <span>Готелі</span>
+          <span>Про нас</span>
+          <span>Контакти</span>
+        </nav>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span style="font-size:14px;font-weight:700;color:var(--c-ink);white-space:nowrap;">☎ 0 800 33 22 11</span>
+        <span style="font-size:18px;color:var(--c-ink-2);">♡</span>
+        <button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-primary);border-radius:10px;padding:9px 18px;cursor:pointer;">Увійти</button>
+      </div>
+    </div>
+
+    <!-- hero -->
+    <div style="position:relative;padding:56px 32px 40px;background:linear-gradient(180deg,rgba(8,28,48,.30),rgba(8,28,48,.62)),url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=80&auto=format&fit=crop') center/cover;">
+      <div style="max-width:680px;">
+        <span style="display:inline-block;font-size:13px;font-weight:700;letter-spacing:.04em;color:#fff;background:rgba(255,255,255,.18);backdrop-filter:blur(4px);border-radius:var(--r-pill);padding:7px 14px;margin-bottom:18px;">✈ Понад 1 200 турів у 38 країн</span>
+        <h1 style="font-family:var(--f-head);font-weight:900;font-size:46px;line-height:1.05;letter-spacing:-.02em;color:#fff;margin:0 0 14px;text-shadow:0 2px 20px rgba(0,0,0,.25);">Знайди свій ідеальний тур за 60 секунд</h1>
+        <p style="font-size:17px;line-height:1.5;color:rgba(255,255,255,.92);margin:0;max-width:540px;">Порівнюй ціни, читай чесні відгуки та бронюй онлайн. Підтримка 24/7 на кожному кроці подорожі.</p>
+      </div>
+
+      <!-- search form -->
+      <div style="margin-top:40px;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-3);padding:18px;display:grid;grid-template-columns:1.4fr 1.2fr 1fr auto;gap:14px;align-items:end;">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:700;color:var(--c-ink-2);margin-bottom:7px;">НАПРЯМОК</label>
+          <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 14px;">
+            <span style="color:var(--c-primary);">📍</span>
+            <span style="font-size:15px;color:var(--c-ink);font-weight:500;">Туреччина, Анталія</span>
+          </div>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:700;color:var(--c-ink-2);margin-bottom:7px;">ДАТИ</label>
+          <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 14px;">
+            <span style="color:var(--c-primary);">📅</span>
+            <span style="font-size:15px;color:var(--c-ink);font-weight:500;">12 – 19 лип.</span>
+          </div>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:700;color:var(--c-ink-2);margin-bottom:7px;">ТУРИСТИ</label>
+          <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 14px;">
+            <span style="color:var(--c-primary);">👤</span>
+            <span style="font-size:15px;color:var(--c-ink);font-weight:500;">2 дорослих</span>
+          </div>
+        </div>
+        <button style="font-family:var(--f-body);font-weight:700;font-size:16px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:14px 30px;cursor:pointer;box-shadow:0 6px 16px rgba(249,115,22,.35);height:48px;white-space:nowrap;">🔍 Знайти тур</button>
+      </div>
+    </div>
+
+    <!-- ===== PROMO CAROUSEL ===== -->
+    <div style="padding:36px 32px 8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <h2 style="font-family:var(--f-head);font-weight:800;font-size:24px;margin:0;">🎁 Спецпропозиції тижня</h2>
+        <div style="display:flex;gap:8px;">
+          <span style="width:38px;height:38px;border-radius:50%;border:1.5px solid var(--c-line);display:grid;place-items:center;color:var(--c-ink-2);cursor:pointer;">‹</span>
+          <span style="width:38px;height:38px;border-radius:50%;border:1.5px solid var(--c-primary);background:var(--c-primary);color:#fff;display:grid;place-items:center;cursor:pointer;">›</span>
+        </div>
+      </div>
+      <div style="position:relative;border-radius:var(--r-lg);overflow:hidden;height:230px;background:linear-gradient(90deg,rgba(8,28,48,.72),rgba(8,28,48,.05)),url('https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=1400&q=80&auto=format&fit=crop') center/cover;display:flex;flex-direction:column;justify-content:center;padding:0 44px;">
+        <span style="font-size:12px;font-weight:800;letter-spacing:.06em;color:#fff;background:var(--c-secondary);border-radius:var(--r-sm);padding:5px 11px;width:max-content;margin-bottom:12px;">РАННЄ БРОНЮВАННЯ · ДО −30%</span>
+        <h3 style="font-family:var(--f-head);font-weight:900;font-size:30px;color:#fff;margin:0 0 8px;max-width:480px;line-height:1.1;">Літо 2026 за цінами зими</h3>
+        <p style="font-size:15px;color:rgba(255,255,255,.9);margin:0 0 18px;max-width:440px;">Фіксуй найкращі готелі Туреччини, Греції та Єгипту вже сьогодні.</p>
+        <button style="font-family:var(--f-body);font-weight:700;font-size:15px;color:var(--c-ink);background:#fff;border:none;border-radius:var(--r-md);padding:12px 22px;cursor:pointer;width:max-content;">Переглянути акції →</button>
+        <div style="position:absolute;bottom:18px;right:44px;display:flex;gap:7px;">
+          <span style="width:24px;height:6px;border-radius:99px;background:#fff;"></span>
+          <span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.5);"></span>
+          <span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.5);"></span>
+          <span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.5);"></span>
+          <span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.5);"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== POPULAR DESTINATIONS ===== -->
+    <div style="padding:36px 32px 8px;">
+      <h2 style="font-family:var(--f-head);font-weight:800;font-size:24px;margin:0 0 6px;">Популярні напрямки</h2>
+      <p style="font-size:14px;color:var(--c-ink-2);margin:0 0 20px;">Куди прямують наші мандрівники цього сезону</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <sc-for list="{{ destinations }}" as="d" hint-placeholder-count="6">
+          <div style="position:relative;height:170px;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;box-shadow:var(--sh-1);" style-hover="transform:translateY(-3px);box-shadow:var(--sh-3);">
+            <div style="position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.62)),url('{{ d.img }}');background-size:cover;background-position:center;transition:transform .4s;"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 18px;color:#fff;">
+              <div style="font-family:var(--f-head);font-weight:800;font-size:20px;">{{ d.country }}</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+                <span style="font-size:13px;opacity:.9;">{{ d.tours }} турів</span>
+                <span style="font-size:13px;font-weight:700;background:rgba(255,255,255,.2);backdrop-filter:blur(4px);border-radius:var(--r-pill);padding:4px 10px;">від {{ d.from }} ₴</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- ===== HOT TOURS (horizontal scroll) ===== -->
+    <div style="padding:36px 0 8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 32px;margin-bottom:18px;">
+        <h2 style="font-family:var(--f-head);font-weight:800;font-size:24px;margin:0;white-space:nowrap;">🔥 Гарячі тури</h2>
+        <span style="font-size:14px;font-weight:600;color:var(--c-primary);">Усі тури →</span>
+      </div>
+      <div style="display:flex;gap:16px;overflow-x:auto;padding:4px 32px 16px;">
+        <sc-for list="{{ hotTours }}" as="t" hint-placeholder-count="5">
+          <div style="flex:0 0 248px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1);transition:transform .2s,box-shadow .2s;" style-hover="transform:translateY(-4px);box-shadow:var(--sh-3);">
+            <div style="position:relative;height:140px;background-image:url('{{ t.img }}');background-size:cover;background-position:center;">
+              <span style="position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;color:#fff;border-radius:var(--r-sm);padding:4px 9px;background:{{ t.badgeBg }};">{{ t.badge }}</span>
+              <span style="position:absolute;top:10px;right:10px;width:30px;height:30px;background:rgba(255,255,255,.92);border-radius:50%;display:grid;place-items:center;font-size:14px;">♡</span>
+            </div>
+            <div style="padding:13px 14px 15px;">
+              <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;"><span style="color:var(--c-warning);font-size:12px;">★</span><span style="font-size:13px;font-weight:700;">{{ t.rating }}</span><span style="font-size:12px;color:var(--c-ink-2);">· {{ t.country }}</span></div>
+              <div style="font-family:var(--f-head);font-weight:700;font-size:15px;line-height:1.3;margin-bottom:4px;min-height:39px;">{{ t.title }}</div>
+              <div style="font-size:12px;color:var(--c-ink-2);margin-bottom:12px;">{{ t.nights }} · все включено</div>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+                <div><div style="font-size:11px;color:var(--c-ink-2);">від</div><div style="font-family:var(--f-head);font-weight:900;font-size:19px;white-space:nowrap;">{{ t.price }} ₴</div></div>
+                <button style="font-family:var(--f-body);font-weight:600;font-size:13px;color:var(--c-primary);background:var(--c-primary-50);border:none;border-radius:9px;padding:8px 12px;cursor:pointer;">Деталі</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- ===== REVIEWS ===== -->
+    <div style="padding:36px 32px 40px;background:var(--c-bg);">
+      <h2 style="font-family:var(--f-head);font-weight:800;font-size:24px;margin:0 0 6px;">Що кажуть наші клієнти</h2>
+      <p style="font-size:14px;color:var(--c-ink-2);margin:0 0 22px;">Понад 14 000 відгуків · середня оцінка 4.8 з 5</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-1);">
+            <div style="color:var(--c-warning);font-size:15px;letter-spacing:2px;margin-bottom:12px;">★★★★★</div>
+            <p style="font-size:14px;line-height:1.6;color:var(--c-ink);margin:0 0 18px;">«{{ r.text }}»</p>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="width:42px;height:42px;border-radius:50%;color:#fff;font-family:var(--f-head);font-weight:800;display:grid;place-items:center;background:{{ r.bg }};">{{ r.initial }}</span>
+              <div><div style="font-weight:700;font-size:14px;">{{ r.name }}</div><div style="font-size:12px;color:var(--c-ink-2);">{{ r.city }} · {{ r.tour }}</div></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div style="background:#10243A;color:#fff;padding:40px 32px 28px;">
+      <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:28px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.12);">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:900;">T</span>
+            <span style="font-family:var(--f-head);font-weight:900;font-size:18px;">TourMaster</span>
+          </div>
+          <p style="font-size:13px;line-height:1.6;color:rgba(255,255,255,.6);margin:0 0 14px;max-width:260px;">Туристична агенція повного циклу. Ліцензія МДО №АЕ 263... Працюємо з 2009 року.</p>
+          <div style="display:flex;gap:10px;">
+            <span style="width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.1);display:grid;place-items:center;">f</span>
+            <span style="width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.1);display:grid;place-items:center;">◎</span>
+            <span style="width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.1);display:grid;place-items:center;">✈</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:14px;">Напрямки</div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;color:rgba(255,255,255,.65);"><span>Туреччина</span><span>Єгипет</span><span>Греція</span><span>ОАЕ</span></div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:14px;">Компанія</div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;color:rgba(255,255,255,.65);"><span>Про нас</span><span>Відгуки</span><span>Блог</span><span>Контакти</span></div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:14px;">Контакти</div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;color:rgba(255,255,255,.65);"><span style="font-weight:700;color:#fff;font-size:15px;">0 800 33 22 11</span><span>info@tourmaster.ua</span><span>Київ, вул. Хрещатик, 22</span></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:18px;font-size:12px;color:rgba(255,255,255,.45);">
+        <span>© 2026 TourMaster. Усі права захищені.</span>
+        <span>Політика конфіденційності · Публічна оферта</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+
+  <div style="display:flex;align-items:center;gap:10px;margin:40px 0 6px;">
+    <span style="font-family:var(--f-body);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[1] ГОЛОВНА · ВАРІАЦІЇ HERO</span>
+    <span style="font-size:12px;color:#9AA3AF;">· на вибір під A/B-тест</span>
+  </div>
+  <p style="font-size:14px;color:var(--c-ink-2);margin:0 0 22px;max-width:760px;">Три підходи до головного конверсійного елемента. Варіант A (вище) — повноекранний банер із горизонтальною формою. Нижче — альтернативи.</p>
+
+  <!-- VARIATION B: split -->
+  <div style="margin-bottom:13px;font-size:13px;font-weight:700;color:var(--c-ink);">Варіант B — Split: текст + вертикальна форма зліва, фото справа</div>
+  <div style="width:1280px;max-width:100%;margin:0 auto 36px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-2);display:grid;grid-template-columns:1fr 1fr;">
+    <div style="padding:52px 48px;">
+      <span style="display:inline-block;font-size:13px;font-weight:700;color:var(--c-primary);background:var(--c-primary-50);border-radius:var(--r-pill);padding:6px 13px;margin-bottom:18px;">✈ 1 200+ турів у 38 країн</span>
+      <h1 style="font-family:var(--f-head);font-weight:900;font-size:42px;line-height:1.06;letter-spacing:-.02em;margin:0 0 14px;">Подорож мрії<br>починається тут</h1>
+      <p style="font-size:16px;line-height:1.5;color:var(--c-ink-2);margin:0 0 26px;max-width:420px;">Заповніть три поля — підберемо найкращі тури за вашим бюджетом.</p>
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:420px;">
+        <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:13px 14px;"><span style="color:var(--c-primary);">📍</span><span style="font-size:15px;color:var(--c-ink-2);">Куди прямуєте?</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:13px 14px;"><span style="color:var(--c-primary);">📅</span><span style="font-size:15px;color:var(--c-ink-2);">Дати</span></div>
+          <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:13px 14px;"><span style="color:var(--c-primary);">👤</span><span style="font-size:15px;color:var(--c-ink-2);">2 особи</span></div>
+        </div>
+        <button style="font-family:var(--f-body);font-weight:700;font-size:16px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:15px;cursor:pointer;box-shadow:0 6px 16px rgba(249,115,22,.32);">🔍 Підібрати тур</button>
+      </div>
+    </div>
+    <div style="background:url('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900&q=80&auto=format&fit=crop') center/cover;min-height:430px;"></div>
+  </div>
+
+  <!-- VARIATION C: centered with tabs -->
+  <div style="margin-bottom:13px;font-size:13px;font-weight:700;color:var(--c-ink);">Варіант C — Центрований банер з табами та компактною формою-пігулкою</div>
+  <div style="width:1280px;max-width:100%;margin:0 auto;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-2);position:relative;min-height:500px;background:linear-gradient(180deg,rgba(8,28,48,.34),rgba(8,28,48,.58)),url('https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1400&q=80&auto=format&fit=crop') center/cover;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 32px;">
+    <div style="display:flex;gap:6px;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);border-radius:var(--r-pill);padding:5px;margin-bottom:22px;">
+      <span style="font-size:14px;font-weight:700;color:var(--c-ink);background:#fff;border-radius:var(--r-pill);padding:9px 20px;">Тури</span>
+      <span style="font-size:14px;font-weight:600;color:#fff;padding:9px 20px;">Готелі</span>
+      <span style="font-size:14px;font-weight:600;color:#fff;padding:9px 20px;">Авіа + готель</span>
+    </div>
+    <h1 style="font-family:var(--f-head);font-weight:900;font-size:48px;line-height:1.05;letter-spacing:-.02em;color:#fff;text-align:center;margin:0 0 34px;text-shadow:0 2px 20px rgba(0,0,0,.3);max-width:620px;">Увесь світ — в одному пошуку</h1>
+    <div style="display:flex;align-items:center;gap:0;background:#fff;border-radius:var(--r-pill);box-shadow:var(--sh-3);padding:8px 8px 8px 8px;width:max-content;max-width:100%;">
+      <div style="display:flex;flex-direction:column;padding:6px 22px;border-right:1px solid var(--c-line);"><span style="font-size:11px;font-weight:700;color:var(--c-ink-2);">НАПРЯМОК</span><span style="font-size:15px;font-weight:600;">Туреччина</span></div>
+      <div style="display:flex;flex-direction:column;padding:6px 22px;border-right:1px solid var(--c-line);"><span style="font-size:11px;font-weight:700;color:var(--c-ink-2);">ДАТИ</span><span style="font-size:15px;font-weight:600;">12–19 лип.</span></div>
+      <div style="display:flex;flex-direction:column;padding:6px 22px;"><span style="font-size:11px;font-weight:700;color:var(--c-ink-2);">ТУРИСТИ</span><span style="font-size:15px;font-weight:600;">2 дорослих</span></div>
+      <button style="width:54px;height:54px;border-radius:50%;background:var(--c-secondary);border:none;color:#fff;font-size:22px;cursor:pointer;margin-left:8px;box-shadow:0 6px 16px rgba(249,115,22,.4);">🔍</button>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:10px;margin:40px 0 18px;">
+    <span style="font-family:var(--f-body);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[1] ГОЛОВНА СТОРІНКА</span>
+    <span style="font-size:12px;color:#9AA3AF;">· Mobile 375px</span>
+  </div>
+
+  <div style="width:392px;margin:0 auto;background:#1C1C1E;border-radius:46px;padding:11px;box-shadow:var(--sh-3);">
+    <div style="background:#fff;border-radius:36px;overflow:hidden;">
+      <!-- status bar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 24px 6px;font-size:13px;font-weight:700;background:#fff;">
+        <span>9:41</span>
+        <span style="position:absolute;left:50%;transform:translateX(-50%);width:90px;height:24px;background:#1C1C1E;border-radius:0 0 16px 16px;margin-top:-10px;"></span>
+        <span style="letter-spacing:1px;">●●●● ⚡ 􀛨</span>
+      </div>
+      <!-- m header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 18px 12px;">
+        <span style="font-size:22px;">☰</span>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:900;font-size:14px;">T</span><span style="font-family:var(--f-head);font-weight:900;font-size:17px;">TourMaster</span></div>
+        <span style="font-size:18px;color:var(--c-ink-2);">♡</span>
+      </div>
+      <!-- m hero -->
+      <div style="position:relative;margin:0 14px;border-radius:var(--r-lg);overflow:hidden;height:200px;background:linear-gradient(180deg,rgba(8,28,48,.18),rgba(8,28,48,.6)),url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80&auto=format&fit=crop') center/cover;display:flex;flex-direction:column;justify-content:flex-end;padding:18px 18px 40px;">
+        <h1 style="font-family:var(--f-head);font-weight:900;font-size:25px;line-height:1.1;color:#fff;margin:0;text-shadow:0 2px 12px rgba(0,0,0,.3);">Знайди свій<br>ідеальний тур</h1>
+      </div>
+      <!-- m search -->
+      <div style="margin:-26px 14px 0;position:relative;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-3);padding:14px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 13px;"><span style="color:var(--c-primary);">📍</span><span style="font-size:14px;color:var(--c-ink-2);">Напрямок</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="display:flex;align-items:center;gap:7px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 12px;"><span style="color:var(--c-primary);">📅</span><span style="font-size:13px;color:var(--c-ink-2);">Дати</span></div>
+          <div style="display:flex;align-items:center;gap:7px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 12px;"><span style="color:var(--c-primary);">👤</span><span style="font-size:13px;color:var(--c-ink-2);">2 особи</span></div>
+        </div>
+        <button style="font-family:var(--f-body);font-weight:700;font-size:15px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:14px;cursor:pointer;box-shadow:0 6px 14px rgba(249,115,22,.32);">🔍 Знайти тур</button>
+      </div>
+      <!-- m destinations -->
+      <div style="padding:24px 14px 6px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;"><h2 style="font-family:var(--f-head);font-weight:800;font-size:18px;margin:0;">Напрямки</h2><span style="font-size:13px;color:var(--c-primary);font-weight:600;">Усі →</span></div>
+        <div style="display:flex;gap:11px;overflow-x:auto;padding-bottom:4px;">
+          <div style="flex:0 0 130px;height:150px;border-radius:var(--r-md);position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=400&q=80&auto=format&fit=crop') center/cover;"><div style="position:absolute;bottom:10px;left:11px;color:#fff;"><div style="font-family:var(--f-head);font-weight:800;font-size:15px;">Туреччина</div><div style="font-size:11px;opacity:.9;">від 18 900 ₴</div></div></div>
+          <div style="flex:0 0 130px;height:150px;border-radius:var(--r-md);position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400&q=80&auto=format&fit=crop') center/cover;"><div style="position:absolute;bottom:10px;left:11px;color:#fff;"><div style="font-family:var(--f-head);font-weight:800;font-size:15px;">Єгипет</div><div style="font-size:11px;opacity:.9;">від 21 500 ₴</div></div></div>
+          <div style="flex:0 0 130px;height:150px;border-radius:var(--r-md);position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=400&q=80&auto=format&fit=crop') center/cover;"><div style="position:absolute;bottom:10px;left:11px;color:#fff;"><div style="font-family:var(--f-head);font-weight:800;font-size:15px;">Греція</div><div style="font-size:11px;opacity:.9;">від 28 400 ₴</div></div></div>
+        </div>
+      </div>
+      <!-- m hot tour -->
+      <div style="padding:18px 14px 6px;">
+        <h2 style="font-family:var(--f-head);font-weight:800;font-size:18px;margin:0 0 12px;">🔥 Гарячі тури</h2>
+        <div style="border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1);">
+          <div style="position:relative;height:150px;background:url('https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=600&q=80&auto=format&fit=crop') center/cover;"><span style="position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;color:#fff;background:var(--c-error);border-radius:var(--r-sm);padding:4px 9px;">−23%</span></div>
+          <div style="padding:13px 14px 15px;">
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;"><span style="color:var(--c-warning);font-size:12px;">★</span><span style="font-size:13px;font-weight:700;">4.9</span><span style="font-size:12px;color:var(--c-ink-2);">· Туреччина</span></div>
+            <div style="font-family:var(--f-head);font-weight:700;font-size:16px;margin-bottom:12px;">Анталія: 5★ все включено</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+              <div><span style="font-size:13px;color:var(--c-ink-2);text-decoration:line-through;">41 900</span><div style="font-family:var(--f-head);font-weight:900;font-size:20px;">32 400 ₴</div></div>
+              <button style="font-family:var(--f-body);font-weight:700;font-size:14px;color:#fff;background:var(--c-secondary);border:none;border-radius:10px;padding:11px 18px;cursor:pointer;">Деталі</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- m bottom nav -->
+      <div style="display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--c-line);padding:12px 0 22px;margin-top:18px;background:#fff;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--c-primary);"><span style="font-size:19px;">⌂</span><span style="font-size:11px;font-weight:700;">Головна</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--c-ink-2);"><span style="font-size:19px;">🔍</span><span style="font-size:11px;">Пошук</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--c-ink-2);"><span style="font-size:19px;">♡</span><span style="font-size:11px;">Wishlist</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--c-ink-2);"><span style="font-size:19px;">👤</span><span style="font-size:11px;">Кабінет</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+
+  <div style="display:flex;align-items:center;gap:14px;margin:56px 0 22px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-ink);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">2</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:26px;margin:0;">Каталог турів</h2>
+    <span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:#9AA3AF;">/tours · Desktop 1280px</span>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);">
+    <!-- header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--c-line);">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:900;">T</span><span style="font-family:var(--f-head);font-weight:900;font-size:18px;">TourMaster</span></div>
+      <div style="flex:1;max-width:420px;margin:0 28px;display:flex;align-items:center;gap:9px;background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-pill);padding:9px 16px;"><span style="color:var(--c-ink-2);">🔍</span><span style="font-size:14px;color:var(--c-ink-2);">Пошук туру, готелю чи напрямку…</span></div>
+      <div style="display:flex;align-items:center;gap:14px;"><span style="font-size:18px;color:var(--c-ink-2);">♡</span><button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-primary);border-radius:10px;padding:8px 16px;cursor:pointer;">Увійти</button></div>
+    </div>
+
+    <!-- toolbar -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 32px 16px;">
+      <div>
+        <div style="font-size:13px;color:var(--c-ink-2);margin-bottom:3px;">Головна · Тури</div>
+        <h1 style="font-family:var(--f-head);font-weight:900;font-size:26px;margin:0;">Тури в Туреччину</h1>
+        <div style="font-size:14px;font-weight:600;color:var(--c-ink-2);margin-top:4px;">Знайдено 1 248 турів</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:10px 14px;font-size:14px;font-weight:600;cursor:pointer;">Сортувати: за популярністю <span style="color:var(--c-ink-2);">▾</span></div>
+        <div style="display:flex;border:1.5px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;">
+          <span style="padding:10px 13px;background:var(--c-primary);color:#fff;font-size:15px;">▦</span>
+          <span style="padding:10px 13px;color:var(--c-ink-2);font-size:15px;border-left:1px solid var(--c-line);">☰</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- body: sidebar + grid -->
+    <div style="display:grid;grid-template-columns:282px 1fr;gap:24px;padding:4px 32px 32px;align-items:start;">
+      <!-- FILTERS -->
+      <div style="border:1px solid var(--c-line);border-radius:var(--r-lg);padding:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;"><span style="font-family:var(--f-head);font-weight:800;font-size:16px;">Фільтри</span><span style="font-size:13px;color:var(--c-primary);font-weight:600;cursor:pointer;">Скинути</span></div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:9px;">Країна</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;">
+          <span style="font-size:13px;font-weight:600;background:var(--c-primary-50);color:var(--c-primary-700);border-radius:var(--r-pill);padding:6px 11px;">Туреччина ✕</span>
+          <span style="font-size:13px;font-weight:600;background:var(--c-bg);color:var(--c-ink-2);border:1px solid var(--c-line);border-radius:var(--r-pill);padding:6px 11px;">+ Єгипет</span>
+          <span style="font-size:13px;font-weight:600;background:var(--c-bg);color:var(--c-ink-2);border:1px solid var(--c-line);border-radius:var(--r-pill);padding:6px 11px;">+ Греція</span>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:9px;">Дати вильоту</div>
+        <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:10px 13px;margin-bottom:20px;"><span style="color:var(--c-primary);">📅</span><span style="font-size:14px;color:var(--c-ink);">12 лип – 19 лип</span></div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:13px;">Ціна, ₴</div>
+        <div style="position:relative;height:6px;background:var(--c-line);border-radius:999px;margin:0 4px 8px;">
+          <div style="position:absolute;left:12%;right:30%;top:0;bottom:0;background:var(--c-primary);border-radius:999px;"></div>
+          <div style="position:absolute;left:12%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;background:#fff;border:2.5px solid var(--c-primary);border-radius:50%;box-shadow:var(--sh-1);"></div>
+          <div style="position:absolute;left:70%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;background:#fff;border:2.5px solid var(--c-primary);border-radius:50%;box-shadow:var(--sh-1);"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--c-ink-2);margin-bottom:20px;"><span>15 000</span><span>90 000</span></div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:11px;">Зірки готелю</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+          <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer;"><span style="width:18px;height:18px;border-radius:5px;background:var(--c-primary);color:#fff;display:grid;place-items:center;font-size:12px;">✓</span><span style="color:var(--c-warning);">★★★★★</span></label>
+          <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer;"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--c-line);"></span><span style="color:var(--c-warning);">★★★★</span><span style="color:#D1D5DB;">☆</span></label>
+          <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer;"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--c-line);"></span><span style="color:var(--c-warning);">★★★</span><span style="color:#D1D5DB;">☆☆</span></label>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:11px;">Харчування</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+          <label style="display:flex;align-items:center;justify-content:space-between;font-size:14px;cursor:pointer;"><span style="display:flex;align-items:center;gap:10px;"><span style="width:18px;height:18px;border-radius:5px;background:var(--c-primary);color:#fff;display:grid;place-items:center;font-size:12px;">✓</span>Все включено</span><span style="font-size:12px;color:var(--c-ink-2);">842</span></label>
+          <label style="display:flex;align-items:center;justify-content:space-between;font-size:14px;cursor:pointer;"><span style="display:flex;align-items:center;gap:10px;"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--c-line);"></span>Сніданки</span><span style="font-size:12px;color:var(--c-ink-2);">311</span></label>
+          <label style="display:flex;align-items:center;justify-content:space-between;font-size:14px;cursor:pointer;"><span style="display:flex;align-items:center;gap:10px;"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--c-line);"></span>Без харчування</span><span style="font-size:12px;color:var(--c-ink-2);">95</span></label>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:11px;">Тривалість</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;">
+          <span style="font-size:13px;font-weight:600;border:1.5px solid var(--c-primary);color:var(--c-primary);border-radius:var(--r-md);padding:7px 13px;">7 ночей</span>
+          <span style="font-size:13px;font-weight:600;border:1.5px solid var(--c-line);color:var(--c-ink-2);border-radius:var(--r-md);padding:7px 13px;">10–11</span>
+          <span style="font-size:13px;font-weight:600;border:1.5px solid var(--c-line);color:var(--c-ink-2);border-radius:var(--r-md);padding:7px 13px;">14</span>
+        </div>
+      </div>
+
+      <!-- GRID -->
+      <div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;">
+          <sc-for list="{{ catalogTours }}" as="t" hint-placeholder-count="6">
+            <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1);transition:transform .2s,box-shadow .2s;" style-hover="transform:translateY(-4px);box-shadow:var(--sh-3);">
+              <div style="position:relative;height:150px;background-image:url('{{ t.img }}');background-size:cover;background-position:center;">
+                <sc-if value="{{ t.badge }}" hint-placeholder-val="x"><span style="position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;color:#fff;border-radius:var(--r-sm);padding:4px 9px;background:{{ t.badgeBg }};">{{ t.badge }}</span></sc-if>
+                <span style="position:absolute;top:10px;right:10px;width:30px;height:30px;background:rgba(255,255,255,.92);border-radius:50%;display:grid;place-items:center;font-size:14px;">♡</span>
+              </div>
+              <div style="padding:14px 15px 16px;">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;"><span style="color:var(--c-warning);font-size:12px;">★</span><span style="font-size:13px;font-weight:700;">{{ t.rating }}</span><span style="font-size:12px;color:var(--c-ink-2);">({{ t.reviews }})</span></div>
+                <div style="font-family:var(--f-head);font-weight:700;font-size:15px;line-height:1.3;margin-bottom:4px;min-height:39px;">{{ t.title }}</div>
+                <div style="font-size:13px;color:var(--c-ink-2);margin-bottom:3px;">📍 {{ t.country }}</div>
+                <div style="font-size:12px;color:var(--c-ink-2);margin-bottom:14px;">{{ t.nights }} · {{ t.board }}</div>
+                <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+                  <div><div style="font-size:11px;color:var(--c-ink-2);">від</div><div style="font-family:var(--f-head);font-weight:900;font-size:19px;white-space:nowrap;">{{ t.price }} ₴</div></div>
+                  <button style="font-family:var(--f-body);font-weight:600;font-size:13px;color:#fff;background:var(--c-primary);border:none;border-radius:9px;padding:9px 13px;cursor:pointer;">Детальніше</button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <!-- pagination -->
+        <div style="display:flex;justify-content:center;align-items:center;gap:7px;margin-top:28px;">
+          <span style="width:38px;height:38px;border-radius:10px;border:1.5px solid var(--c-line);display:grid;place-items:center;color:var(--c-ink-2);">‹</span>
+          <span style="width:38px;height:38px;border-radius:10px;background:var(--c-primary);color:#fff;display:grid;place-items:center;font-weight:700;">1</span>
+          <span style="width:38px;height:38px;border-radius:10px;border:1.5px solid var(--c-line);display:grid;place-items:center;font-weight:600;">2</span>
+          <span style="width:38px;height:38px;border-radius:10px;border:1.5px solid var(--c-line);display:grid;place-items:center;font-weight:600;">3</span>
+          <span style="padding:0 6px;color:var(--c-ink-2);">…</span>
+          <span style="width:38px;height:38px;border-radius:10px;border:1.5px solid var(--c-line);display:grid;place-items:center;font-weight:600;">42</span>
+          <span style="width:38px;height:38px;border-radius:10px;border:1.5px solid var(--c-line);display:grid;place-items:center;color:var(--c-ink-2);">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:10px;margin:40px 0 18px;">
+    <span style="font-family:var(--f-body);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[2] КАТАЛОГ ТУРІВ</span>
+    <span style="font-size:12px;color:#9AA3AF;">· Mobile 375px</span>
+  </div>
+
+  <div style="width:392px;margin:0 auto;background:#1C1C1E;border-radius:46px;padding:11px;box-shadow:var(--sh-3);">
+    <div style="background:var(--c-bg);border-radius:36px;overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 24px 6px;font-size:13px;font-weight:700;background:#fff;"><span>9:41</span><span style="letter-spacing:1px;">●●●● ⚡ 􀛨</span></div>
+      <!-- header -->
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 16px 12px;background:#fff;">
+        <span style="font-size:20px;">‹</span>
+        <div style="flex:1;display:flex;align-items:center;gap:8px;background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-pill);padding:9px 14px;"><span style="color:var(--c-ink-2);">🔍</span><span style="font-size:13px;color:var(--c-ink-2);">Туреччина, 12–19 лип</span></div>
+      </div>
+      <!-- filter/sort bar -->
+      <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:#fff;border-bottom:1px solid var(--c-line);overflow-x:auto;">
+        <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;background:var(--c-primary);border-radius:var(--r-pill);padding:8px 13px;white-space:nowrap;">⚙ Фільтри <span style="background:#fff;color:var(--c-primary);border-radius:50%;width:17px;height:17px;display:inline-grid;place-items:center;font-size:11px;">3</span></span>
+        <span style="font-size:13px;font-weight:600;border:1.5px solid var(--c-line);border-radius:var(--r-pill);padding:8px 13px;white-space:nowrap;">Сортувати ▾</span>
+        <span style="font-size:13px;font-weight:600;border:1.5px solid var(--c-line);border-radius:var(--r-pill);padding:8px 13px;white-space:nowrap;">5★</span>
+        <span style="font-size:13px;font-weight:600;border:1.5px solid var(--c-line);border-radius:var(--r-pill);padding:8px 13px;white-space:nowrap;">Все включено</span>
+      </div>
+      <div style="padding:12px 16px 6px;font-size:13px;color:var(--c-ink-2);font-weight:600;">Знайдено 1 248 турів</div>
+      <!-- list -->
+      <div style="display:flex;flex-direction:column;gap:14px;padding:6px 16px 14px;">
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1);">
+          <div style="position:relative;height:160px;background:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80&auto=format&fit=crop') center/cover;"><span style="position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;color:#fff;background:var(--c-error);border-radius:var(--r-sm);padding:4px 9px;">−19%</span><span style="position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(255,255,255,.92);border-radius:50%;display:grid;place-items:center;">♡</span></div>
+          <div style="padding:13px 15px 15px;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;"><span style="color:var(--c-warning);font-size:12px;">★</span><span style="font-size:13px;font-weight:700;">4.9</span><span style="font-size:12px;color:var(--c-ink-2);">(212) · Белек</span></div>
+            <div style="font-family:var(--f-head);font-weight:700;font-size:16px;margin-bottom:3px;">Rixos Premium Belek 5★</div>
+            <div style="font-size:12px;color:var(--c-ink-2);margin-bottom:12px;">7 ночей · Ultra All Inclusive</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;"><div><span style="font-size:13px;color:var(--c-ink-2);text-decoration:line-through;">59 900</span><div style="font-family:var(--f-head);font-weight:900;font-size:20px;">48 400 ₴</div></div><button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:#fff;background:var(--c-primary);border:none;border-radius:10px;padding:11px 16px;cursor:pointer;">Детальніше</button></div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1);">
+          <div style="position:relative;height:160px;background:url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80&auto=format&fit=crop') center/cover;"><span style="position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;color:#fff;background:var(--c-secondary);border-radius:var(--r-sm);padding:4px 9px;">🔥 ХІТ</span><span style="position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(255,255,255,.92);border-radius:50%;display:grid;place-items:center;">♡</span></div>
+          <div style="padding:13px 15px 15px;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;"><span style="color:var(--c-warning);font-size:12px;">★</span><span style="font-size:13px;font-weight:700;">4.7</span><span style="font-size:12px;color:var(--c-ink-2);">(168) · Шарм</span></div>
+            <div style="font-family:var(--f-head);font-weight:700;font-size:16px;margin-bottom:3px;">Steigenberger Alcazar 5★</div>
+            <div style="font-size:12px;color:var(--c-ink-2);margin-bottom:12px;">8 ночей · All Inclusive</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;"><div><div style="font-size:11px;color:var(--c-ink-2);">від</div><div style="font-family:var(--f-head);font-weight:900;font-size:20px;">31 800 ₴</div></div><button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:#fff;background:var(--c-primary);border:none;border-radius:10px;padding:11px 16px;cursor:pointer;">Детальніше</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:14px;margin:56px 0 22px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-ink);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">3</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:26px;margin:0;">Деталі туру</h2>
+    <span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:#9AA3AF;">/tours/:id · Desktop 1280px</span>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);">
+    <!-- header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--c-line);background:#fff;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:900;">T</span><span style="font-family:var(--f-head);font-weight:900;font-size:18px;">TourMaster</span></div>
+      <nav style="display:flex;gap:22px;font-size:14px;font-weight:600;"><span style="color:var(--c-secondary);">🔥 Гарячі тури</span><span>Напрямки</span><span>Готелі</span><span>Контакти</span></nav>
+      <div style="display:flex;align-items:center;gap:14px;"><span style="font-size:18px;color:var(--c-ink-2);">♡</span><button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-primary);border-radius:10px;padding:8px 16px;cursor:pointer;">Увійти</button></div>
+    </div>
+
+    <div style="padding:22px 32px 32px;">
+      <div style="font-size:13px;color:var(--c-ink-2);margin-bottom:14px;">Головна · Тури · Туреччина · <span style="color:var(--c-ink);">Rixos Premium Belek 5★</span></div>
+
+      <!-- GALLERIA -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="position:relative;height:360px;border-radius:var(--r-lg);overflow:hidden;background:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1000&q=80&auto=format&fit=crop') center/cover;">
+          <span style="position:absolute;top:14px;left:14px;font-size:12px;font-weight:800;color:#fff;background:var(--c-error);border-radius:var(--r-sm);padding:5px 11px;">−19% АКЦІЯ</span>
+          <span style="position:absolute;bottom:14px;right:14px;font-size:13px;font-weight:600;color:#fff;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);border-radius:var(--r-pill);padding:8px 14px;">⛶ Переглянути всі 24 фото</span>
+        </div>
+        <div style="display:grid;grid-template-rows:1fr 1fr;gap:12px;">
+          <div style="border-radius:var(--r-lg);overflow:hidden;background:url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=500&q=80&auto=format&fit=crop') center/cover;"></div>
+          <div style="position:relative;border-radius:var(--r-lg);overflow:hidden;background:url('https://images.unsplash.com/photo-1540541338287-41700207dee6?w=500&q=80&auto=format&fit=crop') center/cover;">
+            <div style="position:absolute;inset:0;background:rgba(8,28,48,.55);display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:800;font-size:20px;">+18</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- title + info -->
+      <div style="display:grid;grid-template-columns:1fr 372px;gap:24px;align-items:start;">
+        <div>
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:24px 26px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="color:var(--c-warning);">★★★★★</span><span style="font-size:14px;font-weight:700;">4.9</span><span style="font-size:13px;color:var(--c-ink-2);">· 212 відгуків</span><span style="font-size:12px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:var(--r-pill);padding:4px 10px;">Чудовий вибір</span></div>
+            <h1 style="font-family:var(--f-head);font-weight:900;font-size:30px;line-height:1.1;margin:0 0 10px;">Rixos Premium Belek 5★</h1>
+            <div style="display:flex;flex-wrap:wrap;gap:18px;font-size:14px;color:var(--c-ink-2);">
+              <span>📍 Туреччина, Белек</span><span>🌙 7 ночей / 8 днів</span><span>🍽 Ultra All Inclusive</span><span>✈ Виліт з Києва</span>
+            </div>
+          </div>
+
+          <!-- TABS -->
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;">
+            <div style="display:flex;border-bottom:1px solid var(--c-line);">
+              <span style="font-size:14px;font-weight:700;color:var(--c-primary);padding:16px 22px;border-bottom:2.5px solid var(--c-primary);">Опис</span>
+              <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);padding:16px 22px;">Програма по днях</span>
+              <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);padding:16px 22px;">Включено / ні</span>
+              <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);padding:16px 22px;">Відгуки (212)</span>
+            </div>
+            <div style="padding:24px 26px;">
+              <p style="font-size:15px;line-height:1.7;color:var(--c-ink);margin:0 0 18px;">Розкішний курорт на першій береговій лінії Белека серед соснового лісу та власного пляжу з блакитним прапором. Концепція Ultra All Inclusive, аквапарк, 9 ресторанів à la carte та преміальний спа-центр — ідеально для родинного відпочинку та пар.</p>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
+                <div style="display:flex;align-items:center;gap:12px;background:var(--c-bg);border-radius:var(--r-md);padding:14px 16px;"><span style="font-size:22px;">🏖</span><div><div style="font-size:14px;font-weight:700;">Власний пляж</div><div style="font-size:12px;color:var(--c-ink-2);">150 м, блакитний прапор</div></div></div>
+                <div style="display:flex;align-items:center;gap:12px;background:var(--c-bg);border-radius:var(--r-md);padding:14px 16px;"><span style="font-size:22px;">🏊</span><div><div style="font-size:14px;font-weight:700;">Аквапарк</div><div style="font-size:12px;color:var(--c-ink-2);">7 гірок, 4 басейни</div></div></div>
+                <div style="display:flex;align-items:center;gap:12px;background:var(--c-bg);border-radius:var(--r-md);padding:14px 16px;"><span style="font-size:22px;">🍽</span><div><div style="font-size:14px;font-weight:700;">9 ресторанів</div><div style="font-size:12px;color:var(--c-ink-2);">à la carte безкоштовно</div></div></div>
+                <div style="display:flex;align-items:center;gap:12px;background:var(--c-bg);border-radius:var(--r-md);padding:14px 16px;"><span style="font-size:22px;">🧒</span><div><div style="font-size:14px;font-weight:700;">Дитячий клуб</div><div style="font-size:12px;color:var(--c-ink-2);">4–12 років, аніматори</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STICKY BOOKING SIDEBAR -->
+        <div style="position:sticky;top:20px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-2);">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;"><span style="font-size:13px;color:var(--c-ink-2);">від</span><span style="font-family:var(--f-head);font-weight:900;font-size:30px;">48 400 ₴</span></div>
+          <div style="font-size:13px;color:var(--c-ink-2);margin-bottom:18px;"><span style="text-decoration:line-through;">59 900 ₴</span> · за 2 дорослих</div>
+
+          <label style="display:block;font-size:12px;font-weight:700;color:var(--c-ink-2);margin-bottom:6px;">ДАТА ВИЛЬОТУ</label>
+          <div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 14px;margin-bottom:14px;"><span style="font-size:14px;font-weight:600;">📅 12 липня 2026</span><span style="color:var(--c-ink-2);">▾</span></div>
+
+          <label style="display:block;font-size:12px;font-weight:700;color:var(--c-ink-2);margin-bottom:6px;">ТУРИСТИ</label>
+          <div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:8px 12px;margin-bottom:18px;">
+            <span style="font-size:14px;font-weight:600;">2 дорослих, 0 дітей</span>
+            <div style="display:flex;gap:6px;"><span style="width:28px;height:28px;border-radius:8px;border:1.5px solid var(--c-line);display:grid;place-items:center;color:var(--c-ink-2);">−</span><span style="width:28px;height:28px;border-radius:8px;border:1.5px solid var(--c-primary);color:var(--c-primary);display:grid;place-items:center;">+</span></div>
+          </div>
+
+          <div style="border-top:1px dashed var(--c-line);padding-top:14px;margin-bottom:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;"><span style="color:var(--c-ink-2);">Тур × 2</span><span>54 400 ₴</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;"><span style="color:var(--c-ink-2);">Знижка</span><span style="color:var(--c-success);font-weight:600;">−6 000 ₴</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:17px;font-weight:800;font-family:var(--f-head);padding-top:8px;border-top:1px solid var(--c-line);"><span>Разом</span><span>48 400 ₴</span></div>
+          </div>
+
+          <button style="width:100%;font-family:var(--f-body);font-weight:700;font-size:17px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:16px;cursor:pointer;box-shadow:0 6px 16px rgba(249,115,22,.35);margin:16px 0 10px;">Забронювати</button>
+          <div style="display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--c-ink-2);"><span style="color:var(--c-success);">✓</span> Безкоштовне скасування 48 год</div>
+        </div>
+      </div>
+
+      <!-- SIMILAR -->
+      <div style="margin-top:32px;">
+        <h2 style="font-family:var(--f-head);font-weight:800;font-size:22px;margin:0 0 16px;">Схожі тури</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;">
+          <sc-for list="{{ hotTours }}" as="t" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1);display:flex;">
+              <div style="width:118px;flex-shrink:0;background-image:url('{{ t.img }}');background-size:cover;background-position:center;"></div>
+              <div style="padding:13px 15px;flex:1;">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;"><span style="color:var(--c-warning);font-size:12px;">★</span><span style="font-size:12px;font-weight:700;">{{ t.rating }}</span><span style="font-size:11px;color:var(--c-ink-2);">· {{ t.country }}</span></div>
+                <div style="font-family:var(--f-head);font-weight:700;font-size:14px;line-height:1.3;margin-bottom:8px;">{{ t.title }}</div>
+                <div style="font-family:var(--f-head);font-weight:900;font-size:16px;white-space:nowrap;">{{ t.price }} ₴</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:10px;margin:40px 0 18px;">
+    <span style="font-family:var(--f-body);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[3] ДЕТАЛІ ТУРУ</span>
+    <span style="font-size:12px;color:#9AA3AF;">· Mobile 375px · floating CTA</span>
+  </div>
+
+  <div style="width:392px;margin:0 auto;background:#1C1C1E;border-radius:46px;padding:11px;box-shadow:var(--sh-3);">
+    <div style="background:#fff;border-radius:36px;overflow:hidden;position:relative;">
+      <!-- gallery -->
+      <div style="position:relative;height:280px;background:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80&auto=format&fit=crop') center/cover;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;"><span style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:18px;">‹</span><div style="display:flex;gap:8px;"><span style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:16px;">♡</span><span style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:16px;">⤴</span></div></div>
+        <span style="position:absolute;top:16px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:#fff;background:var(--c-error);border-radius:var(--r-sm);padding:4px 10px;display:none;"></span>
+        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;"><span style="width:22px;height:6px;border-radius:99px;background:#fff;"></span><span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.6);"></span><span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.6);"></span><span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.6);"></span></div>
+        <span style="position:absolute;bottom:14px;right:14px;font-size:12px;color:#fff;background:rgba(0,0,0,.5);border-radius:var(--r-pill);padding:5px 11px;">1 / 24</span>
+      </div>
+      <!-- content -->
+      <div style="padding:16px 16px 110px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;"><span style="color:var(--c-warning);font-size:13px;">★</span><span style="font-size:13px;font-weight:700;">4.9</span><span style="font-size:12px;color:var(--c-ink-2);">· 212 відгуків</span><span style="font-size:11px;font-weight:700;background:var(--c-error);color:#fff;border-radius:var(--r-sm);padding:3px 8px;margin-left:auto;">−19%</span></div>
+        <h1 style="font-family:var(--f-head);font-weight:900;font-size:23px;line-height:1.15;margin:0 0 10px;">Rixos Premium Belek 5★</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;">
+          <span style="font-size:12px;color:var(--c-ink-2);background:var(--c-bg);border-radius:var(--r-pill);padding:6px 11px;">📍 Белек</span>
+          <span style="font-size:12px;color:var(--c-ink-2);background:var(--c-bg);border-radius:var(--r-pill);padding:6px 11px;">🌙 7 ночей</span>
+          <span style="font-size:12px;color:var(--c-ink-2);background:var(--c-bg);border-radius:var(--r-pill);padding:6px 11px;">🍽 Ultra AI</span>
+        </div>
+        <!-- tabs -->
+        <div style="display:flex;gap:18px;border-bottom:1px solid var(--c-line);margin-bottom:16px;overflow-x:auto;">
+          <span style="font-size:14px;font-weight:700;color:var(--c-primary);padding-bottom:11px;border-bottom:2.5px solid var(--c-primary);white-space:nowrap;">Опис</span>
+          <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);padding-bottom:11px;white-space:nowrap;">По днях</span>
+          <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);padding-bottom:11px;white-space:nowrap;">Включено</span>
+          <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);padding-bottom:11px;white-space:nowrap;">Відгуки</span>
+        </div>
+        <p style="font-size:14px;line-height:1.65;color:var(--c-ink);margin:0 0 16px;">Розкішний курорт на першій лінії Белека серед соснового лісу. Ultra All Inclusive, аквапарк, 9 ресторанів à la carte та преміальний спа.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;gap:12px;background:var(--c-bg);border-radius:var(--r-md);padding:12px 14px;"><span style="font-size:20px;">🏖</span><div><div style="font-size:14px;font-weight:700;">Власний пляж</div><div style="font-size:12px;color:var(--c-ink-2);">150 м, блакитний прапор</div></div></div>
+          <div style="display:flex;align-items:center;gap:12px;background:var(--c-bg);border-radius:var(--r-md);padding:12px 14px;"><span style="font-size:20px;">🏊</span><div><div style="font-size:14px;font-weight:700;">Аквапарк</div><div style="font-size:12px;color:var(--c-ink-2);">7 гірок, 4 басейни</div></div></div>
+        </div>
+      </div>
+      <!-- floating CTA bar -->
+      <div style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--c-line);box-shadow:0 -6px 20px rgba(16,24,40,.08);padding:14px 16px 22px;display:flex;align-items:center;gap:14px;border-radius:0 0 36px 36px;">
+        <div><span style="font-size:12px;color:var(--c-ink-2);">від</span><div style="font-family:var(--f-head);font-weight:900;font-size:22px;">48 400 ₴</div></div>
+        <button style="flex:1;font-family:var(--f-body);font-weight:700;font-size:16px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:15px;cursor:pointer;box-shadow:0 6px 14px rgba(249,115,22,.35);">Забронювати</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:14px;margin:56px 0 22px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-ink);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">4</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:26px;margin:0;">Бронювання — Wizard</h2>
+    <span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:#9AA3AF;">/booking · 5 кроків · Desktop 1280px</span>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);">
+    <!-- header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--c-line);background:#fff;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:900;">T</span><span style="font-family:var(--f-head);font-weight:900;font-size:18px;">TourMaster</span></div>
+      <span style="font-size:14px;color:var(--c-ink-2);">🔒 Захищене бронювання</span>
+      <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);">Потрібна допомога? <span style="color:var(--c-primary);">0 800 33 22 11</span></span>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div style="background:#fff;border-bottom:1px solid var(--c-line);padding:24px 80px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;position:relative;">
+        <div style="position:absolute;left:7%;right:7%;top:18px;height:3px;background:var(--c-line);z-index:0;"></div>
+        <div style="position:absolute;left:7%;width:22%;top:18px;height:3px;background:var(--c-primary);z-index:0;"></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="width:38px;height:38px;border-radius:50%;background:var(--c-success);color:#fff;display:grid;place-items:center;font-weight:800;">✓</span><span style="font-size:13px;font-weight:600;color:var(--c-ink-2);">Тур і дати</span></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="width:38px;height:38px;border-radius:50%;background:var(--c-primary);color:#fff;display:grid;place-items:center;font-weight:800;box-shadow:0 0 0 4px var(--c-primary-50);">2</span><span style="font-size:13px;font-weight:800;color:var(--c-primary);">Туристи</span></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid var(--c-line);color:var(--c-ink-2);display:grid;place-items:center;font-weight:800;">3</span><span style="font-size:13px;font-weight:600;color:var(--c-ink-2);">Послуги</span></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid var(--c-line);color:var(--c-ink-2);display:grid;place-items:center;font-weight:800;">4</span><span style="font-size:13px;font-weight:600;color:var(--c-ink-2);">Огляд</span></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid var(--c-line);color:var(--c-ink-2);display:grid;place-items:center;font-weight:800;">5</span><span style="font-size:13px;font-weight:600;color:var(--c-ink-2);">Оплата</span></div>
+      </div>
+    </div>
+
+    <!-- body -->
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;padding:28px 32px 32px;align-items:start;">
+      <div>
+        <h1 style="font-family:var(--f-head);font-weight:900;font-size:24px;margin:0 0 4px;">Дані туристів</h1>
+        <p style="font-size:14px;color:var(--c-ink-2);margin:0 0 20px;">Введіть дані точно як у закордонному паспорті</p>
+
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:24px 26px;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><span style="width:30px;height:30px;border-radius:50%;background:var(--c-primary-50);color:var(--c-primary);display:grid;place-items:center;font-weight:800;font-size:14px;">1</span><span style="font-family:var(--f-head);font-weight:800;font-size:16px;">Турист 1 · Дорослий</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Прізвище (лат.)</label><input value="SHEVCHENKO" readonly style="width:100%;font-family:var(--f-body);font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;"></div>
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Ім'я (лат.)</label><input value="OLEKSANDR" readonly style="width:100%;font-family:var(--f-body);font-size:15px;border:1.5px solid var(--c-primary);border-radius:var(--r-md);padding:11px 14px;outline:none;box-shadow:0 0 0 3px var(--c-primary-50);"></div>
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Дата народження</label><div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;"><span style="font-size:15px;">14.03.1990</span><span style="color:var(--c-primary);">📅</span></div></div>
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Стать</label><div style="display:flex;gap:8px;"><span style="flex:1;text-align:center;font-size:14px;font-weight:600;border:1.5px solid var(--c-primary);background:var(--c-primary-50);color:var(--c-primary);border-radius:var(--r-md);padding:11px;">Чол.</span><span style="flex:1;text-align:center;font-size:14px;font-weight:600;border:1.5px solid var(--c-line);color:var(--c-ink-2);border-radius:var(--r-md);padding:11px;">Жін.</span></div></div>
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Номер паспорта</label><input value="FE 123456" readonly style="width:100%;font-family:var(--f-body);font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;"></div>
+            <div><label style="display:block;font-size:13px;font-weight:600;color:var(--c-error);margin-bottom:6px;">Дійсний до</label><div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-error);border-radius:var(--r-md);padding:11px 14px;box-shadow:0 0 0 3px var(--c-error-50);"><span style="font-size:15px;color:var(--c-ink-2);">дд.мм.рррр</span><span style="color:var(--c-error);">📅</span></div><div style="font-size:12px;color:var(--c-error);margin-top:5px;">Обов'язкове поле</div></div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px 26px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:30px;height:30px;border-radius:50%;background:var(--c-bg);color:var(--c-ink-2);display:grid;place-items:center;font-weight:800;font-size:14px;">2</span><span style="font-family:var(--f-head);font-weight:800;font-size:16px;color:var(--c-ink-2);">Турист 2 · Дорослий</span></div>
+          <span style="font-size:14px;font-weight:600;color:var(--c-primary);">Розгорнути ▾</span>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;margin-top:24px;">
+          <button style="font-family:var(--f-body);font-weight:600;font-size:15px;color:var(--c-ink);background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:13px 26px;cursor:pointer;">← Назад</button>
+          <button style="font-family:var(--f-body);font-weight:700;font-size:15px;color:#fff;background:var(--c-primary);border:none;border-radius:var(--r-md);padding:13px 36px;cursor:pointer;">Далі: послуги →</button>
+        </div>
+      </div>
+
+      <!-- ORDER SIDEBAR -->
+      <div style="position:sticky;top:20px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:20px;box-shadow:var(--sh-2);">
+        <div style="font-family:var(--f-head);font-weight:800;font-size:16px;margin-bottom:16px;">Ваше замовлення</div>
+        <div style="display:flex;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--c-line);margin-bottom:16px;">
+          <div style="width:72px;height:72px;border-radius:var(--r-md);background:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=200&q=80&auto=format&fit=crop') center/cover;flex-shrink:0;"></div>
+          <div><div style="font-family:var(--f-head);font-weight:700;font-size:14px;line-height:1.3;">Rixos Premium Belek 5★</div><div style="font-size:12px;color:var(--c-ink-2);margin-top:4px;">📍 Туреччина, Белек</div><div style="font-size:12px;color:var(--c-ink-2);">📅 12–19 лип · 2 дорослих</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:9px;"><span style="color:var(--c-ink-2);">Тур × 2</span><span>54 400 ₴</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:9px;"><span style="color:var(--c-ink-2);">Знижка</span><span style="color:var(--c-success);font-weight:600;">−6 000 ₴</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:12px;"><span style="color:var(--c-ink-2);">Послуги</span><span>—</span></div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--f-head);font-weight:800;font-size:19px;padding-top:14px;border-top:1px solid var(--c-line);"><span>Разом</span><span>48 400 ₴</span></div>
+        <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--c-ink-2);margin-top:14px;background:var(--c-success-50);border-radius:var(--r-md);padding:10px 12px;"><span style="color:var(--c-success);">✓</span> Безкоштовне скасування протягом 48 годин</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: PAYMENT -->
+  <div style="display:flex;align-items:center;gap:10px;margin:36px 0 14px;"><span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">КРОК 5 — ОПЛАТА</span><span style="font-size:12px;color:#9AA3AF;">· форма картки</span></div>
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-xl);box-shadow:var(--sh-2);padding:28px 32px;display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start;">
+    <div>
+      <h1 style="font-family:var(--f-head);font-weight:900;font-size:24px;margin:0 0 4px;">Оплата</h1>
+      <p style="font-size:14px;color:var(--c-ink-2);margin:0 0 20px;">Платіж захищено 3-D Secure. Кошти спишуться лише після підтвердження.</p>
+      <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:24px 26px;">
+        <div style="display:flex;gap:12px;margin-bottom:22px;">
+          <span style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;border:1.5px solid var(--c-primary);background:var(--c-primary-50);color:var(--c-primary);border-radius:var(--r-md);padding:12px 18px;">💳 Картка</span>
+          <span style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;border:1.5px solid var(--c-line);color:var(--c-ink-2);border-radius:var(--r-md);padding:12px 18px;">🍏 Apple Pay</span>
+          <span style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;border:1.5px solid var(--c-line);color:var(--c-ink-2);border-radius:var(--r-md);padding:12px 18px;">Розстрочка 0%</span>
+        </div>
+        <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Номер картки</label>
+        <div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 14px;margin-bottom:14px;"><span style="font-size:15px;letter-spacing:1px;">5375 4411 2345 6789</span><span style="font-size:18px;">💳</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Термін дії</label><input value="08/28" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;font-family:var(--f-body);"></div>
+          <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">CVV</label><input value="•••" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;font-family:var(--f-body);"></div>
+        </div>
+        <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Власник картки</label>
+        <input value="OLEKSANDR SHEVCHENKO" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;font-family:var(--f-body);">
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:20px;box-shadow:var(--sh-2);">
+      <div style="font-family:var(--f-head);font-weight:800;font-size:16px;margin-bottom:14px;">До сплати</div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:9px;"><span style="color:var(--c-ink-2);">Тур × 2</span><span>54 400 ₴</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:9px;"><span style="color:var(--c-ink-2);">Страховка</span><span>1 800 ₴</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:9px;"><span style="color:var(--c-ink-2);">Трансфер</span><span>1 200 ₴</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:12px;"><span style="color:var(--c-ink-2);">Знижка</span><span style="color:var(--c-success);font-weight:600;">−6 000 ₴</span></div>
+      <div style="display:flex;justify-content:space-between;font-family:var(--f-head);font-weight:900;font-size:21px;padding-top:14px;border-top:1px solid var(--c-line);"><span>Разом</span><span>51 400 ₴</span></div>
+      <button style="width:100%;font-family:var(--f-body);font-weight:700;font-size:17px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:16px;cursor:pointer;box-shadow:0 6px 16px rgba(249,115,22,.35);margin-top:18px;">Сплатити 51 400 ₴</button>
+      <div style="text-align:center;font-size:12px;color:var(--c-ink-2);margin-top:10px;">🔒 Visa · Mastercard · Безпечна оплата</div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:10px;margin:40px 0 18px;">
+    <span style="font-family:var(--f-body);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[4] WIZARD БРОНЮВАННЯ</span>
+    <span style="font-size:12px;color:#9AA3AF;">· Mobile 375px · Крок 2/5</span>
+  </div>
+
+  <div style="width:392px;margin:0 auto;background:#1C1C1E;border-radius:46px;padding:11px;box-shadow:var(--sh-3);">
+    <div style="background:var(--c-bg);border-radius:36px;overflow:hidden;position:relative;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 24px 6px;font-size:13px;font-weight:700;background:#fff;"><span>9:41</span><span style="letter-spacing:1px;">●●●● ⚡ 􀛨</span></div>
+      <!-- header + progress -->
+      <div style="background:#fff;padding:8px 18px 16px;border-bottom:1px solid var(--c-line);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><span style="font-size:20px;">‹</span><span style="font-family:var(--f-head);font-weight:800;font-size:16px;">Бронювання</span><span style="font-size:13px;color:var(--c-ink-2);font-weight:600;">Крок 2/5</span></div>
+        <div style="display:flex;gap:5px;">
+          <span style="flex:1;height:5px;border-radius:99px;background:var(--c-success);"></span>
+          <span style="flex:1;height:5px;border-radius:99px;background:var(--c-primary);"></span>
+          <span style="flex:1;height:5px;border-radius:99px;background:var(--c-line);"></span>
+          <span style="flex:1;height:5px;border-radius:99px;background:var(--c-line);"></span>
+          <span style="flex:1;height:5px;border-radius:99px;background:var(--c-line);"></span>
+        </div>
+        <div style="font-family:var(--f-head);font-weight:900;font-size:20px;margin-top:14px;">Дані туристів</div>
+        <div style="font-size:13px;color:var(--c-ink-2);margin-top:2px;">Як у закордонному паспорті</div>
+      </div>
+      <!-- form -->
+      <div style="padding:16px 16px 100px;">
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:16px;"><span style="width:26px;height:26px;border-radius:50%;background:var(--c-primary-50);color:var(--c-primary);display:grid;place-items:center;font-weight:800;font-size:13px;">1</span><span style="font-family:var(--f-head);font-weight:800;font-size:15px;">Турист 1 · Дорослий</span></div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div><label style="display:block;font-size:12px;font-weight:600;margin-bottom:5px;">Прізвище (лат.)</label><input value="SHEVCHENKO" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 14px;outline:none;font-family:var(--f-body);"></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;margin-bottom:5px;">Ім'я (лат.)</label><input value="OLEKSANDR" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px 14px;outline:none;font-family:var(--f-body);"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div><label style="display:block;font-size:12px;font-weight:600;margin-bottom:5px;">Дата народж.</label><div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px;"><span style="font-size:14px;">14.03.90</span><span style="color:var(--c-primary);">📅</span></div></div>
+              <div><label style="display:block;font-size:12px;font-weight:600;margin-bottom:5px;">Паспорт №</label><input value="FE 123456" readonly style="width:100%;font-size:14px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:12px;outline:none;font-family:var(--f-body);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- sticky bottom -->
+      <div style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--c-line);box-shadow:0 -6px 20px rgba(16,24,40,.08);padding:13px 16px 22px;display:flex;align-items:center;gap:12px;border-radius:0 0 36px 36px;">
+        <div><span style="font-size:11px;color:var(--c-ink-2);">Разом</span><div style="font-family:var(--f-head);font-weight:900;font-size:19px;">48 400 ₴</div></div>
+        <button style="flex:1;font-family:var(--f-body);font-weight:700;font-size:15px;color:#fff;background:var(--c-primary);border:none;border-radius:var(--r-md);padding:15px;cursor:pointer;">Далі: послуги →</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:14px;margin:56px 0 22px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-ink);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">5</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:26px;margin:0;">Особистий кабінет</h2>
+    <span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:#9AA3AF;">/cabinet · Desktop 1280px</span>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--c-line);background:#fff;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;color:#fff;font-family:var(--f-head);font-weight:900;">T</span><span style="font-family:var(--f-head);font-weight:900;font-size:18px;">TourMaster</span></div>
+      <nav style="display:flex;gap:22px;font-size:14px;font-weight:600;"><span>Напрямки</span><span>Готелі</span><span>Гарячі тури</span><span>Контакти</span></nav>
+      <div style="display:flex;align-items:center;gap:10px;"><span style="width:38px;height:38px;border-radius:50%;background:var(--c-primary);color:#fff;display:grid;place-items:center;font-family:var(--f-head);font-weight:800;">О</span><span style="font-size:14px;font-weight:600;">Олександр</span></div>
+    </div>
+
+    <div style="padding:28px 32px 32px;">
+      <h1 style="font-family:var(--f-head);font-weight:900;font-size:28px;margin:0 0 18px;">Вітаємо, Олександре! 👋</h1>
+      <div style="display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start;">
+        <!-- profile sidebar -->
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:22px;text-align:center;">
+          <span style="width:72px;height:72px;border-radius:50%;background:var(--c-primary);color:#fff;font-family:var(--f-head);font-weight:800;font-size:28px;display:inline-grid;place-items:center;margin-bottom:12px;">О</span>
+          <div style="font-family:var(--f-head);font-weight:800;font-size:17px;">Олександр Шевченко</div>
+          <div style="font-size:13px;color:var(--c-ink-2);margin-bottom:14px;">olek@mail.com</div>
+          <div style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:var(--c-secondary-50);color:var(--c-secondary-600);border-radius:var(--r-pill);padding:7px 13px;margin-bottom:18px;">⭐ Срібний рівень · 1 240 балів</div>
+          <div style="display:flex;flex-direction:column;gap:4px;text-align:left;">
+            <span style="font-size:14px;font-weight:700;color:var(--c-primary);background:var(--c-primary-50);border-radius:var(--r-md);padding:11px 14px;">🧳 Мої бронювання</span>
+            <span style="font-size:14px;font-weight:600;color:var(--c-ink);padding:11px 14px;">♡ Wishlist (8)</span>
+            <span style="font-size:14px;font-weight:600;color:var(--c-ink);padding:11px 14px;">👤 Мій профіль</span>
+            <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);padding:11px 14px;">↩ Вийти</span>
+          </div>
+        </div>
+
+        <!-- bookings -->
+        <div>
+          <div style="display:flex;gap:8px;margin-bottom:18px;">
+            <span style="font-size:14px;font-weight:700;color:#fff;background:var(--c-primary);border-radius:var(--r-pill);padding:9px 16px;">Усі · 6</span>
+            <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);border:1.5px solid var(--c-line);border-radius:var(--r-pill);padding:9px 16px;">Майбутні · 2</span>
+            <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);border:1.5px solid var(--c-line);border-radius:var(--r-pill);padding:9px 16px;">Завершені · 3</span>
+            <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);border:1.5px solid var(--c-line);border-radius:var(--r-pill);padding:9px 16px;">Скасовані · 1</span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <!-- paid -->
+            <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;display:flex;gap:16px;">
+              <div style="width:104px;height:104px;border-radius:var(--r-md);background:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=300&q=80&auto=format&fit=crop') center/cover;flex-shrink:0;"></div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div style="font-family:var(--f-head);font-weight:700;font-size:17px;">Rixos Premium Belek 5★</div><div style="font-size:13px;color:var(--c-ink-2);margin-top:3px;">№ TM-10428 · 📅 12–19 лип. 2026 · 2 дорослих</div></div><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:var(--r-pill);padding:6px 12px;white-space:nowrap;"><span style="width:7px;height:7px;border-radius:50%;background:var(--c-success);"></span>Оплачено</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;"><span style="font-family:var(--f-head);font-weight:800;font-size:18px;">48 400 ₴</span><div style="display:flex;gap:8px;"><button style="font-size:13px;font-weight:600;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-line);border-radius:9px;padding:8px 14px;cursor:pointer;">⤓ Ваучер</button><button style="font-size:13px;font-weight:600;color:#fff;background:var(--c-primary);border:none;border-radius:9px;padding:8px 14px;cursor:pointer;">Деталі</button></div></div>
+              </div>
+            </div>
+            <!-- completed -->
+            <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;display:flex;gap:16px;">
+              <div style="width:104px;height:104px;border-radius:var(--r-md);background:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=300&q=80&auto=format&fit=crop') center/cover;flex-shrink:0;"></div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div style="font-family:var(--f-head);font-weight:700;font-size:17px;">Atlantis The Palm 5★</div><div style="font-size:13px;color:var(--c-ink-2);margin-top:3px;">№ TM-09114 · 📅 3–9 лют. 2026 · 2 дорослих</div></div><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;background:#EEF0F3;color:#4B5563;border-radius:var(--r-pill);padding:6px 12px;white-space:nowrap;"><span style="width:7px;height:7px;border-radius:50%;background:#9AA3AF;"></span>Завершено</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;"><span style="font-family:var(--f-head);font-weight:800;font-size:18px;">76 200 ₴</span><div style="display:flex;gap:8px;"><button style="font-size:13px;font-weight:600;color:var(--c-secondary-600);background:var(--c-secondary-50);border:none;border-radius:9px;padding:8px 14px;cursor:pointer;">★ Залишити відгук</button><button style="font-size:13px;font-weight:600;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-line);border-radius:9px;padding:8px 14px;cursor:pointer;">Повторити</button></div></div>
+              </div>
+            </div>
+            <!-- cancelled -->
+            <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;display:flex;gap:16px;opacity:.78;">
+              <div style="width:104px;height:104px;border-radius:var(--r-md);background:url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&q=80&auto=format&fit=crop') center/cover;flex-shrink:0;filter:grayscale(.4);"></div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div style="font-family:var(--f-head);font-weight:700;font-size:17px;">Steigenberger Alcazar 5★</div><div style="font-size:13px;color:var(--c-ink-2);margin-top:3px;">№ TM-08770 · 📅 18–26 груд. 2025 · 2 дорослих</div></div><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;background:var(--c-error-50);color:#B42323;border-radius:var(--r-pill);padding:6px 12px;white-space:nowrap;"><span style="width:7px;height:7px;border-radius:50%;background:var(--c-error);"></span>Скасовано</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;"><span style="font-size:13px;color:var(--c-ink-2);">Кошти повернено на картку</span><button style="font-size:13px;font-weight:600;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-line);border-radius:9px;padding:8px 14px;cursor:pointer;">Деталі</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:14px;margin:56px 0 22px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-ink);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">6</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:26px;margin:0;">Авторизація</h2>
+    <span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:#9AA3AF;">/auth · Desktop 1280px</span>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);display:grid;grid-template-columns:1fr 1fr;min-height:560px;">
+    <!-- left visual -->
+    <div style="position:relative;background:linear-gradient(160deg,rgba(8,28,48,.55),rgba(26,111,191,.55)),url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=900&q=80&auto=format&fit=crop') center/cover;padding:48px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.2);backdrop-filter:blur(4px);display:grid;place-items:center;font-family:var(--f-head);font-weight:900;">T</span><span style="font-family:var(--f-head);font-weight:900;font-size:19px;">TourMaster</span></div>
+      <div>
+        <h2 style="font-family:var(--f-head);font-weight:900;font-size:32px;line-height:1.15;margin:0 0 12px;text-shadow:0 2px 16px rgba(0,0,0,.3);">Твоя наступна подорож<br>на відстані одного входу</h2>
+        <p style="font-size:15px;line-height:1.6;color:rgba(255,255,255,.9);margin:0;max-width:380px;">Зберігай улюблені тури, відстежуй бронювання та отримуй персональні знижки.</p>
+        <div style="display:flex;gap:8px;margin-top:24px;"><span style="width:24px;height:6px;border-radius:99px;background:#fff;"></span><span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.5);"></span><span style="width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.5);"></span></div>
+      </div>
+    </div>
+
+    <!-- right form -->
+    <div style="padding:48px 56px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="display:flex;gap:6px;background:var(--c-bg);border-radius:var(--r-md);padding:5px;margin-bottom:28px;width:max-content;">
+        <span style="font-size:14px;font-weight:700;color:var(--c-ink);background:#fff;border-radius:9px;padding:9px 28px;box-shadow:var(--sh-1);">Вхід</span>
+        <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);padding:9px 28px;">Реєстрація</span>
+      </div>
+
+      <h1 style="font-family:var(--f-head);font-weight:900;font-size:26px;margin:0 0 6px;">З поверненням!</h1>
+      <p style="font-size:14px;color:var(--c-ink-2);margin:0 0 24px;">Увійдіть, щоб продовжити бронювання</p>
+
+      <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Електронна пошта</label>
+      <input value="olek@mail.com" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:13px 14px;outline:none;font-family:var(--f-body);margin-bottom:16px;">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><label style="font-size:13px;font-weight:600;">Пароль</label><span style="font-size:13px;font-weight:600;color:var(--c-primary);">Забули пароль?</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:13px 14px;margin-bottom:22px;"><span style="font-size:15px;letter-spacing:3px;">••••••••</span><span style="color:var(--c-ink-2);">👁</span></div>
+
+      <button style="width:100%;font-family:var(--f-body);font-weight:700;font-size:16px;color:#fff;background:var(--c-primary);border:none;border-radius:var(--r-md);padding:15px;cursor:pointer;margin-bottom:18px;">Увійти</button>
+
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;"><div style="flex:1;height:1px;background:var(--c-line);"></div><span style="font-size:13px;color:var(--c-ink-2);">або</span><div style="flex:1;height:1px;background:var(--c-line);"></div></div>
+
+      <button style="width:100%;display:flex;align-items:center;justify-content:center;gap:11px;font-family:var(--f-body);font-weight:600;font-size:15px;color:var(--c-ink);background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:13px;cursor:pointer;"><span style="font-family:var(--f-head);font-weight:900;font-size:17px;color:#4285F4;">G</span> Продовжити з Google</button>
+
+      <p style="text-align:center;font-size:14px;color:var(--c-ink-2);margin:24px 0 0;">Ще немає акаунта? <span style="color:var(--c-primary);font-weight:700;">Зареєструватися</span></p>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:14px;margin:64px 0 26px;">
+    <span style="font-family:var(--f-head);font-weight:900;font-size:15px;color:#fff;background:var(--c-secondary);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;">04</span>
+    <h2 style="font-family:var(--f-head);font-weight:900;font-size:30px;margin:0;letter-spacing:-.01em;">Адміністративна частина</h2>
+    <div style="flex:1;height:1px;background:var(--c-line);"></div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;"><span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[7] DASHBOARD</span><span style="font-size:12px;color:#9AA3AF;">· /admin · Desktop 1280px</span></div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);display:grid;grid-template-columns:236px 1fr;min-height:680px;">
+    <!-- SIDEBAR -->
+    <div style="background:#10243A;color:#fff;padding:22px 16px;display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 8px 22px;"><span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;font-family:var(--f-head);font-weight:900;">T</span><div><div style="font-family:var(--f-head);font-weight:900;font-size:16px;line-height:1;">TourMaster</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Admin Panel</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:3px;font-size:14px;font-weight:600;">
+        <span style="display:flex;align-items:center;gap:11px;background:var(--c-primary);border-radius:var(--r-md);padding:11px 13px;">◳ Dashboard</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">🧳 Тури</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">📋 Бронювання <span style="margin-left:auto;font-size:11px;background:var(--c-secondary);border-radius:99px;padding:2px 7px;">12</span></span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">👥 Клієнти</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">📊 Аналітика</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">⚙ Налаштування</span>
+      </div>
+      <div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid rgba(255,255,255,.1);"><span style="width:34px;height:34px;border-radius:50%;background:var(--c-secondary);display:grid;place-items:center;font-family:var(--f-head);font-weight:800;">М</span><div><div style="font-size:13px;font-weight:700;">Марина К.</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Менеджер</div></div></div>
+    </div>
+
+    <!-- MAIN -->
+    <div style="background:var(--c-bg);">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:#fff;border-bottom:1px solid var(--c-line);">
+        <div><h1 style="font-family:var(--f-head);font-weight:900;font-size:22px;margin:0;">Дашборд</h1><div style="font-size:13px;color:var(--c-ink-2);">Середа, 11 червня 2026</div></div>
+        <div style="display:flex;align-items:center;gap:14px;"><div style="display:flex;align-items:center;gap:8px;background:var(--c-bg);border-radius:var(--r-pill);padding:8px 14px;"><span style="color:var(--c-ink-2);">🔍</span><span style="font-size:13px;color:var(--c-ink-2);">Пошук…</span></div><span style="font-size:18px;position:relative;">🔔</span></div>
+      </div>
+
+      <div style="padding:24px 28px;">
+        <!-- stat cards -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;color:var(--c-ink-2);font-weight:600;">Бронювань сьогодні</span><span style="width:32px;height:32px;border-radius:9px;background:var(--c-primary-50);color:var(--c-primary);display:grid;place-items:center;">✦</span></div><div style="font-family:var(--f-head);font-weight:900;font-size:26px;">37</div><div style="font-size:12px;color:var(--c-success);font-weight:600;margin-top:3px;">▲ 6 за годину</div></div>
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;color:var(--c-ink-2);font-weight:600;">Виручка / місяць</span><span style="width:32px;height:32px;border-radius:9px;background:var(--c-success-50);color:var(--c-success);display:grid;place-items:center;">₴</span></div><div style="font-family:var(--f-head);font-weight:900;font-size:26px;">2,84 млн</div><div style="font-size:12px;color:var(--c-success);font-weight:600;margin-top:3px;">▲ 12,4%</div></div>
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;color:var(--c-ink-2);font-weight:600;">Нові клієнти</span><span style="width:32px;height:32px;border-radius:9px;background:var(--c-secondary-50);color:var(--c-secondary-600);display:grid;place-items:center;">👤</span></div><div style="font-family:var(--f-head);font-weight:900;font-size:26px;">148</div><div style="font-size:12px;color:var(--c-success);font-weight:600;margin-top:3px;">▲ 9,1%</div></div>
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;color:var(--c-ink-2);font-weight:600;">Конверсія</span><span style="width:32px;height:32px;border-radius:9px;background:#EEF0F3;color:#4B5563;display:grid;place-items:center;">%</span></div><div style="font-family:var(--f-head);font-weight:900;font-size:26px;">4,8%</div><div style="font-size:12px;color:var(--c-error);font-weight:600;margin-top:3px;">▼ 0,3%</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;">
+          <!-- chart -->
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:20px 22px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;"><div><div style="font-family:var(--f-head);font-weight:800;font-size:16px;">Продажі за 30 днів</div><div style="font-size:13px;color:var(--c-ink-2);">Загалом 2 843 200 ₴</div></div><span style="font-size:13px;font-weight:600;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:7px 12px;">30 днів ▾</span></div>
+            <svg viewBox="0 0 640 200" style="width:100%;height:200px;display:block;">
+              <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1A6FBF" stop-opacity="0.22"/><stop offset="1" stop-color="#1A6FBF" stop-opacity="0"/></linearGradient></defs>
+              <line x1="0" y1="50" x2="640" y2="50" stroke="#EEF0F3" stroke-width="1"/>
+              <line x1="0" y1="100" x2="640" y2="100" stroke="#EEF0F3" stroke-width="1"/>
+              <line x1="0" y1="150" x2="640" y2="150" stroke="#EEF0F3" stroke-width="1"/>
+              <path d="M0,150 L53,135 L106,140 L160,110 L213,120 L266,88 L320,95 L373,70 L426,80 L480,52 L533,60 L586,38 L640,46 L640,200 L0,200 Z" fill="url(#ag)"/>
+              <path d="M0,150 L53,135 L106,140 L160,110 L213,120 L266,88 L320,95 L373,70 L426,80 L480,52 L533,60 L586,38 L640,46" fill="none" stroke="#1A6FBF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="586" cy="38" r="5" fill="#fff" stroke="#1A6FBF" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <!-- tasks -->
+          <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:20px 22px;">
+            <div style="font-family:var(--f-head);font-weight:800;font-size:16px;margin-bottom:16px;">Задачі на сьогодні</div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div style="display:flex;gap:11px;"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--c-line);flex-shrink:0;margin-top:1px;"></span><div><div style="font-size:13px;font-weight:600;">Підтвердити TM-10431</div><div style="font-size:12px;color:var(--c-error);">⏰ до 14:00</div></div></div>
+              <div style="display:flex;gap:11px;"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--c-line);flex-shrink:0;margin-top:1px;"></span><div><div style="font-size:13px;font-weight:600;">Передзвонити Ковальчук О.</div><div style="font-size:12px;color:var(--c-ink-2);">Питання по візі</div></div></div>
+              <div style="display:flex;gap:11px;"><span style="width:18px;height:18px;border-radius:5px;background:var(--c-success);color:#fff;display:grid;place-items:center;font-size:11px;flex-shrink:0;margin-top:1px;">✓</span><div><div style="font-size:13px;font-weight:600;color:var(--c-ink-2);text-decoration:line-through;">Оновити ціни Туреччина</div></div></div>
+              <div style="display:flex;gap:11px;"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--c-line);flex-shrink:0;margin-top:1px;"></span><div><div style="font-size:13px;font-weight:600;">Відповісти на 3 відгуки</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- recent bookings table -->
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:20px 22px;margin-top:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><div style="font-family:var(--f-head);font-weight:800;font-size:16px;">Останні бронювання</div><span style="font-size:13px;font-weight:600;color:var(--c-primary);">Усі →</span></div>
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead><tr style="text-align:left;color:var(--c-ink-2);font-size:12px;"><th style="padding:0 0 10px;font-weight:600;">№</th><th style="padding:0 0 10px;font-weight:600;">Клієнт</th><th style="padding:0 0 10px;font-weight:600;">Тур</th><th style="padding:0 0 10px;font-weight:600;">Сума</th><th style="padding:0 0 10px;font-weight:600;">Статус</th></tr></thead>
+            <tbody>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 0;font-weight:700;">TM-10431</td><td>Ковальчук О.</td><td>Rixos Belek 5★</td><td style="font-weight:700;">48 400 ₴</td><td><span style="font-size:12px;font-weight:700;background:var(--c-warning-50);color:#92610A;border-radius:99px;padding:4px 10px;">● Нове</span></td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 0;font-weight:700;">TM-10430</td><td>Бондаренко І.</td><td>Atlantis Palm 5★</td><td style="font-weight:700;">76 200 ₴</td><td><span style="font-size:12px;font-weight:700;background:var(--c-primary-50);color:var(--c-primary-700);border-radius:99px;padding:4px 10px;">● Підтверджено</span></td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 0;font-weight:700;">TM-10429</td><td>Шевченко О.</td><td>Mykonos Blu 5★</td><td style="font-weight:700;">52 700 ₴</td><td><span style="font-size:12px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:99px;padding:4px 10px;">● Оплачено</span></td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 0;font-weight:700;">TM-10428</td><td>Мельник Т.</td><td>Anantara Veli 5★</td><td style="font-weight:700;">128 000 ₴</td><td><span style="font-size:12px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:99px;padding:4px 10px;">● Оплачено</span></td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 0;font-weight:700;">TM-10427</td><td>Гриценко В.</td><td>Гудаурі 4★</td><td style="font-weight:700;">19 400 ₴</td><td><span style="font-size:12px;font-weight:700;background:#EEF0F3;color:#4B5563;border-radius:99px;padding:4px 10px;">● Завершено</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:10px;margin:48px 0 14px;"><span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[8] УПРАВЛІННЯ ТУРАМИ</span><span style="font-size:12px;color:#9AA3AF;">· /admin/tours · з модальним Dialog</span></div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);display:grid;grid-template-columns:236px 1fr;min-height:640px;position:relative;">
+    <!-- sidebar -->
+    <div style="background:#10243A;color:#fff;padding:22px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 8px 22px;"><span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;font-family:var(--f-head);font-weight:900;">T</span><div><div style="font-family:var(--f-head);font-weight:900;font-size:16px;line-height:1;">TourMaster</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Admin Panel</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:3px;font-size:14px;font-weight:600;">
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">◳ Dashboard</span>
+        <span style="display:flex;align-items:center;gap:11px;background:var(--c-primary);border-radius:var(--r-md);padding:11px 13px;">🧳 Тури</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">📋 Бронювання <span style="margin-left:auto;font-size:11px;background:var(--c-secondary);border-radius:99px;padding:2px 7px;">12</span></span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">👥 Клієнти</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">📊 Аналітика</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">⚙ Налаштування</span>
+      </div>
+    </div>
+    <!-- main -->
+    <div style="background:var(--c-bg);">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:#fff;border-bottom:1px solid var(--c-line);">
+        <h1 style="font-family:var(--f-head);font-weight:900;font-size:22px;margin:0;">Управління турами <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);">· 1 248</span></h1>
+        <button style="font-family:var(--f-body);font-weight:700;font-size:14px;color:#fff;background:var(--c-secondary);border:none;border-radius:var(--r-md);padding:11px 18px;cursor:pointer;box-shadow:0 4px 12px rgba(249,115,22,.3);">+ Додати тур</button>
+      </div>
+      <div style="padding:20px 28px;">
+        <div style="display:flex;gap:10px;margin-bottom:16px;">
+          <div style="flex:1;display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:10px 14px;"><span style="color:var(--c-ink-2);">🔍</span><span style="font-size:14px;color:var(--c-ink-2);">Пошук за назвою або країною…</span></div>
+          <span style="display:flex;align-items:center;font-size:14px;font-weight:600;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:10px 16px;">Країна ▾</span>
+          <span style="display:flex;align-items:center;font-size:14px;font-weight:600;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:10px 16px;">Статус ▾</span>
+        </div>
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead><tr style="text-align:left;color:var(--c-ink-2);font-size:12px;background:var(--c-bg);"><th style="padding:13px 20px;font-weight:600;">Тур</th><th style="padding:13px;font-weight:600;">Країна</th><th style="padding:13px;font-weight:600;">Ціна від</th><th style="padding:13px;font-weight:600;">Статус</th><th style="padding:13px 20px;font-weight:600;text-align:right;">Дії</th></tr></thead>
+            <tbody>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 20px;"><div style="display:flex;align-items:center;gap:12px;"><span style="width:46px;height:46px;border-radius:9px;background:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=120&q=80&auto=format&fit=crop') center/cover;"></span><span style="font-weight:600;">Rixos Premium Belek 5★</span></div></td><td style="padding:12px;color:var(--c-ink-2);">Туреччина</td><td style="padding:12px;font-weight:700;">48 400 ₴</td><td style="padding:12px;"><span style="font-size:12px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:99px;padding:4px 10px;">● Активний</span></td><td style="padding:12px 20px;text-align:right;color:var(--c-ink-2);">✎&nbsp;&nbsp;🗑</td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 20px;"><div style="display:flex;align-items:center;gap:12px;"><span style="width:46px;height:46px;border-radius:9px;background:url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=120&q=80&auto=format&fit=crop') center/cover;"></span><span style="font-weight:600;">Steigenberger Alcazar 5★</span></div></td><td style="padding:12px;color:var(--c-ink-2);">Єгипет</td><td style="padding:12px;font-weight:700;">31 800 ₴</td><td style="padding:12px;"><span style="font-size:12px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:99px;padding:4px 10px;">● Активний</span></td><td style="padding:12px 20px;text-align:right;color:var(--c-ink-2);">✎&nbsp;&nbsp;🗑</td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 20px;"><div style="display:flex;align-items:center;gap:12px;"><span style="width:46px;height:46px;border-radius:9px;background:url('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=120&q=80&auto=format&fit=crop') center/cover;"></span><span style="font-weight:600;">Mykonos Blu Grecotel 5★</span></div></td><td style="padding:12px;color:var(--c-ink-2);">Греція</td><td style="padding:12px;font-weight:700;">52 700 ₴</td><td style="padding:12px;"><span style="font-size:12px;font-weight:700;background:var(--c-warning-50);color:#92610A;border-radius:99px;padding:4px 10px;">● Чернетка</span></td><td style="padding:12px 20px;text-align:right;color:var(--c-ink-2);">✎&nbsp;&nbsp;🗑</td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 20px;"><div style="display:flex;align-items:center;gap:12px;"><span style="width:46px;height:46px;border-radius:9px;background:url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=120&q=80&auto=format&fit=crop') center/cover;"></span><span style="font-weight:600;">Гудаурі 4★</span></div></td><td style="padding:12px;color:var(--c-ink-2);">Грузія</td><td style="padding:12px;font-weight:700;">19 400 ₴</td><td style="padding:12px;"><span style="font-size:12px;font-weight:700;background:#EEF0F3;color:#4B5563;border-radius:99px;padding:4px 10px;">● Архів</span></td><td style="padding:12px 20px;text-align:right;color:var(--c-ink-2);">✎&nbsp;&nbsp;🗑</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIALOG OVERLAY -->
+    <div style="position:absolute;inset:0;background:rgba(16,36,58,.45);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div style="width:520px;max-width:100%;background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-3);overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--c-line);"><h3 style="font-family:var(--f-head);font-weight:800;font-size:18px;margin:0;">Додати новий тур</h3><span style="font-size:18px;color:var(--c-ink-2);cursor:pointer;">✕</span></div>
+        <div style="padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Назва туру</label><input value="Rixos Premium Belek 5★" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;font-family:var(--f-body);"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Країна</label><div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;"><span style="font-size:15px;">Туреччина</span><span style="color:var(--c-ink-2);">▾</span></div></div>
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Зірки</label><div style="display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;"><span style="color:var(--c-warning);">★★★★★</span><span style="color:var(--c-ink-2);">▾</span></div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Ціна від, ₴</label><input value="48 400" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;font-family:var(--f-body);"></div>
+            <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Тривалість</label><input value="7 ночей" readonly style="width:100%;font-size:15px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 14px;outline:none;font-family:var(--f-body);"></div>
+          </div>
+          <div><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Фото туру</label><div style="border:1.5px dashed var(--c-line);border-radius:var(--r-md);padding:20px;text-align:center;color:var(--c-ink-2);font-size:13px;">⬆ Перетягніть зображення або натисніть для завантаження</div></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--c-line);background:var(--c-bg);">
+          <button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:var(--c-ink);background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 20px;cursor:pointer;">Скасувати</button>
+          <button style="font-family:var(--f-body);font-weight:700;font-size:14px;color:#fff;background:var(--c-primary);border:none;border-radius:var(--r-md);padding:11px 24px;cursor:pointer;">Зберегти тур</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 56px;">
+  <div style="display:flex;align-items:center;gap:10px;margin:48px 0 14px;"><span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[9] УПРАВЛІННЯ БРОНЮВАННЯМИ</span><span style="font-size:12px;color:#9AA3AF;">· /admin/bookings · Dialog деталей</span></div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);display:grid;grid-template-columns:236px 1fr;min-height:640px;position:relative;">
+    <div style="background:#10243A;color:#fff;padding:22px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 8px 22px;"><span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;font-family:var(--f-head);font-weight:900;">T</span><div><div style="font-family:var(--f-head);font-weight:900;font-size:16px;line-height:1;">TourMaster</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Admin Panel</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:3px;font-size:14px;font-weight:600;">
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">◳ Dashboard</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">🧳 Тури</span>
+        <span style="display:flex;align-items:center;gap:11px;background:var(--c-primary);border-radius:var(--r-md);padding:11px 13px;">📋 Бронювання <span style="margin-left:auto;font-size:11px;background:#fff;color:var(--c-primary);border-radius:99px;padding:2px 7px;">12</span></span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">👥 Клієнти</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">📊 Аналітика</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">⚙ Налаштування</span>
+      </div>
+    </div>
+    <div style="background:var(--c-bg);">
+      <div style="padding:18px 28px;background:#fff;border-bottom:1px solid var(--c-line);"><h1 style="font-family:var(--f-head);font-weight:900;font-size:22px;margin:0;">Бронювання</h1></div>
+      <div style="padding:20px 28px;">
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <span style="font-size:13px;font-weight:700;color:#fff;background:var(--c-primary);border-radius:var(--r-pill);padding:8px 14px;">Усі · 1 248</span>
+          <span style="font-size:13px;font-weight:600;color:#92610A;background:var(--c-warning-50);border-radius:var(--r-pill);padding:8px 14px;">Нові · 12</span>
+          <span style="font-size:13px;font-weight:600;color:var(--c-primary-700);background:var(--c-primary-50);border-radius:var(--r-pill);padding:8px 14px;">Підтверджені · 34</span>
+          <span style="font-size:13px;font-weight:600;color:#157A3C;background:var(--c-success-50);border-radius:var(--r-pill);padding:8px 14px;">Оплачені · 210</span>
+          <span style="margin-left:auto;font-size:13px;font-weight:600;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:8px 14px;">📅 Червень 2026 ▾</span>
+        </div>
+        <div style="background:#fff;border:1px solid var(--c-line);border-radius:var(--r-lg);overflow:hidden;">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead><tr style="text-align:left;color:var(--c-ink-2);font-size:12px;background:var(--c-bg);"><th style="padding:13px 20px;font-weight:600;">№</th><th style="padding:13px;font-weight:600;">Клієнт</th><th style="padding:13px;font-weight:600;">Тур</th><th style="padding:13px;font-weight:600;">Дати</th><th style="padding:13px;font-weight:600;">Сума</th><th style="padding:13px;font-weight:600;">Статус</th></tr></thead>
+            <tbody>
+              <tr style="border-top:1px solid var(--c-line);background:var(--c-primary-50);"><td style="padding:12px 20px;font-weight:700;">TM-10431</td><td>Ковальчук О.</td><td>Rixos Belek 5★</td><td style="color:var(--c-ink-2);">12–19 лип</td><td style="font-weight:700;">48 400 ₴</td><td><span style="font-size:12px;font-weight:700;background:var(--c-warning-50);color:#92610A;border-radius:99px;padding:4px 10px;">● Нове</span></td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 20px;font-weight:700;">TM-10430</td><td>Бондаренко І.</td><td>Atlantis Palm 5★</td><td style="color:var(--c-ink-2);">22–28 лип</td><td style="font-weight:700;">76 200 ₴</td><td><span style="font-size:12px;font-weight:700;background:var(--c-primary-50);color:var(--c-primary-700);border-radius:99px;padding:4px 10px;">● Підтверджено</span></td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 20px;font-weight:700;">TM-10429</td><td>Шевченко О.</td><td>Mykonos Blu 5★</td><td style="color:var(--c-ink-2);">5–12 серп</td><td style="font-weight:700;">52 700 ₴</td><td><span style="font-size:12px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:99px;padding:4px 10px;">● Оплачено</span></td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 20px;font-weight:700;">TM-10428</td><td>Мельник Т.</td><td>Anantara Veli 5★</td><td style="color:var(--c-ink-2);">1–10 вер</td><td style="font-weight:700;">128 000 ₴</td><td><span style="font-size:12px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:99px;padding:4px 10px;">● Оплачено</span></td></tr>
+              <tr style="border-top:1px solid var(--c-line);"><td style="padding:12px 20px;font-weight:700;">TM-10427</td><td>Гриценко В.</td><td>Гудаурі 4★</td><td style="color:var(--c-ink-2);">3–8 лют</td><td style="font-weight:700;">19 400 ₴</td><td><span style="font-size:12px;font-weight:700;background:#EEF0F3;color:#4B5563;border-radius:99px;padding:4px 10px;">● Завершено</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- detail dialog -->
+    <div style="position:absolute;inset:0;background:rgba(16,36,58,.45);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div style="width:540px;max-width:100%;background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-3);overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--c-line);"><div><h3 style="font-family:var(--f-head);font-weight:800;font-size:18px;margin:0;">Бронювання TM-10431</h3><div style="font-size:13px;color:var(--c-ink-2);margin-top:2px;">Створено 11.06.2026, 09:14</div></div><span style="font-size:18px;color:var(--c-ink-2);cursor:pointer;">✕</span></div>
+        <div style="padding:22px 24px;">
+          <div style="display:flex;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--c-line);margin-bottom:16px;">
+            <div style="width:64px;height:64px;border-radius:var(--r-md);background:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=200&q=80&auto=format&fit=crop') center/cover;flex-shrink:0;"></div>
+            <div><div style="font-family:var(--f-head);font-weight:700;font-size:15px;">Rixos Premium Belek 5★</div><div style="font-size:13px;color:var(--c-ink-2);margin-top:3px;">📅 12–19 липня 2026 · 2 дорослих</div><div style="font-family:var(--f-head);font-weight:800;font-size:16px;margin-top:5px;">48 400 ₴</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+            <div><div style="font-size:12px;color:var(--c-ink-2);">Клієнт</div><div style="font-size:14px;font-weight:600;">Ковальчук Олена</div></div>
+            <div><div style="font-size:12px;color:var(--c-ink-2);">Телефон</div><div style="font-size:14px;font-weight:600;">+380 67 123 45 67</div></div>
+            <div><div style="font-size:12px;color:var(--c-ink-2);">Email</div><div style="font-size:14px;font-weight:600;">olena.k@mail.com</div></div>
+            <div><div style="font-size:12px;color:var(--c-ink-2);">Менеджер</div><div style="font-size:14px;font-weight:600;">Марина К.</div></div>
+          </div>
+          <label style="display:block;font-size:13px;font-weight:600;margin-bottom:8px;">Змінити статус</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+            <span style="font-size:13px;font-weight:700;background:var(--c-warning-50);color:#92610A;border:1.5px solid var(--c-warning);border-radius:var(--r-md);padding:8px 13px;">● Нове</span>
+            <span style="font-size:13px;font-weight:600;color:var(--c-primary-700);background:var(--c-primary-50);border:1.5px solid transparent;border-radius:var(--r-md);padding:8px 13px;">● Підтверджено</span>
+            <span style="font-size:13px;font-weight:600;color:#157A3C;background:var(--c-success-50);border:1.5px solid transparent;border-radius:var(--r-md);padding:8px 13px;">● Оплачено</span>
+            <span style="font-size:13px;font-weight:600;color:#B42323;background:var(--c-error-50);border:1.5px solid transparent;border-radius:var(--r-md);padding:8px 13px;">● Скасовано</span>
+          </div>
+          <label style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--c-ink);cursor:pointer;"><span style="width:18px;height:18px;border-radius:5px;background:var(--c-primary);color:#fff;display:grid;place-items:center;font-size:11px;">✓</span>Надіслати сповіщення клієнту (Email + SMS)</label>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--c-line);background:var(--c-bg);">
+          <button style="font-family:var(--f-body);font-weight:600;font-size:14px;color:var(--c-ink);background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:11px 20px;cursor:pointer;">Закрити</button>
+          <button style="font-family:var(--f-body);font-weight:700;font-size:14px;color:#fff;background:var(--c-primary);border:none;border-radius:var(--r-md);padding:11px 24px;cursor:pointer;">Підтвердити та сповістити</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="max-width:1440px;margin:0 auto;padding:8px 40px 80px;">
+  <div style="display:flex;align-items:center;gap:10px;margin:48px 0 14px;"><span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--c-ink-2);">[10] БАЗА КЛІЄНТІВ</span><span style="font-size:12px;color:#9AA3AF;">· /admin/clients · профіль + нотатки</span></div>
+
+  <div style="width:1280px;max-width:100%;margin:0 auto;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-3);display:grid;grid-template-columns:236px 1fr;min-height:640px;">
+    <div style="background:#10243A;color:#fff;padding:22px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:0 8px 22px;"><span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));display:grid;place-items:center;font-family:var(--f-head);font-weight:900;">T</span><div><div style="font-family:var(--f-head);font-weight:900;font-size:16px;line-height:1;">TourMaster</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Admin Panel</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:3px;font-size:14px;font-weight:600;">
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">◳ Dashboard</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">🧳 Тури</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">📋 Бронювання <span style="margin-left:auto;font-size:11px;background:var(--c-secondary);border-radius:99px;padding:2px 7px;">12</span></span>
+        <span style="display:flex;align-items:center;gap:11px;background:var(--c-primary);border-radius:var(--r-md);padding:11px 13px;">👥 Клієнти</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">📊 Аналітика</span>
+        <span style="display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.7);padding:11px 13px;">⚙ Налаштування</span>
+      </div>
+    </div>
+    <div style="background:var(--c-bg);display:grid;grid-template-columns:1fr 360px;">
+      <!-- list -->
+      <div style="border-right:1px solid var(--c-line);">
+        <div style="padding:18px 24px;background:#fff;border-bottom:1px solid var(--c-line);"><h1 style="font-family:var(--f-head);font-weight:900;font-size:22px;margin:0 0 12px;">Клієнти <span style="font-size:14px;font-weight:600;color:var(--c-ink-2);">· 8 412</span></h1><div style="display:flex;align-items:center;gap:9px;background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-md);padding:10px 14px;"><span style="color:var(--c-ink-2);">🔍</span><span style="font-size:14px;color:var(--c-ink-2);">Пошук за ім'ям, телефоном, email…</span></div></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 24px;background:var(--c-primary-50);border-left:3px solid var(--c-primary);"><span style="width:42px;height:42px;border-radius:50%;background:var(--c-primary);color:#fff;font-family:var(--f-head);font-weight:800;display:grid;place-items:center;">О</span><div style="flex:1;"><div style="font-weight:700;font-size:14px;">Шевченко Олександр</div><div style="font-size:12px;color:var(--c-ink-2);">+380 67 …45 67 · 6 турів</div></div></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--c-line);"><span style="width:42px;height:42px;border-radius:50%;background:var(--c-secondary);color:#fff;font-family:var(--f-head);font-weight:800;display:grid;place-items:center;">І</span><div style="flex:1;"><div style="font-weight:700;font-size:14px;">Бондаренко Ірина</div><div style="font-size:12px;color:var(--c-ink-2);">+380 50 …12 34 · 3 тури</div></div></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--c-line);"><span style="width:42px;height:42px;border-radius:50%;background:#22C55E;color:#fff;font-family:var(--f-head);font-weight:800;display:grid;place-items:center;">Т</span><div style="flex:1;"><div style="font-weight:700;font-size:14px;">Мельник Тарас</div><div style="font-size:12px;color:var(--c-ink-2);">+380 93 …88 21 · 9 турів</div></div></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--c-line);"><span style="width:42px;height:42px;border-radius:50%;background:#6B7280;color:#fff;font-family:var(--f-head);font-weight:800;display:grid;place-items:center;">В</span><div style="flex:1;"><div style="font-weight:700;font-size:14px;">Гриценко Віктор</div><div style="font-size:12px;color:var(--c-ink-2);">+380 99 …40 05 · 1 тур</div></div></div>
+        </div>
+      </div>
+      <!-- profile -->
+      <div style="padding:24px;background:#fff;">
+        <div style="text-align:center;padding-bottom:18px;border-bottom:1px solid var(--c-line);margin-bottom:18px;">
+          <span style="width:64px;height:64px;border-radius:50%;background:var(--c-primary);color:#fff;font-family:var(--f-head);font-weight:800;font-size:24px;display:inline-grid;place-items:center;margin-bottom:10px;">О</span>
+          <div style="font-family:var(--f-head);font-weight:800;font-size:17px;">Шевченко Олександр</div>
+          <div style="font-size:13px;color:var(--c-ink-2);">Клієнт з 2021 · ⭐ Срібний</div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;"><button style="font-size:13px;font-weight:600;color:#fff;background:var(--c-primary);border:none;border-radius:9px;padding:8px 14px;cursor:pointer;">✉ Написати</button><button style="font-size:13px;font-weight:600;color:var(--c-primary);background:#fff;border:1.5px solid var(--c-line);border-radius:9px;padding:8px 14px;cursor:pointer;">☎ Дзвінок</button></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
+          <div style="background:var(--c-bg);border-radius:var(--r-md);padding:12px;text-align:center;"><div style="font-family:var(--f-head);font-weight:900;font-size:20px;">6</div><div style="font-size:12px;color:var(--c-ink-2);">бронювань</div></div>
+          <div style="background:var(--c-bg);border-radius:var(--r-md);padding:12px;text-align:center;"><div style="font-family:var(--f-head);font-weight:900;font-size:20px;">312k ₴</div><div style="font-size:12px;color:var(--c-ink-2);">витрачено</div></div>
+        </div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Історія бронювань</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span>Rixos Belek 5★</span><span style="font-size:11px;font-weight:700;background:var(--c-success-50);color:#157A3C;border-radius:99px;padding:3px 9px;">Оплачено</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span>Atlantis Palm 5★</span><span style="font-size:11px;font-weight:700;background:#EEF0F3;color:#4B5563;border-radius:99px;padding:3px 9px;">Завершено</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span>Mykonos Blu 5★</span><span style="font-size:11px;font-weight:700;background:#EEF0F3;color:#4B5563;border-radius:99px;padding:3px 9px;">Завершено</span></div>
+        </div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Нотатки менеджера</div>
+        <div style="background:var(--c-warning-50);border-radius:var(--r-md);padding:12px 14px;font-size:13px;line-height:1.5;color:#7A5208;margin-bottom:10px;">Надає перевагу готелям 5★ з аквапарком. Завжди подорожує з дружиною. Цінує швидку відповідь у Viber.</div>
+        <div style="display:flex;align-items:center;gap:9px;border:1.5px solid var(--c-line);border-radius:var(--r-md);padding:10px 12px;"><span style="color:var(--c-ink-2);">✎</span><span style="font-size:13px;color:var(--c-ink-2);">Додати нотатку…</span></div>
+      </div>
+    </div>
+  </div>
+</div></x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const U = (id, w) => `https://images.unsplash.com/photo-${id}?w=${w||700}&q=80&auto=format&fit=crop`;
+    return {
+      destinations: [
+        { country: 'Туреччина', tours: 324, from: '18 900', img: U('1524231757912-21f4fe3a7200') },
+        { country: 'Єгипет',    tours: 246, from: '21 500', img: U('1539768942893-daf53e448371') },
+        { country: 'Греція',    tours: 182, from: '28 400', img: U('1533105079780-92b9be482077') },
+        { country: 'ОАЕ',       tours: 98,  from: '41 200', img: U('1512453979798-5ea266f8880c') },
+        { country: 'Грузія',    tours: 134, from: '16 700', img: U('1469854523086-cc02fe5d8800') },
+        { country: 'Мальдіви',  tours: 61,  from: '89 000', img: U('1514282401047-d79a71a590e8') },
+      ],
+      hotTours: [
+        { title: 'Анталія: 5★ ультра все включено', country: 'Туреччина', nights: '7 ночей', rating: '4.9', reviews: 212, price: '32 400', old: '41 900', badge: '−23%', badgeBg: '#EF4444', img: U('1605281317010-fe5ffe798166') },
+        { title: 'Шарм-ель-Шейх: риф і пляж', country: 'Єгипет', nights: '8 ночей', rating: '4.7', reviews: 168, price: '27 800', old: '', badge: '🔥 ХІТ', badgeBg: '#F97316', img: U('1559827260-dc66d52bef19') },
+        { title: 'Дубай: розкіш пустелі', country: 'ОАЕ', nights: '6 ночей', rating: '4.8', reviews: 143, price: '54 600', old: '', badge: 'НОВИНКА', badgeBg: '#22C55E', img: U('1512453979798-5ea266f8880c') },
+        { title: 'Санторіні: біла казка', country: 'Греція', nights: '7 ночей', rating: '4.9', reviews: 301, price: '38 900', old: '45 200', badge: '−14%', badgeBg: '#EF4444', img: U('1533105079780-92b9be482077') },
+        { title: 'Мальдіви: бунгало над водою', country: 'Мальдіви', nights: '9 ночей', rating: '5.0', reviews: 88, price: '112 000', old: '', badge: '🔥 ХІТ', badgeBg: '#F97316', img: U('1514282401047-d79a71a590e8') },
+      ],
+      reviews: [
+        { name: 'Оксана Левченко', city: 'Київ', tour: 'Санторіні, Греція', text: 'Менеджер підібрав ідеальний готель за нашим бюджетом. Усе пройшло без жодної заминки — від трансферу до екскурсій.', initial: 'О', bg: '#1A6FBF' },
+        { name: 'Андрій Поліщук', city: 'Львів', tour: 'Анталія, Туреччина', text: 'Бронював за 15 хвилин прямо з телефона. Ціна виявилась нижчою, ніж у конкурентів. Повернемось знову!', initial: 'А', bg: '#F97316' },
+        { name: 'Марія Кравець', city: 'Одеса', tour: 'Дубай, ОАЕ', text: 'Окреме спасибі за страховку та підтримку 24/7. Відчувалося, що про нас справді дбають протягом усієї подорожі.', initial: 'М', bg: '#22C55E' },
+      ],
+      catalogTours: [
+        { title: 'Rixos Premium Belek 5★', country: 'Туреччина · Белек', stars: 5, nights: '7 ночей', board: 'Ultra All Inclusive', rating: '4.9', reviews: 212, price: '48 400', old: '59 900', badge: '−19%', badgeBg: '#EF4444', img: `https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80&auto=format&fit=crop` },
+        { title: 'Steigenberger Alcazar 5★', country: 'Єгипет · Шарм', stars: 5, nights: '8 ночей', board: 'All Inclusive', rating: '4.7', reviews: 168, price: '31 800', old: '', badge: '🔥 ХІТ', badgeBg: '#F97316', img: `https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=700&q=80&auto=format&fit=crop` },
+        { title: 'Mykonos Blu Grecotel 5★', country: 'Греція · Міконос', stars: 5, nights: '7 ночей', board: 'Сніданки', rating: '4.9', reviews: 134, price: '52 700', old: '', badge: 'НОВИНКА', badgeBg: '#22C55E', img: `https://images.unsplash.com/photo-1533105079780-92b9be482077?w=700&q=80&auto=format&fit=crop` },
+        { title: 'Atlantis The Palm 5★', country: 'ОАЕ · Дубай', stars: 5, nights: '6 ночей', board: 'Сніданки', rating: '4.8', reviews: 143, price: '76 200', old: '', badge: '', badgeBg: '#F97316', img: `https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=80&auto=format&fit=crop` },
+        { title: 'Anantara Veli Resort 5★', country: 'Мальдіви', stars: 5, nights: '9 ночей', board: 'Напівпансіон', rating: '5.0', reviews: 88, price: '128 000', old: '', badge: '🔥 ХІТ', badgeBg: '#F97316', img: `https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=700&q=80&auto=format&fit=crop` },
+        { title: 'Гудаурі: гірський відпочинок 4★', country: 'Грузія · Гудаурі', stars: 4, nights: '5 ночей', board: 'Сніданки', rating: '4.6', reviews: 97, price: '19 400', old: '23 100', badge: '−16%', badgeBg: '#EF4444', img: `https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=700&q=80&auto=format&fit=crop` },
+      ],
+      promos: [
+        { title: 'Раннє бронювання літа 2026', sub: 'До −30% на тури в Туреччину та Єгипет', img: U('1507525428034-b723cf961d3e', 1400) },
+        { title: 'Гарячі тури на цей тиждень', sub: 'Виліт 13–18 червня · ціни від 16 700 ₴', img: U('1505228395891-9a51e7e86bf6', 1400) },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

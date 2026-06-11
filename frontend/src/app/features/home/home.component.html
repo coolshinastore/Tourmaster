@@ -1,0 +1,310 @@
+<app-header [transparentOnTop]="true" />
+
+<main class="pb-16 md:pb-0">
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="relative flex items-center justify-center" style="min-height: 100svh">
+    <img class="absolute inset-0 w-full h-full object-cover"
+         src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80"
+         alt="Hero" loading="eager" />
+    <div class="absolute inset-0"
+         style="background: linear-gradient(180deg, rgba(8,28,48,.30) 0%, rgba(8,28,48,.62) 100%)"></div>
+
+    <div class="relative z-10 flex flex-col items-center text-center px-4 w-full pt-20 pb-16">
+      <h1 class="text-white font-black mb-4 leading-tight"
+          style="font-family:'Nunito Sans',sans-serif; font-size: clamp(2rem, 5vw, 3rem)">
+        Відкрийте світ разом&nbsp;з&nbsp;TourMaster
+      </h1>
+      <p class="text-white/85 text-lg md:text-xl mb-10 max-w-lg">
+        Понад 500 турів у найкращих напрямках. Підберемо ідеальний відпочинок для вас.
+      </p>
+
+      <!-- Search card -->
+      <div class="bg-surface rounded-xl p-5 w-full max-w-4xl text-left" style="box-shadow: var(--shadow-3)">
+        <div class="grid grid-cols-1 md:grid-cols-[1.4fr_1.2fr_1fr_auto] gap-4 items-end">
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-semibold text-ink-2 uppercase tracking-wider">Напрямок</label>
+            <input pInputText [(ngModel)]="search.destination"
+                   placeholder="Куди летимо?" class="w-full" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-semibold text-ink-2 uppercase tracking-wider">Дати вильоту</label>
+            <input pInputText placeholder="Оберіть дати" class="w-full" readonly />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-semibold text-ink-2 uppercase tracking-wider">Туристи</label>
+            <p-inputnumber [(ngModel)]="search.tourists" [min]="1" [max]="20"
+                           [showButtons]="true" buttonLayout="horizontal"
+                           decrementButtonIcon="pi pi-minus" incrementButtonIcon="pi pi-plus"
+                           class="w-full" inputStyleClass="text-center w-full" />
+          </div>
+          <button class="p-button p-button-cta flex items-center justify-center gap-2 h-[46px] px-6 w-full md:w-auto rounded-xl font-bold text-white"
+                  (click)="onSearch()">
+            <i class="pi pi-search"></i>
+            Знайти тур
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex gap-8 mt-10">
+        @for (stat of [
+          { value: '500+', label: 'турів' },
+          { value: '12K+', label: 'клієнтів' },
+          { value: '50+', label: 'країн' },
+          { value: '4.9★', label: 'рейтинг' }
+        ]; track stat.label) {
+          <div class="text-center">
+            <div class="text-white font-black text-2xl" style="font-family:'Nunito Sans',sans-serif">
+              {{ stat.value }}
+            </div>
+            <div class="text-white/70 text-sm">{{ stat.label }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SPECIAL OFFERS CAROUSEL ═══════════ -->
+  <section class="py-16 bg-surface">
+    <div class="container-app">
+      <div class="flex items-end justify-between mb-8">
+        <div>
+          <p class="text-secondary font-semibold text-sm mb-1">Вигідно та швидко</p>
+          <h2 class="font-black text-3xl text-ink" style="font-family:'Nunito Sans',sans-serif">
+            Спеціальні пропозиції
+          </h2>
+        </div>
+        <a routerLink="/tours" class="text-primary font-semibold text-sm flex items-center gap-1 hover:underline">
+          Всі тури <i class="pi pi-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <p-carousel [value]="slides" [numVisible]="1" [numScroll]="1"
+                  [circular]="true" [autoplayInterval]="5000"
+                  [showIndicators]="true" [showNavigators]="true">
+        <ng-template #item let-slide>
+          <div class="relative rounded-xl overflow-hidden mx-2" style="height: 300px; cursor: pointer"
+               (click)="onSearch()">
+            <img [src]="slide.image" [alt]="slide.title"
+                 class="absolute inset-0 w-full h-full object-cover" />
+            <div class="absolute inset-0"
+                 style="background: linear-gradient(180deg, rgba(8,28,48,.10) 0%, rgba(8,28,48,.70) 100%)"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3"
+                    [class]="badgeClass(slide.badge)"
+                    style="backdrop-filter: blur(4px)">{{ slide.badge }}</span>
+              <h3 class="font-black text-2xl mb-1" style="font-family:'Nunito Sans',sans-serif">{{ slide.title }}</h3>
+              <p class="text-white/85 text-sm mb-3">{{ slide.subtitle }}</p>
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-white/60 text-xs">від</span>
+                  <span class="text-white font-black text-xl ml-1">{{ slide.price | number }} ₴</span>
+                </div>
+                <button class="p-button p-button-cta px-4 py-2 rounded-xl text-sm font-bold text-white">
+                  Забронювати
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </section>
+
+  <!-- ═══════════ POPULAR DESTINATIONS ═══════════ -->
+  <section class="py-16" style="background: var(--color-bg)">
+    <div class="container-app">
+      <div class="text-center mb-10">
+        <p class="text-secondary font-semibold text-sm mb-1">Обирайте напрямок</p>
+        <h2 class="font-black text-3xl text-ink" style="font-family:'Nunito Sans',sans-serif">
+          Популярні напрямки
+        </h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        @for (dest of destinations; track dest.name) {
+          <a routerLink="/tours" [queryParams]="{country: dest.name}"
+             class="relative rounded-xl overflow-hidden cursor-pointer group"
+             style="height: 170px">
+            <img [src]="dest.image" [alt]="dest.name"
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <div class="absolute inset-0"
+                 style="background: linear-gradient(180deg, rgba(8,28,48,.10) 0%, rgba(8,28,48,.65) 100%)"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+              <h3 class="font-black text-lg mb-1" style="font-family:'Nunito Sans',sans-serif">{{ dest.name }}</h3>
+              <div class="flex items-center justify-between">
+                <span class="text-white/80 text-xs">{{ dest.toursCount }} турів</span>
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full"
+                      style="background: rgba(255,255,255,.15); backdrop-filter: blur(4px)">
+                  від {{ dest.priceFrom | number }} ₴
+                </span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ HOT TOURS ═══════════ -->
+  <section class="py-16 bg-surface">
+    <div class="container-app">
+      <div class="flex items-end justify-between mb-8">
+        <div>
+          <p class="text-secondary font-semibold text-sm mb-1">Найкраща ціна сьогодні</p>
+          <h2 class="font-black text-3xl text-ink" style="font-family:'Nunito Sans',sans-serif">
+            Гарячі тури
+          </h2>
+        </div>
+        <a routerLink="/tours" [queryParams]="{badge:'HIT'}"
+           class="text-primary font-semibold text-sm flex items-center gap-1 hover:underline">
+          Всі хіти <i class="pi pi-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      @if (loadingTours()) {
+        <!-- Skeleton placeholders -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          @for (i of [1,2,3]; track i) {
+            <div class="rounded-xl overflow-hidden" style="box-shadow: var(--shadow-1)">
+              <div class="skeleton w-full" style="height: 180px"></div>
+              <div class="p-4 flex flex-col gap-3">
+                <div class="skeleton h-5 w-3/4 rounded"></div>
+                <div class="skeleton h-4 w-1/2 rounded"></div>
+                <div class="skeleton h-8 w-full rounded-xl"></div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else if (hotTours().length > 0) {
+        <p-carousel [value]="hotTours()" [numVisible]="3" [numScroll]="1"
+                    [circular]="false" [responsiveOptions]="carouselResponsive">
+          <ng-template #item let-tour>
+            <div class="tour-card mx-2" [routerLink]="['/tours', tour.id]" style="cursor:pointer">
+              <!-- Photo -->
+              <div class="relative overflow-hidden" style="height: 180px">
+                <img [src]="tour.imageUrl || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'"
+                     [alt]="tour.title"
+                     class="w-full h-full object-cover" />
+                @if (tour.badge) {
+                  <span class="absolute top-3 left-3 px-2 py-0.5 rounded-full text-xs font-bold"
+                        [class]="tourBadgeClass(tour.badge)">
+                    {{ tourBadgeLabel(tour.badge) }}
+                  </span>
+                }
+                <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-ink-2 hover:text-error transition-colors">
+                  <i class="pi pi-heart text-sm"></i>
+                </button>
+              </div>
+
+              <!-- Info -->
+              <div class="p-4">
+                <div class="flex items-center gap-1 mb-1">
+                  <i class="pi pi-star-fill text-warning text-xs"></i>
+                  <span class="text-xs font-semibold text-ink">{{ tour.rating | number:'1.1-1' }}</span>
+                  <span class="text-xs text-ink-2">({{ tour.reviewsCount }})</span>
+                </div>
+                <h3 class="font-bold text-ink text-sm leading-snug mb-1 line-clamp-2">{{ tour.title }}</h3>
+                <p class="text-xs text-ink-2 mb-3">
+                  <i class="pi pi-map-marker mr-1"></i>{{ tour.country }}
+                  &nbsp;·&nbsp;{{ tour.durationNights }} ночей
+                  &nbsp;·&nbsp;{{ tour.mealType }}
+                </p>
+                <div class="flex items-center justify-between">
+                  <div>
+                    @if (tour.oldPrice) {
+                      <span class="text-xs text-ink-2 line-through block">{{ tour.oldPrice | number }} ₴</span>
+                    }
+                    <span class="font-black text-primary text-base">від {{ tour.priceFrom | number }} ₴</span>
+                  </div>
+                  <a [routerLink]="['/tours', tour.id]"
+                     class="px-3 py-1.5 rounded-xl text-xs font-semibold text-primary border border-primary hover:bg-primary-50 transition-colors">
+                    Детальніше
+                  </a>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-carousel>
+      } @else {
+        <!-- Empty state (backend not connected yet) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          @for (slide of slides.slice(0,3); track slide.title) {
+            <div class="tour-card">
+              <div class="relative overflow-hidden" style="height: 180px">
+                <img [src]="slide.image" [alt]="slide.title" class="w-full h-full object-cover" />
+                <span class="absolute top-3 left-3 px-2 py-0.5 rounded-full text-xs font-bold badge-hit">
+                  🔥 ХІТ
+                </span>
+              </div>
+              <div class="p-4">
+                <h3 class="font-bold text-ink text-sm mb-1">{{ slide.title }}</h3>
+                <p class="text-xs text-ink-2 mb-3">{{ slide.country }} · 7 ночей · All Inclusive</p>
+                <div class="flex items-center justify-between">
+                  <span class="font-black text-primary text-base">від {{ slide.price | number }} ₴</span>
+                  <button class="px-3 py-1.5 rounded-xl text-xs font-semibold text-primary border border-primary">Детальніше</button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ═══════════ REVIEWS ═══════════ -->
+  <section class="py-16" style="background: var(--color-bg)">
+    <div class="container-app">
+      <div class="text-center mb-10">
+        <p class="text-secondary font-semibold text-sm mb-1">Що кажуть клієнти</p>
+        <h2 class="font-black text-3xl text-ink" style="font-family:'Nunito Sans',sans-serif">
+          Відгуки мандрівників
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        @for (review of reviews; track review.id) {
+          <div class="bg-surface rounded-xl p-6" style="box-shadow: var(--shadow-1)">
+            <p-rating [ngModel]="review.rating" [readonly]="true" class="mb-4" />
+            <p class="text-ink text-sm leading-relaxed mb-5">"{{ review.text }}"</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                   style="background: var(--color-primary)">
+                {{ review.author[0] }}
+              </div>
+              <div>
+                <p class="font-semibold text-sm text-ink">{{ review.author }}</p>
+                <p class="text-xs text-ink-2">{{ review.date }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ CTA BANNER ═══════════ -->
+  <section class="py-16" style="background: var(--color-primary)">
+    <div class="container-app text-center">
+      <h2 class="font-black text-3xl text-white mb-4" style="font-family:'Nunito Sans',sans-serif">
+        Готові до нової пригоди?
+      </h2>
+      <p class="text-white/80 mb-8 max-w-md mx-auto">
+        Зареєструйтесь та отримайте доступ до ексклюзивних пропозицій і знижок до 30%.
+      </p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a routerLink="/tours"
+           class="px-8 py-3 rounded-xl font-bold text-primary bg-white hover:bg-primary-50 transition-colors">
+          Переглянути тури
+        </a>
+        <a routerLink="/auth/register"
+           class="px-8 py-3 rounded-xl font-bold text-white border-2 border-white/40 hover:bg-white/10 transition-colors">
+          Зареєструватися
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<app-footer />
+<app-mobile-tab-bar />
