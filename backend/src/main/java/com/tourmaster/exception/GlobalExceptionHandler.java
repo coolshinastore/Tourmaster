@@ -66,6 +66,14 @@ public class GlobalExceptionHandler {
         return pd;
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public ProblemDetail handleBusiness(BusinessException ex) {
+        ProblemDetail pd = ProblemDetail.forStatus(ex.getStatus());
+        pd.setTitle("Business rule violation");
+        pd.setDetail(ex.getMessage());
+        return pd;
+    }
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGeneral(Exception ex) {
         log.error("Unhandled exception", ex);
