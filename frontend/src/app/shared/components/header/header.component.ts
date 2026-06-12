@@ -1,11 +1,11 @@
 import { Component, Input, HostListener, signal, computed, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink],
   template: `
     <header
       class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"

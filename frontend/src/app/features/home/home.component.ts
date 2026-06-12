@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Carousel }    from 'primeng/carousel';
 import { Rating }      from 'primeng/rating';
-import { Button }      from 'primeng/button';
 import { InputText }   from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 
@@ -29,7 +28,7 @@ interface ReviewItem {
   selector: 'app-home',
   imports: [
     CommonModule, RouterLink, FormsModule,
-    Carousel, Rating, Button, InputText, InputNumber,
+    Carousel, Rating, InputText, InputNumber,
     HeaderComponent, FooterComponent, MobileTabBarComponent,
   ],
   templateUrl: './home.component.html',

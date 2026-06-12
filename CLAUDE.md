@@ -44,17 +44,17 @@
 
 | Компонент | Технологія |
 |---|---|
-| Фреймворк | Angular 18 |
-| Мова | TypeScript 5.x |
+| Фреймворк | **Angular 22** (встановлено замість 18) |
+| Мова | TypeScript 6.x |
 | Стиль компонентів | Standalone Components (без NgModules) |
-| UI-бібліотека | PrimeNG 17.x |
-| Стилі | Tailwind CSS (кастомні утиліти поверх PrimeNG-теми) |
+| UI-бібліотека | **PrimeNG 21.x** (встановлено замість 17.x) |
+| Стилі | **Tailwind CSS 4.x** (CLI-підхід: `tw:build` → `tailwind-out.css`) |
 | Управління станом | Angular Signals + `CartService` (кошик бронювань) |
 | HTTP | `HttpClient` з перехоплювачами (interceptors) для JWT |
 | Маршрутизація | Angular Router із lazy loading |
 | Форми | Reactive Forms |
 | Зображення | `ng-lazyload-image` |
-| PrimeNG компоненти | Carousel, DataView, Dialog, Toast, Rating, Galleria, Calendar, Paginator |
+| PrimeNG компоненти | Carousel, DataView, Dialog, Toast, Rating, Galleria, DatePicker, Paginator, Slider, Select, Drawer, Password, Checkbox |
 | Тестування | Jasmine + Karma (unit), Playwright або Cypress (e2e) |
 
 ### DevOps / Інфраструктура
@@ -256,14 +256,22 @@ export const environment = {
 ## 9. Команди для запуску
 
 ```bash
-# Backend
-cd backend
-mvn spring-boot:run
+# Backend (компілювати ЛИШЕ через IntelliJ IDEA — SSL проблема з Maven CLI)
+# Run → TourMasterApplication
 
-# Frontend
+# Frontend — ЗАВЖДИ два кроки:
 cd frontend
-npm install
+npm install --legacy-peer-deps   # обов'язковий прапор через конфлікти peer deps
+
+# Крок 1 (одноразово або після змін CSS): генерація Tailwind CSS
+npm run tw:build                  # tailwindcss -i src/tailwind.css -o src/tailwind-out.css
+
+# Крок 2: запуск Angular dev server
 ng serve
+
+# Для розробки з hot-reload Tailwind — два термінали паралельно:
+# Термінал 1:  npm run tw:watch
+# Термінал 2:  ng serve
 
 # Docker (повний стек)
 docker-compose up --build
@@ -281,26 +289,37 @@ cd backend  && mvn clean package -DskipTests
 
 ## 10. Поточний стан розробки
 
+### Завершено
 - [x] Аналіз ринку та конкурентів
 - [x] Структура сторінок (draw.io)
 - [x] Пояснювальна записка — Розділ 1 (ТЗ + аналітичний огляд)
-- [x] Дизайн-промпт для Claude Design сформовано
-- [x] Дизайн системи розроблений (Claude Design) — дизайн-токени, компоненти, макети 10 сторінок
-- [ ] Ініціалізація репозиторію (monorepo)
-- [ ] Backend: налаштування Spring Boot, Flyway, SecurityConfig
-- [ ] Backend: сутності та міграції БД
-- [ ] Backend: Auth API (register / login / refresh)
-- [ ] Backend: Tours API (CRUD + пошук)
-- [ ] Backend: Bookings API + зміна статусів
-- [ ] Backend: Admin API (звіти, клієнти)
-- [ ] Frontend: ініціалізація Angular 18 + PrimeNG + Tailwind
-- [ ] Frontend: core (interceptors, guards, services)
-- [ ] Frontend: головна сторінка
-- [ ] Frontend: каталог та деталі туру
-- [ ] Frontend: wizard бронювання
-- [ ] Frontend: особистий кабінет
-- [ ] Frontend: адмін-панель
-- [ ] Інтеграційне тестування
+- [x] Дизайн системи (Claude Design) — токени, компоненти, макети 10 сторінок
+- [x] Ініціалізація monorepo
+- [x] **Backend: Spring Boot 3.5.14**, Flyway, SecurityConfig, CORS, JWT
+- [x] **Backend: сутності та міграції** (V1–V3: users, tours, tour_dates, bookings, booking_items, extra_services, reviews, wishlist, notifications, manager_notes)
+- [x] **Backend: Auth API** — register / login / refresh / logout (Spring Security + jjwt 0.12.6)
+- [x] **Backend: Tours API** — CRUD + JpaSpecification пошук + пагінація
+- [x] **Backend: Bookings API** — створення, скасування, статуси, email-сповіщення (@Async)
+- [x] **Backend: Admin API** — тури (архівування), бронювання (зміна статусів), клієнти, нотатки менеджера
+- [x] **Frontend: ініціалізація** Angular 22 + PrimeNG 21 + Tailwind 4 (CLI-підхід)
+- [x] **Frontend: core** — interceptors (auth, error), guards (auth, manager), services (auth, cart, tour)
+- [x] **Frontend: shared** — HeaderComponent (scroll-transparent), FooterComponent, MobileTabBarComponent
+- [x] **Frontend: `/`** — HomeComponent (hero + search, carousel, destinations, hot tours, reviews, CTA)
+- [x] **Frontend: `/auth/login`** — split layout, reactive form, p-password, returnUrl redirect
+- [x] **Frontend: `/auth/register`** — split layout, password strength, terms checkbox, passwordsMatch validator
+- [x] **Frontend: `/tours`** — TourCatalogComponent (sidebar filters, grid/list toggle, paginator, mock fallback)
+
+- [x] **Frontend: `/tours/:id`** — TourDetailComponent (Galleria fullscreen, 4 вкладки, sticky sidebar, tourist stepper, mobile floating bar, mock fallback)
+
+- [x] **Frontend: `/booking`** — BookingWizardComponent (5 кроків: Тур/дати → Туристи → Послуги → Огляд → Оплата; standalone wizard header, progress bar з анімацією, sticky sidebar, reactive forms, mock fallback)
+- [x] **Frontend: `/booking/success`** — BookingSuccessComponent (номер бронювання, кроки підтвердження, CTA кнопки)
+
+- [x] **Frontend: `/cabinet`** — CabinetLayoutComponent (sidebar з профілем, nav), MyBookingsComponent (фільтри, статуси, дії), WishlistComponent (grid карток, видалення), ProfileComponent (редагування даних, зміна пароля)
+
+- [x] **Frontend: `/admin`** — AdminLayoutComponent (фіксований sidebar, nav), AdminDashboardComponent (stat cards, таблиця останніх броні, топ турів), AdminToursComponent (таблиця + пошук + фільтр + архівування), AdminBookingsComponent (таблиця + inline зміна статусу), AdminClientsComponent (таблиця + loyalty рівні)
+
+### В роботі / Наступні кроки
+- [ ] Інтеграційне тестування (backend ↔ frontend)
 - [ ] Розгортання (Docker + Nginx)
 
 ---
@@ -310,14 +329,16 @@ cd backend  && mvn clean package -DskipTests
 | Рішення | Обґрунтування |
 |---|---|
 | Angular Signals (не NgRx) | Простіша модель стану для проєкту такого масштабу; вбудована реактивність без додаткових залежностей |
-| Standalone Components | Angular 18 best practice; менше бойлерплейту, кращий tree-shaking |
+| Standalone Components | Angular 22 best practice; менше бойлерплейту, кращий tree-shaking |
 | PrimeNG (не Angular Material) | Багатший набір туристично-релевантних компонентів: Galleria, DataView, Calendar, Rating |
 | JWT у localStorage (не cookie) | Простіша реалізація для SPA; для продакшну розглянути HttpOnly cookie |
 | Flyway (не Liquibase) | Простіший синтаксис SQL-міграцій; достатньо для даного масштабу |
 | Monorepo | Спрощує розробку та налагодження; єдиний CI/CD пайплайн |
-| Tailwind поверх PrimeNG | PrimeNG забезпечує функціональність компонентів, Tailwind — кастомні утиліти для layout та spacing |
+| Tailwind 4 CLI (не PostCSS) | Angular esbuild не передає глобальні CSS через PostCSS pipeline → Tailwind CLI генерує `tailwind-out.css` |
+| `--legacy-peer-deps` | PrimeNG 21 вимагає Angular 21, але встановлено Angular 22 — конфлікт peer deps |
+| `npm install --legacy-peer-deps` | Обов'язковий прапор для всіх пакетів; без нього npm відмовляє через peer dependency conflicts |
 
 ---
 
-*Останнє оновлення: сесія проєктування у Claude.ai*  
-*Наступний крок: ініціалізувати репозиторій і розпочати розробку backend з `mvn archetype:generate` або Spring Initializr*
+*Останнє оновлення: сесія розробки frontend (2026-06-12)*  
+*Поточний крок: інтеграційне тестування (backend ↔ frontend) та розгортання*

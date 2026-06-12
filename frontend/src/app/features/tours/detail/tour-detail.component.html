@@ -1,0 +1,438 @@
+<app-header />
+
+<main class="pb-24 md:pb-8" style="background: var(--color-bg); min-height: 100svh">
+
+  <!-- ═══ LOADING SKELETON ═══ -->
+  @if (loading()) {
+    <div class="container-app py-6">
+      <div class="skeleton h-4 w-48 rounded mb-6"></div>
+      <div class="skeleton w-full rounded-xl mb-2" style="height: 420px"></div>
+      <div class="flex gap-8 mt-8">
+        <div class="flex-1 flex flex-col gap-4">
+          <div class="skeleton h-8 w-3/4 rounded"></div>
+          <div class="skeleton h-4 w-1/2 rounded"></div>
+          <div class="skeleton h-4 w-full rounded"></div>
+          <div class="skeleton h-4 w-full rounded"></div>
+          <div class="skeleton h-4 w-2/3 rounded"></div>
+        </div>
+        <div class="flex-none rounded-xl" style="width: 372px">
+          <div class="skeleton w-full h-64 rounded-xl"></div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  @if (!loading()) {
+    @if (tour(); as t) {
+
+      <!-- BREADCRUMB -->
+      <div class="container-app pt-5 pb-3">
+        <nav class="text-sm text-ink-2 flex items-center gap-1 flex-wrap">
+          <a routerLink="/" class="hover:text-primary transition-colors">Головна</a>
+          <i class="pi pi-angle-right text-xs"></i>
+          <a routerLink="/tours" class="hover:text-primary transition-colors">Тури</a>
+          <i class="pi pi-angle-right text-xs"></i>
+          <span class="text-ink font-medium">{{ t.title }}</span>
+        </nav>
+      </div>
+
+      <!-- ═══ GALLERY ═══ -->
+      <div class="container-app mb-6">
+        <div class="gallery-grid">
+          <!-- Main photo -->
+          <div class="gallery-main" (click)="openGallery(0)">
+            <img [src]="t.galleryUrls[0]" [alt]="t.title" class="w-full h-full object-cover" />
+            @if (t.badge) {
+              <span class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold" [class]="badgeClass(t.badge)">
+                {{ badgeLabel(t.badge) }}
+              </span>
+            }
+            <div class="gallery-mobile-counter md:hidden">
+              <i class="pi pi-images text-xs"></i>
+              1 / {{ t.galleryUrls.length }}
+            </div>
+          </div>
+          <!-- Side thumbnails (desktop) -->
+          <div class="gallery-side hidden md:grid">
+            <div class="gallery-thumb" (click)="openGallery(1)">
+              <img [src]="t.galleryUrls[1]" alt="" class="w-full h-full object-cover" />
+            </div>
+            <div class="gallery-thumb gallery-thumb--last" (click)="openGallery(2)">
+              <img [src]="t.galleryUrls[2]" alt="" class="w-full h-full object-cover" />
+              @if (t.galleryUrls.length > 3) {
+                <div class="gallery-overlay">
+                  <i class="pi pi-images text-xl mb-1"></i>
+                  <span class="text-sm font-semibold">+{{ t.galleryUrls.length - 3 }} фото</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-all-photos hidden md:flex" (click)="openGallery(0)">
+          <i class="pi pi-images mr-2"></i>
+          Переглянути всі {{ t.galleryUrls.length }} фото
+        </button>
+      </div>
+
+      <!-- ═══ MAIN LAYOUT ═══ -->
+      <div class="container-app tour-layout">
+
+        <!-- ─── LEFT: CONTENT ─── -->
+        <div class="tour-content">
+
+          <!-- Title block -->
+          <div class="mb-6">
+            <div class="flex items-center gap-3 flex-wrap mb-3">
+              <div class="flex items-center gap-1">
+                @for (s of starsOf(t.rating); track $index) {
+                  <i class="pi pi-star-fill text-warning text-sm"></i>
+                }
+                @for (s of emptyStars(t.rating); track $index) {
+                  <i class="pi pi-star text-ink-2 text-sm"></i>
+                }
+                <span class="ml-1 font-bold text-ink text-sm">{{ t.rating | number:'1.1-1' }}</span>
+                <span class="text-ink-2 text-sm">· {{ t.reviewsCount }} відгуків</span>
+              </div>
+              <span class="badge-choice">✦ Чудовий вибір</span>
+              <button class="ml-auto wish-btn" (click)="inWishlist.set(!inWishlist())"
+                      [class.active]="inWishlist()">
+                <i [class]="inWishlist() ? 'pi pi-heart-fill' : 'pi pi-heart'"></i>
+                {{ inWishlist() ? 'В обраному' : 'В обране' }}
+              </button>
+            </div>
+
+            <h1 class="tour-h1">{{ t.title }}</h1>
+
+            <div class="tour-meta-row">
+              <span><i class="pi pi-map-marker mr-1"></i>{{ t.country }}, {{ t.city }}</span>
+              <span class="meta-dot">·</span>
+              <span>🌙 {{ t.durationNights }} ночей</span>
+              <span class="meta-dot">·</span>
+              <span>🍽️ {{ mealLabel(t.mealType) }}</span>
+              <span class="meta-dot">·</span>
+              <span><i class="pi pi-send mr-1"></i>Виліт з Києва</span>
+            </div>
+          </div>
+
+          <!-- ─── TABS ─── -->
+          <div class="tour-tabs">
+            @for (tab of tabs; track tab.id) {
+              <button class="tab-btn" [class.active]="activeTab() === tab.id"
+                      (click)="activeTab.set(tab.id)">
+                {{ tab.id === 'reviews' ? 'Відгуки (' + t.reviewsCount + ')' : tab.label }}
+              </button>
+            }
+          </div>
+
+          <!-- ─── TAB: DESCRIPTION ─── -->
+          @if (activeTab() === 'description') {
+            <div class="tab-content">
+              <p class="text-ink leading-relaxed mb-6">{{ t.description }}</p>
+
+              <h3 class="font-bold text-ink mb-4" style="font-size: 18px">Про готель</h3>
+              <div class="feature-grid">
+                <div class="feature-tile">
+                  <span class="feature-icon">🏖️</span>
+                  <div>
+                    <div class="font-semibold text-ink text-sm">Власний пляж</div>
+                    <div class="text-xs text-ink-2">800 м піщаного пляжу</div>
+                  </div>
+                </div>
+                <div class="feature-tile">
+                  <span class="feature-icon">🍽️</span>
+                  <div>
+                    <div class="font-semibold text-ink text-sm">6 ресторанів</div>
+                    <div class="text-xs text-ink-2">10 барів, All Inclusive</div>
+                  </div>
+                </div>
+                <div class="feature-tile">
+                  <span class="feature-icon">🏊</span>
+                  <div>
+                    <div class="font-semibold text-ink text-sm">Аквапарк</div>
+                    <div class="text-xs text-ink-2">17 гірок, 8 басейнів</div>
+                  </div>
+                </div>
+                <div class="feature-tile">
+                  <span class="feature-icon">💆</span>
+                  <div>
+                    <div class="font-semibold text-ink text-sm">SPA & Fitness</div>
+                    <div class="text-xs text-ink-2">Повний комплекс</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- ─── TAB: PROGRAM ─── -->
+          @if (activeTab() === 'program') {
+            <div class="tab-content">
+              <h3 class="font-bold text-ink mb-5" style="font-size: 18px">Програма туру по днях</h3>
+              <div class="program-list">
+                @for (day of programDays; track day.day) {
+                  <div class="program-day">
+                    <div class="program-day__marker">
+                      <div class="program-day__dot"></div>
+                      @if (!$last) {
+                        <div class="program-day__line"></div>
+                      }
+                    </div>
+                    <div class="program-day__content">
+                      <div class="font-bold text-ink text-sm mb-1">
+                        День {{ day.day }} — {{ day.title }}
+                      </div>
+                      <p class="text-sm text-ink-2 leading-relaxed">{{ day.text }}</p>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- ─── TAB: INCLUDED ─── -->
+          @if (activeTab() === 'included') {
+            <div class="tab-content">
+              <div class="included-grid">
+                <div>
+                  <h3 class="font-bold text-ink mb-4" style="font-size: 16px">✅ Включено</h3>
+                  <ul class="included-list">
+                    @for (item of includedItems; track $index) {
+                      <li class="included-item">
+                        <i class="pi pi-check-circle text-success text-sm flex-none"></i>
+                        <span class="text-sm text-ink">{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+                <div>
+                  <h3 class="font-bold text-ink mb-4" style="font-size: 16px">❌ Не включено</h3>
+                  <ul class="included-list">
+                    @for (item of excludedItems; track $index) {
+                      <li class="included-item">
+                        <i class="pi pi-times-circle text-error text-sm flex-none"></i>
+                        <span class="text-sm text-ink">{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- ─── TAB: REVIEWS ─── -->
+          @if (activeTab() === 'reviews') {
+            <div class="tab-content">
+              <div class="flex items-start gap-5 mb-6">
+                <div class="rating-big">
+                  <span class="rating-big__num">{{ t.rating | number:'1.1-1' }}</span>
+                  <div class="flex gap-0.5 my-1">
+                    @for (s of starsOf(t.rating); track $index) {
+                      <i class="pi pi-star-fill text-warning text-sm"></i>
+                    }
+                  </div>
+                  <span class="text-xs text-ink-2">{{ t.reviewsCount }} відгуків</span>
+                </div>
+                <div class="flex-1 pt-1">
+                  @for (n of [5,4,3,2,1]; track n) {
+                    <div class="flex items-center gap-2 mb-1.5">
+                      <span class="text-xs text-ink-2 w-3 text-right">{{ n }}</span>
+                      <i class="pi pi-star-fill text-warning text-xs"></i>
+                      <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background: var(--color-line)">
+                        <div class="h-full rounded-full" style="background: var(--color-warning)"
+                             [style.width.%]="n === 5 ? 72 : n === 4 ? 18 : n === 3 ? 6 : n === 2 ? 3 : 1"></div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-4">
+                @for (review of t.latestReviews; track review.id) {
+                  <div class="review-card">
+                    <div class="flex items-center gap-3 mb-3">
+                      <div class="review-avatar">{{ review.authorFirstName[0] }}{{ review.authorLastLetter }}</div>
+                      <div>
+                        <div class="font-semibold text-ink text-sm">{{ review.authorFirstName }} {{ review.authorLastLetter }}.</div>
+                        <div class="flex items-center gap-1 mt-0.5">
+                          @for (s of starsOf(review.rating); track $index) {
+                            <i class="pi pi-star-fill text-warning text-xs"></i>
+                          }
+                          <span class="text-xs text-ink-2 ml-1">{{ review.createdAt | date:'dd.MM.yyyy' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="text-sm text-ink leading-relaxed">{{ review.comment }}</p>
+                  </div>
+                }
+              </div>
+
+              @if (t.reviewsCount > t.latestReviews.length) {
+                <button class="w-full mt-5 py-3 rounded-xl border-2 font-semibold text-sm transition-colors"
+                        style="color: var(--color-primary); border-color: var(--color-primary)">
+                  Переглянути всі {{ t.reviewsCount }} відгуків
+                </button>
+              }
+            </div>
+          }
+
+        </div><!-- /tour-content -->
+
+        <!-- ─── RIGHT: BOOKING SIDEBAR ─── -->
+        <aside class="booking-sidebar">
+          <div class="sidebar-card">
+            <!-- Price -->
+            <div class="sidebar-price">
+              @if (t.oldPrice) {
+                <span class="old-price">{{ formatPrice(t.oldPrice) }}</span>
+              }
+              <div class="flex items-baseline gap-2">
+                <span class="current-price">від {{ formatPrice(pricePerPerson()) }}</span>
+                <span class="text-sm text-ink-2">/ особа</span>
+              </div>
+            </div>
+
+            <!-- Dates -->
+            <div class="sidebar-section">
+              <div class="sidebar-label">Дата вильоту</div>
+              <div class="date-list">
+                @for (date of t.dates; track date.id) {
+                  <button class="date-btn" [class.active]="selectedDate()?.id === date.id"
+                          (click)="selectDate(date)">
+                    <span class="date-btn__date">{{ formatDate(date.departureDate) }}</span>
+                    <span class="date-btn__price">{{ formatPrice(date.price) }}</span>
+                    <span class="date-btn__seats" [class.low]="date.availableSeats <= 3">
+                      {{ date.availableSeats }} місць
+                    </span>
+                  </button>
+                }
+              </div>
+            </div>
+
+            <!-- Tourist count -->
+            <div class="sidebar-section">
+              <div class="sidebar-label">Кількість туристів</div>
+              <div class="tourist-stepper">
+                <button class="stepper-btn" (click)="decrementTourists()" [disabled]="touristCount() <= 1">
+                  <i class="pi pi-minus text-xs"></i>
+                </button>
+                <div class="stepper-value">
+                  <span class="text-xl font-bold text-ink">{{ touristCount() }}</span>
+                  <span class="text-xs text-ink-2">
+                    {{ touristCount() === 1 ? 'особа' : touristCount() < 5 ? 'особи' : 'осіб' }}
+                  </span>
+                </div>
+                <button class="stepper-btn" (click)="incrementTourists()" [disabled]="touristCount() >= 10">
+                  <i class="pi pi-plus text-xs"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Price breakdown -->
+            <div class="price-breakdown">
+              <div class="breakdown-row">
+                <span class="text-sm text-ink-2">{{ formatPrice(pricePerPerson()) }} × {{ touristCount() }}</span>
+                <span class="text-sm font-semibold text-ink">{{ formatPrice(totalPrice()) }}</span>
+              </div>
+              <div class="breakdown-divider"></div>
+              <div class="breakdown-total">
+                <span>Разом</span>
+                <span>{{ formatPrice(totalPrice()) }}</span>
+              </div>
+            </div>
+
+            <!-- CTA -->
+            <button class="btn-book" (click)="book()">
+              <i class="pi pi-calendar-plus mr-2"></i>
+              Забронювати
+            </button>
+            <p class="cancel-note">
+              <i class="pi pi-check-circle mr-1"></i>
+              Безкоштовне скасування протягом 48 год
+            </p>
+          </div>
+        </aside>
+      </div><!-- /tour-layout -->
+
+      <!-- ═══ SIMILAR TOURS ═══ -->
+      <section class="container-app similar-section">
+        <h2 class="section-title">Схожі тури</h2>
+        <div class="similar-grid">
+          @for (tour of similarTours; track tour.id) {
+            <div class="similar-card" [routerLink]="['/tours', tour.id]">
+              <div class="similar-card__img">
+                <img [src]="tour.imageUrl" [alt]="tour.title" class="w-full h-full object-cover" />
+                @if (tour.badge) {
+                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold" [class]="badgeClass(tour.badge)">
+                    {{ badgeLabel(tour.badge) }}
+                  </span>
+                }
+              </div>
+              <div class="p-4">
+                <div class="flex items-center gap-1 mb-1">
+                  <i class="pi pi-star-fill text-warning text-xs"></i>
+                  <span class="text-xs font-semibold text-ink">{{ tour.rating | number:'1.1-1' }}</span>
+                  <span class="text-xs text-ink-2">({{ tour.reviewsCount }})</span>
+                </div>
+                <h3 class="font-bold text-ink text-sm leading-snug mb-1 line-clamp-2">{{ tour.title }}</h3>
+                <p class="text-xs text-ink-2 mb-3">
+                  <i class="pi pi-map-marker mr-1"></i>{{ tour.country }} · {{ tour.durationNights }} н · {{ tour.mealType }}
+                </p>
+                <div class="flex items-center justify-between">
+                  <div>
+                    @if (tour.oldPrice) {
+                      <span class="text-xs text-ink-2 line-through block">{{ tour.oldPrice | number }} ₴</span>
+                    }
+                    <span class="font-black text-primary text-base">від {{ tour.priceFrom | number }} ₴</span>
+                  </div>
+                  <span class="text-xs font-semibold text-primary border border-primary px-3 py-1.5 rounded-xl">
+                    Детальніше
+                  </span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+    }<!-- /tour() -->
+  }<!-- /!loading() -->
+
+</main>
+
+<!-- ═══ MOBILE FLOATING BOTTOM BAR ═══ -->
+@if (!loading()) {
+  @if (tour(); as t) {
+    <div class="mobile-bottom-bar md:hidden">
+      <div>
+        @if (t.oldPrice) {
+          <span class="text-xs line-through block" style="color: rgba(255,255,255,.55)">{{ formatPrice(t.oldPrice) }}</span>
+        }
+        <div class="text-white font-black text-base">від {{ formatPrice(pricePerPerson()) }}</div>
+        <div class="text-xs" style="color: rgba(255,255,255,.6)">/ особа</div>
+      </div>
+      <button class="btn-book-mobile" (click)="book()">Забронювати</button>
+    </div>
+  }
+}
+
+<!-- ═══ FULLSCREEN GALLERIA ═══ -->
+<p-galleria
+  [value]="galleryImages()"
+  [(visible)]="galleryVisible"
+  [activeIndex]="galleryActiveIndex"
+  [fullScreen]="true"
+  [showThumbnails]="true"
+  [showItemNavigators]="true"
+  [numVisible]="5"
+  styleClass="tour-galleria">
+  <ng-template #item let-item>
+    <img [src]="item.itemImageSrc" style="max-height: 80vh; max-width: 100%; object-fit: contain;" />
+  </ng-template>
+  <ng-template #thumbnail let-item>
+    <img [src]="item.thumbnailImageSrc" style="width: 80px; height: 56px; object-fit: cover; border-radius: 6px;" />
+  </ng-template>
+</p-galleria>
+
+<app-footer />
+<app-mobile-tab-bar />

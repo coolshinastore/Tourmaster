@@ -1,0 +1,216 @@
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--color-ink);
+}
+
+.page-sub {
+  font-size: 14px;
+  color: var(--color-ink-2);
+  margin-top: 2px;
+}
+
+// ─── Toolbar ──────────────────────────────────────────────
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 220px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-ink);
+  background: #fff;
+  border: 1.5px solid var(--color-line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus { border-color: var(--color-primary); }
+}
+
+.loyalty-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--color-bg);
+  border-radius: 10px;
+  padding: 4px;
+  flex-wrap: wrap;
+}
+
+.loyalty-tab {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink-2);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+
+  &:hover:not(.loyalty-tab-active) {
+    color: var(--color-ink);
+  }
+
+  &.loyalty-tab-active {
+    background: #fff;
+    color: var(--color-ink);
+    font-weight: 700;
+    box-shadow: var(--shadow-1);
+  }
+}
+
+// ─── Table card ───────────────────────────────────────────
+.table-card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+
+  th {
+    font-weight: 700;
+    color: var(--color-ink-2);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-bg);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--color-bg);
+    color: var(--color-ink);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafcff; }
+}
+
+// ─── Client cell ──────────────────────────────────────────
+.client-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.client-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-primary-50);
+  color: var(--color-primary);
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.client-name {
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.client-email {
+  font-size: 12px;
+  color: var(--color-ink-2);
+  margin-top: 1px;
+}
+
+.phone-cell {
+  white-space: nowrap;
+  color: var(--color-ink-2);
+}
+
+.center-cell {
+  text-align: center;
+  font-weight: 700;
+}
+
+.price-cell {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.date-cell {
+  white-space: nowrap;
+  color: var(--color-ink-2);
+}
+
+.empty-row {
+  text-align: center;
+  color: var(--color-ink-2);
+  padding: 32px !important;
+}
+
+// ─── Loyalty pill ─────────────────────────────────────────
+.loyalty-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  gap: 4px;
+}
+
+// ─── Actions ──────────────────────────────────────────────
+.actions-cell {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.btn-icon {
+  font-size: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-line);
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.15s;
+
+  &:hover {
+    background: var(--color-bg);
+    border-color: var(--color-primary);
+  }
+}

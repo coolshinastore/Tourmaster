@@ -1,0 +1,77 @@
+<app-cabinet-layout activeSection="wishlist" [wishlistCount]="wishlist().length">
+
+  <!-- Header row -->
+  <div class="flex items-center justify-between mb-5">
+    <h2 class="font-heading font-extrabold text-ink" style="font-size:22px">
+      Список бажань
+    </h2>
+    @if (wishlist().length > 0) {
+      <span class="text-sm text-ink-2">{{ wishlist().length }} тур{{ wishlist().length === 1 ? '' : (wishlist().length < 5 ? 'и' : 'ів') }}</span>
+    }
+  </div>
+
+  <!-- Empty state -->
+  @if (wishlist().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">🤍</div>
+      <div class="font-heading font-extrabold text-ink text-lg">Список бажань порожній</div>
+      <div class="text-sm text-ink-2 mt-1">Натисніть ♡ на картці туру, щоб зберегти його тут</div>
+      <a routerLink="/tours" class="btn-primary mt-4">Переглянути тури</a>
+    </div>
+  }
+
+  <!-- Tour grid -->
+  @if (wishlist().length > 0) {
+    <div class="wish-grid">
+      @for (tour of wishlist(); track tour.id) {
+        <div class="wish-card">
+          <!-- Remove button -->
+          <button class="wish-remove" type="button" (click)="removeFromWishlist(tour.id)" title="Видалити зі списку">♡</button>
+
+          <!-- Badge -->
+          @if (tour.badge) {
+            <span class="wish-badge" [class]="badgeClass(tour.badge)">{{ badgeLabel(tour.badge) }}</span>
+          }
+
+          <!-- Photo -->
+          <a [routerLink]="['/tours', tour.id]" class="wish-photo">
+            <img [src]="tour.imageUrl" [alt]="tour.title" loading="lazy">
+          </a>
+
+          <!-- Body -->
+          <div class="wish-body">
+            <a [routerLink]="['/tours', tour.id]" class="wish-title">{{ tour.title }}</a>
+
+            <div class="wish-meta">
+              <span>🌍 {{ tour.country }}{{ tour.city ? ', ' + tour.city : '' }}</span>
+              <span>🌙 {{ tour.durationNights }} ночей</span>
+              <span>🍽 {{ mealLabel(tour.mealType) }}</span>
+            </div>
+
+            <!-- Rating -->
+            <div class="wish-rating">
+              <div class="wish-stars">
+                @for (s of starsOf(tour.rating ?? 0); track s) {
+                  <span style="color: #F59E0B; font-size: 13px;">★</span>
+                }
+              </div>
+              <span class="text-sm text-ink-2">{{ tour.rating }} ({{ tour.reviewsCount }})</span>
+            </div>
+
+            <!-- Price row -->
+            <div class="wish-price-row">
+              <div>
+                @if (tour.oldPrice) {
+                  <div class="wish-old-price">{{ formatPrice(tour.oldPrice) }}</div>
+                }
+                <div class="wish-price">від {{ formatPrice(tour.priceFrom) }}</div>
+              </div>
+              <a [routerLink]="['/tours', tour.id]" class="wish-book-btn">Обрати тур</a>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</app-cabinet-layout>

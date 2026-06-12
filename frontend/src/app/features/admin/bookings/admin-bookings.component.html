@@ -1,0 +1,94 @@
+<app-admin-layout activeSection="bookings">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Бронювання</h1>
+      <p class="page-sub">Всі бронювання агентства</p>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input class="search-input"
+           type="text"
+           placeholder="🔍  Пошук за клієнтом, туром, номером…"
+           [ngModel]="searchQuery()"
+           (ngModelChange)="searchQuery.set($event)">
+
+    <select class="status-select"
+            [ngModel]="filterStatus()"
+            (ngModelChange)="filterStatus.set($event)">
+      <option value="ALL">Всі статуси</option>
+      @for (s of statusOptions; track s) {
+        <option [value]="s">{{ statusConfig(s).label }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Клієнт</th>
+            <th>Тур</th>
+            <th>Виліт</th>
+            <th>Туристів</th>
+            <th>Сума</th>
+            <th>Статус</th>
+            <th>Дії</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (filteredBookings().length === 0) {
+            <tr>
+              <td colspan="8" class="empty-row">Нічого не знайдено</td>
+            </tr>
+          }
+          @for (b of filteredBookings(); track b.id) {
+            <tr>
+              <td class="num-cell">{{ bookingNum(b.id) }}</td>
+              <td>
+                <div class="client-name">{{ b.client }}</div>
+                <div class="client-email">{{ b.email }}</div>
+              </td>
+              <td class="tour-cell">{{ b.tour }}</td>
+              <td class="date-cell">{{ b.departureDate }}</td>
+              <td class="center-cell">{{ b.touristsCount }}</td>
+              <td class="price-cell">{{ formatPrice(b.total) }}</td>
+              <td>
+                @if (editStatusId() === b.id) {
+                  <div class="status-edit-row">
+                    <select class="status-mini-select"
+                            [ngModel]="editStatusValue()"
+                            (ngModelChange)="editStatusValue.set($event)">
+                      @for (s of statusOptions; track s) {
+                        <option [value]="s">{{ statusConfig(s).label }}</option>
+                      }
+                    </select>
+                    <button class="btn-confirm" type="button" (click)="confirmStatusChange(b.id)">✓</button>
+                    <button class="btn-cancel-edit" type="button" (click)="editStatusId.set(null)">✕</button>
+                  </div>
+                } @else {
+                  <span class="status-pill"
+                        [style.background]="statusConfig(b.status).bg"
+                        [style.color]="statusConfig(b.status).color">
+                    {{ statusConfig(b.status).label }}
+                  </span>
+                }
+              </td>
+              <td class="actions-cell">
+                <button class="btn-icon" type="button" title="Змінити статус"
+                        (click)="openEditStatus(b)">✏️</button>
+                <button class="btn-icon" type="button" title="Деталі">👁</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</app-admin-layout>

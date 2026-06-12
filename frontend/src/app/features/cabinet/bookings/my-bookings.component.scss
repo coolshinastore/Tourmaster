@@ -1,0 +1,218 @@
+// ─── Filter chips ─────────────────────────────────────────
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-line);
+  background: #fff;
+  color: var(--color-ink-2);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+
+  &:hover:not(.filter-chip-active) {
+    border-color: var(--color-primary-100);
+    color: var(--color-primary);
+  }
+
+  &.filter-chip-active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+    font-weight: 700;
+  }
+}
+
+// ─── Booking card ─────────────────────────────────────────
+.booking-card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  gap: 16px;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: var(--shadow-2);
+  }
+
+  &.booking-cancelled {
+    opacity: 0.78;
+  }
+}
+
+.booking-photo {
+  width: 104px;
+  height: 104px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.photo-grayscale img {
+    filter: grayscale(0.4);
+  }
+}
+
+.booking-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.booking-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.booking-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+// ─── Status badge ─────────────────────────────────────────
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 6px 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+// ─── Buttons ──────────────────────────────────────────────
+.btn-outline {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: #fff;
+  border: 1.5px solid var(--color-line);
+  border-radius: 9px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+
+  &:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-50);
+  }
+
+  &.btn-outline-danger {
+    color: var(--color-error);
+
+    &:hover {
+      border-color: var(--color-error);
+      background: rgba(239, 68, 68, 0.06);
+    }
+  }
+}
+
+.btn-review {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-secondary-600);
+  background: var(--color-secondary-50);
+  border: none;
+  border-radius: 9px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Inter', sans-serif;
+
+  &:hover {
+    background: #ffe8d5;
+  }
+}
+
+.btn-primary-sm {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 9px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Inter', sans-serif;
+
+  &:hover {
+    background: var(--color-primary-600);
+  }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+  font-family: 'Inter', sans-serif;
+
+  &:hover {
+    background: var(--color-primary-600);
+  }
+}
+
+// ─── Empty state ──────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 48px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-primary-50);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+}

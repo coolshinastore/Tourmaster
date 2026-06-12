@@ -1,0 +1,245 @@
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--color-ink);
+}
+
+.page-sub {
+  font-size: 14px;
+  color: var(--color-ink-2);
+  margin-top: 2px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 11px;
+  padding: 11px 20px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+
+  &:hover { background: var(--color-primary-600); }
+}
+
+// ─── Toolbar ──────────────────────────────────────────────
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-ink);
+  background: #fff;
+  border: 1.5px solid var(--color-line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus { border-color: var(--color-primary); }
+}
+
+.status-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--color-bg);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.status-tab {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink-2);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+
+  &:hover:not(.status-tab-active) {
+    color: var(--color-ink);
+  }
+
+  &.status-tab-active {
+    background: #fff;
+    color: var(--color-primary);
+    font-weight: 700;
+    box-shadow: var(--shadow-1);
+  }
+}
+
+// ─── Table card ───────────────────────────────────────────
+.table-card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+
+  th {
+    font-weight: 700;
+    color: var(--color-ink-2);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-bg);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--color-bg);
+    color: var(--color-ink);
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: #fafcff;
+  }
+
+  tr.row-archived td {
+    opacity: 0.65;
+  }
+}
+
+.tour-title-cell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 13px;
+  max-width: 260px;
+}
+
+.tour-badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: var(--color-primary-50);
+  color: var(--color-primary);
+  border-radius: 5px;
+  padding: 2px 6px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.stars-row {
+  display: flex;
+  gap: 1px;
+  margin-top: 2px;
+}
+
+.price-cell {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.empty-row {
+  text-align: center;
+  color: var(--color-ink-2);
+  padding: 32px !important;
+}
+
+// ─── Status pills ─────────────────────────────────────────
+.status-pill {
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.status-active   { background: rgba(34,197,94,.1);  color: #157A3C; }
+.status-archived { background: #EEF0F3;              color: #4B5563; }
+
+// ─── Action buttons ───────────────────────────────────────
+.actions-cell {
+  white-space: nowrap;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.btn-icon {
+  font-size: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-line);
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.15s;
+
+  &:hover:not(:disabled) {
+    background: var(--color-bg);
+    border-color: var(--color-primary);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &.btn-icon-danger {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    width: auto;
+    padding: 0 10px;
+    color: var(--color-error);
+    border-color: rgba(239,68,68,.3);
+
+    &:hover {
+      background: rgba(239,68,68,.08);
+      border-color: var(--color-error);
+    }
+  }
+}

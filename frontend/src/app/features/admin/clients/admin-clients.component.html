@@ -1,0 +1,83 @@
+<app-admin-layout activeSection="clients">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Клієнти</h1>
+      <p class="page-sub">{{ clients().length }} клієнтів · Загальна виручка {{ formatPrice(totalRevenue) }}</p>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input class="search-input"
+           type="text"
+           placeholder="🔍  Пошук за ім'ям або email…"
+           [ngModel]="searchQuery()"
+           (ngModelChange)="searchQuery.set($event)">
+
+    <div class="loyalty-tabs">
+      @for (t of [['ALL','Всі'],['GOLD','🥇 Золоті'],['SILVER','🥈 Срібні'],['BRONZE','🥉 Бронзові']]; track t[0]) {
+        <button class="loyalty-tab"
+                [class.loyalty-tab-active]="filterLoyalty() === t[0]"
+                (click)="filterLoyalty.set($any(t[0]))"
+                type="button">
+          {{ t[1] }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Клієнт</th>
+            <th>Телефон</th>
+            <th>Бронювань</th>
+            <th>Витрачено</th>
+            <th>Рівень</th>
+            <th>Реєстрація</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (filteredClients().length === 0) {
+            <tr>
+              <td colspan="7" class="empty-row">Нічого не знайдено</td>
+            </tr>
+          }
+          @for (c of filteredClients(); track c.id) {
+            <tr>
+              <td>
+                <div class="client-row">
+                  <div class="client-avatar">{{ (c.firstName.charAt(0) + c.lastName.charAt(0)).toUpperCase() }}</div>
+                  <div>
+                    <div class="client-name">{{ c.firstName }} {{ c.lastName }}</div>
+                    <div class="client-email">{{ c.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">{{ c.phone }}</td>
+              <td class="center-cell">{{ c.bookingsCount }}</td>
+              <td class="price-cell">{{ formatPrice(c.totalSpent) }}</td>
+              <td>
+                <span class="loyalty-pill"
+                      [style.background]="loyaltyConfig(c.loyaltyLevel).bg"
+                      [style.color]="loyaltyConfig(c.loyaltyLevel).color">
+                  {{ loyaltyConfig(c.loyaltyLevel).icon }} {{ loyaltyConfig(c.loyaltyLevel).label }}
+                </span>
+              </td>
+              <td class="date-cell">{{ c.registeredAt }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon" type="button" title="Деталі">👁</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</app-admin-layout>

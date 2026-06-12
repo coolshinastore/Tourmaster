@@ -1,0 +1,215 @@
+// ─── Grid ─────────────────────────────────────────────────
+.wish-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Card ─────────────────────────────────────────────────
+.wish-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+
+  &:hover {
+    box-shadow: var(--shadow-2);
+    transform: translateY(-2px);
+  }
+}
+
+// ─── Remove button ────────────────────────────────────────
+.wish-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid var(--color-line);
+  font-size: 18px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s, color 0.2s;
+  color: var(--color-error);
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.1);
+  }
+}
+
+// ─── Badge ────────────────────────────────────────────────
+.wish-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border-radius: 6px;
+  padding: 4px 9px;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+}
+
+.badge-hit  { background: rgba(245, 158, 11, 0.15); color: #92610A; }
+.badge-sale { background: rgba(239, 68, 68, 0.12);  color: #B42323; }
+.badge-new  { background: rgba(26, 111, 191, 0.12); color: #15598F; }
+.badge-last { background: rgba(239, 68, 68, 0.08);  color: #B42323; }
+
+// ─── Photo ────────────────────────────────────────────────
+.wish-photo {
+  display: block;
+  height: 180px;
+  overflow: hidden;
+  text-decoration: none;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.04);
+  }
+}
+
+// ─── Body ─────────────────────────────────────────────────
+.wish-body {
+  padding: 14px 16px 16px;
+}
+
+.wish-title {
+  display: block;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--color-ink);
+  text-decoration: none;
+  margin-bottom: 8px;
+  line-height: 1.3;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.wish-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 12px;
+  color: var(--color-ink-2);
+  margin-bottom: 8px;
+}
+
+// ─── Rating ───────────────────────────────────────────────
+.wish-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.wish-stars {
+  display: flex;
+  gap: 1px;
+}
+
+// ─── Price row ────────────────────────────────────────────
+.wish-price-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wish-old-price {
+  font-size: 12px;
+  color: var(--color-ink-3);
+  text-decoration: line-through;
+  line-height: 1.2;
+}
+
+.wish-price {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--color-ink);
+}
+
+.wish-book-btn {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-primary);
+  border-radius: 10px;
+  padding: 9px 14px;
+  text-decoration: none;
+  transition: background 0.2s;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+
+  &:hover {
+    background: var(--color-primary-600);
+  }
+}
+
+// ─── Empty state ──────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 36px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-primary-50);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+  font-family: 'Inter', sans-serif;
+
+  &:hover {
+    background: var(--color-primary-600);
+  }
+}

@@ -1,0 +1,65 @@
+<app-header />
+
+<main style="background:var(--color-bg);min-height:100svh" class="pb-16">
+  <div class="container-app py-16 flex justify-center">
+    <div class="success-card">
+
+      <!-- Icon -->
+      <div class="success-icon-wrap">
+        <div class="success-icon">✓</div>
+      </div>
+
+      <!-- Heading -->
+      <h1 class="font-heading font-black text-ink text-center" style="font-size:28px;margin:20px 0 8px">
+        Бронювання підтверджено!
+      </h1>
+      <p class="text-ink-2 text-center text-sm leading-relaxed mb-6">
+        Дякуємо за бронювання в TourMaster. Деталі надіслано на вашу електронну пошту.
+      </p>
+
+      <!-- Booking number -->
+      <div class="booking-num-badge">
+        <span class="text-ink-2 text-xs font-semibold">Номер бронювання</span>
+        <span class="font-heading font-black text-primary" style="font-size:22px">{{ bookingId() }}</span>
+      </div>
+
+      <!-- Info steps -->
+      <div class="success-steps">
+        <div class="success-step">
+          <div class="step-dot" style="background:var(--color-primary-50);color:var(--color-primary)">✉</div>
+          <div>
+            <div class="font-semibold text-ink text-sm">Підтвердження на email</div>
+            <div class="text-xs text-ink-2 mt-0.5">Лист з деталями вже в дорозі</div>
+          </div>
+        </div>
+        <div class="success-step">
+          <div class="step-dot" style="background:var(--color-secondary-50);color:var(--color-secondary-600)">📄</div>
+          <div>
+            <div class="font-semibold text-ink text-sm">Ваучер</div>
+            <div class="text-xs text-ink-2 mt-0.5">Доступний у вашому кабінеті</div>
+          </div>
+        </div>
+        <div class="success-step">
+          <div class="step-dot" style="background:rgba(34,197,94,.1);color:var(--color-success)">🧳</div>
+          <div>
+            <div class="font-semibold text-ink text-sm">Готуйтеся до відпочинку!</div>
+            <div class="text-xs text-ink-2 mt-0.5">Гарної подорожі від команди TourMaster</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col gap-3 mt-8">
+        <a routerLink="/cabinet/bookings" class="btn-primary-action">
+          Мої бронювання
+        </a>
+        <a routerLink="/tours" class="btn-secondary-action">
+          Продовжити перегляд турів
+        </a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<app-footer />

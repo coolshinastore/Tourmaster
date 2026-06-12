@@ -1,0 +1,90 @@
+<app-admin-layout activeSection="dashboard">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Дашборд</h1>
+      <p class="page-sub">Аналітика за червень 2026</p>
+    </div>
+    <a routerLink="/admin/bookings" class="btn-primary">+ Нове бронювання</a>
+  </div>
+
+  <!-- ── Stat cards ──────────────────────────────────────── -->
+  <div class="stats-grid">
+    @for (s of stats; track s.label) {
+      <div class="stat-card">
+        <div class="stat-icon">{{ s.icon }}</div>
+        <div class="stat-value">{{ s.value }}</div>
+        <div class="stat-label">{{ s.label }}</div>
+        <div class="stat-delta" [class.delta-positive]="s.positive" [class.delta-negative]="!s.positive">
+          {{ s.delta }}
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- ── Two-column section ──────────────────────────────── -->
+  <div class="dash-cols">
+
+    <!-- Recent bookings -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <h2 class="dash-card-title">Останні бронювання</h2>
+        <a routerLink="/admin/bookings" class="dash-card-link">Всі →</a>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Клієнт</th>
+              <th>Тур</th>
+              <th>Виліт</th>
+              <th>Статус</th>
+              <th class="text-right">Сума</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (b of recentBookings; track b.id) {
+              <tr>
+                <td class="booking-num-cell">{{ bookingNum(b.id) }}</td>
+                <td>{{ b.client }}</td>
+                <td class="tour-cell">{{ b.tour }}</td>
+                <td class="date-cell">{{ b.date }}</td>
+                <td>
+                  <span class="status-pill"
+                        [style.background]="statusConfig(b.status).bg"
+                        [style.color]="statusConfig(b.status).color">
+                    {{ statusConfig(b.status).label }}
+                  </span>
+                </td>
+                <td class="text-right price-cell">{{ formatPrice(b.total) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top tours -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <h2 class="dash-card-title">Топ турів</h2>
+        <a routerLink="/admin/tours" class="dash-card-link">Всі тури →</a>
+      </div>
+      <div class="flex flex-col gap-3">
+        @for (t of topTours; track t.title; let i = $index) {
+          <div class="top-tour-row">
+            <div class="top-tour-rank">{{ i + 1 }}</div>
+            <div class="top-tour-info">
+              <div class="top-tour-title">{{ t.title }}</div>
+              <div class="top-tour-meta">{{ t.bookings }} бронювань · {{ formatPrice(t.revenue) }}</div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+</app-admin-layout>

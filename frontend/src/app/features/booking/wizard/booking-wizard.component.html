@@ -1,0 +1,533 @@
+<div class="wizard-page">
+
+  <!-- ═══ WIZARD HEADER ═══ -->
+  <header class="wiz-header">
+    <a routerLink="/" class="wiz-header__logo">
+      <span class="logo-tile">T</span>
+      <span class="logo-text">TourMaster</span>
+    </a>
+    <span class="wiz-header__secure">🔒 Захищене бронювання</span>
+    <span class="wiz-header__help hidden md:block">
+      Потрібна допомога?&nbsp;<a href="tel:0800332211" class="text-primary font-semibold">0 800 33 22 11</a>
+    </span>
+  </header>
+
+  <!-- ═══ DESKTOP PROGRESS BAR ═══ -->
+  <div class="wiz-progress">
+    <div class="progress-inner">
+      <div class="progress-track"></div>
+      <div class="progress-fill" [style.width]="progressFillPct()"></div>
+      @for (step of steps; track step.num) {
+        <div class="progress-step">
+          <div class="progress-circle"
+               [class.circle-done]="stepStatus(step.num) === 'completed'"
+               [class.circle-active]="stepStatus(step.num) === 'active'"
+               [class.circle-pending]="stepStatus(step.num) === 'pending'">
+            @if (stepStatus(step.num) === 'completed') { ✓ }
+            @else { {{ step.num }} }
+          </div>
+          <span class="progress-label" [class.label-active]="stepStatus(step.num) === 'active'">
+            {{ step.label }}
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- ═══ MOBILE PROGRESS ═══ -->
+  <div class="mobile-progress">
+    <div class="flex items-center justify-between mb-3">
+      @if (currentStep() > 1) {
+        <button class="mobile-back" (click)="prevStep()">‹</button>
+      } @else {
+        <a routerLink="/tours" class="mobile-back">‹</a>
+      }
+      <span class="font-heading font-extrabold text-base">Бронювання</span>
+      <span class="text-sm font-semibold text-ink-2">Крок {{ currentStep() }}/5</span>
+    </div>
+    <div class="mobile-bars">
+      @for (step of steps; track step.num) {
+        <span [class.bar-done]="step.num < currentStep()"
+              [class.bar-active]="step.num === currentStep()"></span>
+      }
+    </div>
+    <div class="mt-3 font-heading font-black text-xl text-ink">
+      @switch (currentStep()) {
+        @case (1) { Тур і дати }
+        @case (2) { Дані туристів }
+        @case (3) { Додаткові послуги }
+        @case (4) { Перевірте замовлення }
+        @case (5) { Оплата }
+      }
+    </div>
+    <div class="text-sm text-ink-2 mt-1">
+      @switch (currentStep()) {
+        @case (1) { Оберіть дату вильоту та кількість туристів }
+        @case (2) { Як у закордонному паспорті }
+        @case (3) { Покращіть свій відпочинок }
+        @case (4) { Переконайтеся, що все вірно }
+        @case (5) { 3-D Secure. Кошти спишуться після підтвердження }
+      }
+    </div>
+  </div>
+
+  <!-- ═══ LOADING ═══ -->
+  @if (loading()) {
+    <div class="container-app py-8">
+      <div class="flex gap-6 flex-col md:flex-row">
+        <div class="flex-1 flex flex-col gap-4">
+          <div class="skeleton h-8 w-64 rounded-lg"></div>
+          <div class="skeleton h-4 w-48 rounded"></div>
+          <div class="skeleton w-full rounded-xl" style="height:180px"></div>
+          <div class="skeleton w-full rounded-xl" style="height:120px"></div>
+        </div>
+        <div class="w-full md:w-80">
+          <div class="skeleton w-full rounded-xl" style="height:280px"></div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ═══ BODY ═══ -->
+  @if (!loading()) {
+    <div class="wiz-body container-app">
+
+      <!-- ─── MAIN CONTENT ───────────────────────────────────── -->
+      <div class="wiz-main">
+
+        <!-- ══ STEP 1: Тур і дати ══ -->
+        @if (currentStep() === 1) {
+          <h1 class="step-title">Підтвердіть тур і дати</h1>
+          <p class="step-subtitle">Перевірте деталі та оберіть зручну дату вильоту</p>
+
+          <div class="step-card">
+            <div class="tour-confirm-row">
+              <img [src]="tour()?.imageUrl" [alt]="tour()?.title" class="confirm-img">
+              <div class="flex-1 min-w-0">
+                <div class="font-heading font-extrabold text-lg text-ink leading-snug mb-2">{{ tour()?.title }}</div>
+                <div class="flex flex-col gap-1 text-sm text-ink-2">
+                  <span>📍 {{ tour()?.country }}, {{ tour()?.city }}</span>
+                  <span>🌙 {{ tour()?.durationNights }} ночей · 🍽 {{ mealLabel(tour()?.mealType ?? '') }}</span>
+                  <span class="text-warning">
+                    @for (i of [].constructor(tour()?.hotelStars ?? 0); track $index) { ★ }
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="subsection-label">Дата вильоту</div>
+            <div class="flex flex-col gap-2 mt-2">
+              @for (date of tour()?.dates; track date.id) {
+                <div class="date-option" [class.date-selected]="tourDate()?.id === date.id"
+                     (click)="selectDate(date)">
+                  <div>
+                    <div class="font-semibold text-ink" style="font-size:15px">
+                      ✈ {{ formatDate(date.departureDate) }} – {{ formatDate(date.returnDate) }}
+                    </div>
+                    <div class="text-xs text-ink-2 mt-0.5">{{ date.departureCity }} · {{ date.availableSeats }} місць</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-heading font-extrabold text-ink" style="font-size:17px">{{ formatPrice(date.price) }}</div>
+                    <div class="text-xs text-ink-2">за особу</div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="tourist-count-row">
+              <div>
+                <div class="font-semibold text-ink" style="font-size:15px">Кількість туристів</div>
+                <div class="text-sm text-ink-2 mt-0.5">Дорослих (від 12 років)</div>
+              </div>
+              <div class="count-stepper">
+                <button class="count-btn" (click)="decrementCount()" [disabled]="touristsCount() <= 1">−</button>
+                <span class="count-val">{{ touristsCount() }}</span>
+                <button class="count-btn" (click)="incrementCount()" [disabled]="touristsCount() >= 9">+</button>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- ══ STEP 2: Туристи ══ -->
+        @if (currentStep() === 2) {
+          <h1 class="step-title">Дані туристів</h1>
+          <p class="step-subtitle">Введіть дані точно як у закордонному паспорті</p>
+
+          @if (stepError()) {
+            <div class="alert-error">
+              <span>⚠</span> Будь ласка, заповніть усі обов'язкові поля для кожного туриста
+            </div>
+          }
+
+          @for (fg of touristFormsArray; track $index) {
+            <div class="step-card" style="margin-bottom:12px">
+              @if (!isExpanded($index)) {
+                <!-- Collapsed -->
+                <div class="tourist-collapsed-row" (click)="toggleTourist($index)">
+                  <span class="tourist-num-badge pending">{{ $index + 1 }}</span>
+                  <span class="font-heading font-extrabold text-base text-ink-2">
+                    Турист {{ $index + 1 }} · Дорослий
+                  </span>
+                  <button class="expand-btn" type="button">Розгорнути ▾</button>
+                </div>
+              } @else {
+                <!-- Expanded header -->
+                <div class="tourist-expanded-header">
+                  <span class="tourist-num-badge active">{{ $index + 1 }}</span>
+                  <span class="font-heading font-extrabold text-base text-ink">
+                    Турист {{ $index + 1 }} · Дорослий
+                  </span>
+                  @if ($index > 0) {
+                    <button class="collapse-btn" type="button" (click)="toggleTourist($index)">Згорнути ▲</button>
+                  }
+                </div>
+
+                <!-- Fields grid -->
+                <div class="tourist-grid" [formGroup]="touristForm($index)">
+                  <div>
+                    <label class="field-label">Прізвище (лат.)</label>
+                    <input formControlName="lastName" class="field-input"
+                           placeholder="SHEVCHENKO" style="text-transform:uppercase">
+                    @if (touristForm($index).get('lastName')?.invalid && touristForm($index).get('lastName')?.touched) {
+                      <div class="field-error">Обов'язкове поле</div>
+                    }
+                  </div>
+                  <div>
+                    <label class="field-label">Ім'я (лат.)</label>
+                    <input formControlName="firstName" class="field-input"
+                           placeholder="OLEKSANDR" style="text-transform:uppercase">
+                    @if (touristForm($index).get('firstName')?.invalid && touristForm($index).get('firstName')?.touched) {
+                      <div class="field-error">Обов'язкове поле</div>
+                    }
+                  </div>
+                  <div>
+                    <label class="field-label">Дата народження</label>
+                    <input formControlName="birthDate" class="field-input" type="date"
+                           [max]="todayStr">
+                    @if (touristForm($index).get('birthDate')?.invalid && touristForm($index).get('birthDate')?.touched) {
+                      <div class="field-error">Обов'язкове поле</div>
+                    }
+                  </div>
+                  <div>
+                    <label class="field-label">Стать</label>
+                    <div class="gender-toggle">
+                      <button type="button"
+                              [class.gender-selected]="touristForm($index).value.gender === 'male'"
+                              (click)="setGender(touristForm($index), 'male')">Чол.</button>
+                      <button type="button"
+                              [class.gender-selected]="touristForm($index).value.gender === 'female'"
+                              (click)="setGender(touristForm($index), 'female')">Жін.</button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="field-label">Номер паспорта</label>
+                    <input formControlName="passportNumber" class="field-input" placeholder="FE 123456">
+                    @if (touristForm($index).get('passportNumber')?.invalid && touristForm($index).get('passportNumber')?.touched) {
+                      <div class="field-error">Обов'язкове поле</div>
+                    }
+                  </div>
+                  <div>
+                    <label class="field-label"
+                           [class.label-error]="touristForm($index).get('passportExpiry')?.invalid && touristForm($index).get('passportExpiry')?.touched">
+                      Дійсний до
+                    </label>
+                    <input formControlName="passportExpiry" class="field-input"
+                           [class.input-error]="touristForm($index).get('passportExpiry')?.invalid && touristForm($index).get('passportExpiry')?.touched"
+                           type="date">
+                    @if (touristForm($index).get('passportExpiry')?.invalid && touristForm($index).get('passportExpiry')?.touched) {
+                      <div class="field-error">Обов'язкове поле</div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        }
+
+        <!-- ══ STEP 3: Послуги ══ -->
+        @if (currentStep() === 3) {
+          <h1 class="step-title">Додаткові послуги</h1>
+          <p class="step-subtitle">Зробіть відпочинок ще зручнішим і безпечнішим</p>
+
+          @for (service of extraServices(); track service.id) {
+            <div class="service-item" [class.service-selected]="isServiceSelected(service.id)"
+                 (click)="toggleService(service)">
+              <div class="service-icon-wrap" [style.background]="serviceIconBg(service.type)">
+                <span style="font-size:22px">{{ serviceIcon(service.type) }}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="font-heading font-bold text-ink" style="font-size:16px">{{ service.name }}</div>
+                <div class="text-sm text-ink-2 mt-0.5">{{ service.description }}</div>
+              </div>
+              <div class="text-right flex-shrink-0">
+                <div class="font-heading font-extrabold text-ink" style="font-size:17px">{{ formatPrice(service.price) }}</div>
+                <div class="text-xs text-ink-2">з особи</div>
+              </div>
+              <div class="service-check" [class.service-check-on]="isServiceSelected(service.id)">
+                @if (isServiceSelected(service.id)) { ✓ }
+              </div>
+            </div>
+          }
+
+          @if (selectedServices().length === 0) {
+            <p class="text-sm text-ink-2 mt-4 text-center">Можна продовжити без додаткових послуг</p>
+          }
+        }
+
+        <!-- ══ STEP 4: Огляд ══ -->
+        @if (currentStep() === 4) {
+          <h1 class="step-title">Перевірте замовлення</h1>
+          <p class="step-subtitle">Переконайтеся, що всі дані правильні перед оплатою</p>
+
+          <!-- Tour & date summary -->
+          <div class="step-card">
+            <div class="review-section-label">Тур та дата</div>
+            <div class="tour-confirm-row">
+              <img [src]="tour()?.imageUrl" [alt]="tour()?.title" class="confirm-img">
+              <div class="flex-1 min-w-0">
+                <div class="font-heading font-extrabold text-base text-ink mb-1">{{ tour()?.title }}</div>
+                <div class="flex flex-col gap-1 text-sm text-ink-2">
+                  <span>📍 {{ tour()?.country }}, {{ tour()?.city }}</span>
+                  <span>✈ {{ formatDateLong(tourDate()?.departureDate) }} – {{ formatDateLong(tourDate()?.returnDate) }}</span>
+                  <span>👤 {{ touristsCount() }} {{ touristLabel(touristsCount()) }} · 🍽 {{ mealLabel(tour()?.mealType ?? '') }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tourists summary -->
+          <div class="step-card">
+            <div class="review-section-label mb-3">Туристи</div>
+            @for (fg of touristFormsArray; track $index) {
+              <div class="review-tourist-row" [class.review-row-border]="$index < touristFormsArray.length - 1">
+                <div class="review-tourist-num">
+                  <span class="tourist-num-badge active" style="font-size:13px;width:26px;height:26px">{{ $index + 1 }}</span>
+                </div>
+                <div class="review-tourist-data">
+                  <div>
+                    <div class="text-xs text-ink-2 mb-0.5">Прізвище та ім'я</div>
+                    <div class="font-semibold text-ink" style="font-size:15px">
+                      {{ fg.value.lastName }} {{ fg.value.firstName }}
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-xs text-ink-2 mb-0.5">Дата народження</div>
+                    <div class="font-semibold text-ink" style="font-size:15px">{{ formatDate(fg.value.birthDate) }}</div>
+                  </div>
+                  <div>
+                    <div class="text-xs text-ink-2 mb-0.5">Паспорт / Дійсний до</div>
+                    <div class="font-semibold text-ink" style="font-size:15px">
+                      {{ fg.value.passportNumber }} / {{ formatDate(fg.value.passportExpiry) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Services summary -->
+          @if (selectedServices().length > 0) {
+            <div class="step-card">
+              <div class="review-section-label mb-3">Додаткові послуги</div>
+              @for (s of selectedServices(); track s.id) {
+                <div class="review-service-row">
+                  <span>{{ serviceIcon(s.type) }}&nbsp;{{ s.name }}</span>
+                  <span class="font-semibold">{{ formatPrice(s.price * touristsCount()) }}</span>
+                </div>
+              }
+            </div>
+          }
+        }
+
+        <!-- ══ STEP 5: Оплата ══ -->
+        @if (currentStep() === 5) {
+          <h1 class="step-title">Оплата</h1>
+          <p class="step-subtitle">Платіж захищено 3-D Secure. Кошти спишуться лише після підтвердження.</p>
+
+          <div class="step-card">
+            <!-- Payment method tabs -->
+            <div class="flex gap-2 mb-5 flex-wrap">
+              <button class="pay-tab" [class.pay-tab-active]="paymentMethod() === 'card'"
+                      (click)="paymentMethod.set('card')" type="button">
+                💳 Картка
+              </button>
+              <button class="pay-tab" [class.pay-tab-active]="paymentMethod() === 'apple'"
+                      (click)="paymentMethod.set('apple')" type="button">
+                🍏 Apple Pay
+              </button>
+              <button class="pay-tab" [class.pay-tab-active]="paymentMethod() === 'installment'"
+                      (click)="paymentMethod.set('installment')" type="button">
+                Розстрочка 0%
+              </button>
+            </div>
+
+            <!-- Card form -->
+            @if (paymentMethod() === 'card') {
+              <form [formGroup]="paymentForm" class="flex flex-col gap-4">
+                <div>
+                  <label class="field-label">Номер картки</label>
+                  <div class="card-input-wrap">
+                    <input formControlName="cardNumber" class="field-input" placeholder="•••• •••• •••• ••••" maxlength="19">
+                    <span class="card-icon">💳</span>
+                  </div>
+                  @if (paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched) {
+                    <div class="field-error">Введіть номер картки</div>
+                  }
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="field-label">Термін дії</label>
+                    <input formControlName="expiry" class="field-input" placeholder="ММ/РР" maxlength="5">
+                    @if (paymentForm.get('expiry')?.invalid && paymentForm.get('expiry')?.touched) {
+                      <div class="field-error">Обов'язкове поле</div>
+                    }
+                  </div>
+                  <div>
+                    <label class="field-label">CVV</label>
+                    <input formControlName="cvv" class="field-input" placeholder="•••" maxlength="3" type="password">
+                    @if (paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched) {
+                      <div class="field-error">Обов'язкове поле</div>
+                    }
+                  </div>
+                </div>
+                <div>
+                  <label class="field-label">Власник картки</label>
+                  <input formControlName="holder" class="field-input"
+                         placeholder="ІМ'Я ПРІЗВИЩЕ ЛАТИНИЦЕЮ" style="text-transform:uppercase">
+                  @if (paymentForm.get('holder')?.invalid && paymentForm.get('holder')?.touched) {
+                    <div class="field-error">Введіть ім'я власника картки</div>
+                  }
+                </div>
+                <div class="card-logos">
+                  <span style="font-size:11px;color:var(--color-ink-2)">🔒 Visa · Mastercard · Безпечна оплата</span>
+                </div>
+              </form>
+            }
+
+            <!-- Apple Pay -->
+            @if (paymentMethod() === 'apple') {
+              <div class="pay-alt-block">
+                <div class="pay-alt-icon">🍏</div>
+                <div>
+                  <div class="font-heading font-extrabold text-base text-ink">Apple Pay</div>
+                  <div class="text-sm text-ink-2 mt-1">
+                    Натисніть «Сплатити» нижче — вас буде перенаправлено для підтвердження через Apple Pay
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Installment -->
+            @if (paymentMethod() === 'installment') {
+              <div class="pay-alt-block">
+                <div class="pay-alt-icon" style="background:var(--color-secondary-50)">📅</div>
+                <div>
+                  <div class="font-heading font-extrabold text-base text-ink">Розстрочка без переплат</div>
+                  <div class="text-sm text-ink-2 mt-1">До 12 місяців · 0% переплата · Рішення за 2 хвилини</div>
+                </div>
+              </div>
+              <div class="installment-amount">
+                <span class="font-heading font-black text-ink" style="font-size:26px">{{ formatPrice(monthlyInstallment) }}</span>
+                <span class="text-ink-2 text-sm">&nbsp;/ місяць × 12</span>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- ─── Navigation (desktop) ───────────────────────── -->
+        <div class="wiz-nav">
+          @if (currentStep() > 1) {
+            <button class="btn-back" (click)="prevStep()" type="button">← Назад</button>
+          } @else {
+            <a routerLink="/tours" class="btn-back">← До каталогу</a>
+          }
+          <div style="margin-left:auto">
+            @if (currentStep() < 5) {
+              <button class="btn-next" (click)="nextStep()" type="button">
+                Далі: {{ steps[currentStep()].label }} →
+              </button>
+            } @else {
+              <button class="btn-pay" (click)="submitBooking()" [disabled]="submitting()" type="button">
+                @if (submitting()) { Обробляємо… }
+                @else { Сплатити {{ formatPrice(totalPrice()) }} }
+              </button>
+            }
+          </div>
+        </div>
+
+      </div><!-- /wiz-main -->
+
+      <!-- ─── ORDER SIDEBAR ─────────────────────────────────── -->
+      <aside class="wiz-sidebar">
+        <div class="font-heading font-extrabold text-base text-ink mb-4">Ваше замовлення</div>
+
+        <!-- Mini tour -->
+        <div class="sidebar-tour">
+          <img [src]="tour()?.imageUrl" [alt]="tour()?.title" class="sidebar-img">
+          <div class="min-w-0">
+            <div class="font-heading font-bold text-sm text-ink leading-snug mb-1">{{ tour()?.title }}</div>
+            <div class="text-xs text-ink-2 leading-relaxed">
+              📍 {{ tour()?.country }}<br>
+              📅 {{ formatDate(tourDate()?.departureDate) }}–{{ formatDate(tourDate()?.returnDate) }} · {{ touristsCount() }} дорослих
+            </div>
+          </div>
+        </div>
+
+        <!-- Price rows -->
+        <div class="flex flex-col gap-2 mb-3">
+          <div class="flex justify-between text-sm">
+            <span class="text-ink-2">Тур × {{ touristsCount() }}</span>
+            <span class="text-ink font-medium">{{ formatPrice(basePrice()) }}</span>
+          </div>
+          @if (selectedServices().length > 0) {
+            <div class="flex justify-between text-sm">
+              <span class="text-ink-2">Послуги</span>
+              <span class="text-ink font-medium">{{ formatPrice(servicesTotal()) }}</span>
+            </div>
+          } @else {
+            <div class="flex justify-between text-sm">
+              <span class="text-ink-2">Послуги</span>
+              <span class="text-ink-2">—</span>
+            </div>
+          }
+        </div>
+
+        <!-- Total -->
+        <div class="sidebar-total">
+          <span>Разом</span>
+          <span>{{ formatPrice(totalPrice()) }}</span>
+        </div>
+
+        <!-- Cancellation note -->
+        <div class="sidebar-note">
+          <span class="text-success font-bold">✓</span>
+          Безкоштовне скасування протягом 48 годин
+        </div>
+      </aside>
+
+    </div><!-- /wiz-body -->
+  }
+
+  <!-- ═══ MOBILE BOTTOM BAR ═══ -->
+  <div class="mobile-bottom-bar">
+    <div>
+      <div class="text-xs text-ink-2">Разом</div>
+      <div class="font-heading font-black text-ink" style="font-size:19px">{{ formatPrice(totalPrice()) }}</div>
+    </div>
+    @if (currentStep() < 5) {
+      <button class="mobile-btn" (click)="nextStep()" type="button">
+        Далі: {{ steps[currentStep()].label }} →
+      </button>
+    } @else {
+      <button class="mobile-btn mobile-btn-pay" (click)="submitBooking()" [disabled]="submitting()" type="button">
+        @if (submitting()) { Обробляємо… }
+        @else { Сплатити }
+      </button>
+    }
+  </div>
+
+</div>

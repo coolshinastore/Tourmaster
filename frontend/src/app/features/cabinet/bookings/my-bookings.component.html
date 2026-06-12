@@ -1,0 +1,92 @@
+<app-cabinet-layout activeSection="bookings" [wishlistCount]="4">
+
+  <!-- Filter chips -->
+  <div class="filter-chips">
+    @for (f of filters; track f.key) {
+      <button class="filter-chip"
+              [class.filter-chip-active]="activeFilter() === f.key"
+              (click)="activeFilter.set(f.key)"
+              type="button">
+        {{ f.label }} · {{ countFor(f.key) }}
+      </button>
+    }
+  </div>
+
+  <!-- Loading skeleton -->
+  @if (loading()) {
+    <div class="flex flex-col gap-3">
+      @for (i of [1,2,3]; track i) {
+        <div class="skeleton w-full rounded-xl" style="height:124px"></div>
+      }
+    </div>
+  }
+
+  <!-- Bookings list -->
+  @if (!loading()) {
+    @if (filteredBookings().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🧳</div>
+        <div class="font-heading font-extrabold text-ink text-lg">Бронювань не знайдено</div>
+        <div class="text-sm text-ink-2 mt-1">Тут з'являться ваші замовлення</div>
+        <a routerLink="/tours" class="btn-primary mt-4">Переглянути тури</a>
+      </div>
+    } @else {
+      <div class="flex flex-col gap-3">
+        @for (b of filteredBookings(); track b.id) {
+          <div class="booking-card" [class.booking-cancelled]="isCancelled(b)">
+            <!-- Tour photo -->
+            <div class="booking-photo" [class.photo-grayscale]="isCancelled(b)">
+              <img [src]="b.imageUrl" [alt]="b.tourTitle">
+            </div>
+
+            <!-- Info -->
+            <div class="booking-info">
+              <div class="booking-top-row">
+                <div>
+                  <div class="font-heading font-bold text-ink" style="font-size:17px">{{ b.tourTitle }}</div>
+                  <div class="text-sm text-ink-2 mt-0.5">
+                    № {{ bookingNum(b.id) }} · 📅 {{ formatDateRange(b.departureDate, b.returnDate) }} · {{ b.touristsCount }} дорослих
+                  </div>
+                </div>
+                <!-- Status badge -->
+                <span class="status-badge"
+                      [style.background]="statusConfig(b.status).bg"
+                      [style.color]="statusConfig(b.status).color">
+                  <span class="status-dot" [style.background]="statusConfig(b.status).dot"></span>
+                  {{ statusConfig(b.status).label }}
+                </span>
+              </div>
+
+              <div class="booking-bottom-row">
+                @if (!isCancelled(b)) {
+                  <span class="font-heading font-extrabold text-ink" style="font-size:18px">
+                    {{ formatPrice(b.totalPrice) }}
+                  </span>
+                } @else {
+                  <span class="text-sm text-ink-2">Кошти повернено на картку</span>
+                }
+
+                <div class="flex gap-2">
+                  @if (b.status === 'PAID' || b.status === 'CONFIRMED') {
+                    <button class="btn-outline" type="button">⤓ Ваучер</button>
+                  }
+                  @if (isCompleted(b)) {
+                    <button class="btn-review" type="button">★ Залишити відгук</button>
+                    <button class="btn-outline" type="button">Повторити</button>
+                  }
+                  @if (canCancel(b)) {
+                    <button class="btn-outline btn-outline-danger" type="button">Скасувати</button>
+                  }
+                  @if (!isCompleted(b)) {
+                    <button class="btn-primary-sm" type="button">Деталі</button>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+
+</app-cabinet-layout>

@@ -1,0 +1,855 @@
+// ─── Page wrapper ─────────────────────────────────────────
+.wizard-page {
+  min-height: 100vh;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
+}
+
+// ─── Wizard Header ────────────────────────────────────────
+.wiz-header {
+  background: #fff;
+  border-bottom: 1px solid var(--color-line);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-1);
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+
+    .logo-tile {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-700));
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-family: 'Nunito Sans', sans-serif;
+      font-weight: 900;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: 'Nunito Sans', sans-serif;
+      font-weight: 900;
+      font-size: 18px;
+      color: var(--color-ink);
+    }
+  }
+
+  &__secure {
+    font-size: 14px;
+    color: var(--color-ink-2);
+  }
+
+  &__help {
+    font-size: 14px;
+    color: var(--color-ink-2);
+
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+// ─── Desktop Progress Bar ─────────────────────────────────
+.wiz-progress {
+  background: #fff;
+  border-bottom: 1px solid var(--color-line);
+  padding: 24px 80px;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+.progress-inner {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.progress-track,
+.progress-fill {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 19px;
+  height: 3px;
+  border-radius: 99px;
+  z-index: 0;
+}
+
+.progress-track {
+  background: var(--color-line);
+}
+
+.progress-fill {
+  right: auto;
+  width: 0%;
+  background: var(--color-primary);
+  transition: width 0.4s ease;
+}
+
+.progress-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 16px;
+  transition: all 0.3s;
+
+  &.circle-done {
+    background: var(--color-success);
+    color: #fff;
+    border: none;
+  }
+
+  &.circle-active {
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 0 0 4px var(--color-primary-50);
+  }
+
+  &.circle-pending {
+    background: #fff;
+    color: var(--color-ink-2);
+    border: 2px solid var(--color-line);
+  }
+}
+
+.progress-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink-2);
+  white-space: nowrap;
+
+  &.label-active {
+    color: var(--color-primary);
+    font-weight: 800;
+  }
+}
+
+// ─── Mobile Progress ──────────────────────────────────────
+.mobile-progress {
+  display: none;
+  background: #fff;
+  border-bottom: 1px solid var(--color-line);
+  padding: 10px 16px 16px;
+
+  @media (max-width: 767px) {
+    display: block;
+  }
+}
+
+.mobile-back {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  color: var(--color-ink);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 50%;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--color-bg);
+  }
+}
+
+.mobile-bars {
+  display: flex;
+  gap: 5px;
+
+  span {
+    flex: 1;
+    height: 5px;
+    border-radius: 99px;
+    background: var(--color-line);
+    transition: background 0.3s;
+
+    &.bar-done { background: var(--color-success); }
+    &.bar-active { background: var(--color-primary); }
+  }
+}
+
+// ─── Body layout ──────────────────────────────────────────
+.wiz-body {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  padding-top: 28px;
+  padding-bottom: 64px;
+  align-items: start;
+
+  @media (max-width: 1023px) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 767px) {
+    padding-bottom: 110px;
+  }
+}
+
+// ─── Step title ───────────────────────────────────────────
+.step-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  margin: 0 0 4px;
+  color: var(--color-ink);
+}
+
+.step-subtitle {
+  font-size: 14px;
+  color: var(--color-ink-2);
+  margin: 0 0 20px;
+}
+
+// ─── Step card ────────────────────────────────────────────
+.step-card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 24px 26px;
+  margin-bottom: 16px;
+}
+
+.section-divider {
+  height: 1px;
+  background: var(--color-line);
+  margin: 20px 0;
+}
+
+.subsection-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+}
+
+// ─── Step 1 ───────────────────────────────────────────────
+.tour-confirm-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.confirm-img {
+  width: 120px;
+  height: 90px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.date-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: 1.5px solid var(--color-line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: var(--color-primary-100);
+    background: var(--color-primary-50);
+  }
+
+  &.date-selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-50);
+  }
+}
+
+.tourist-count-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.count-stepper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.count-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-line);
+  background: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: var(--color-primary);
+  transition: all 0.2s;
+  line-height: 1;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    background: var(--color-primary-50);
+  }
+
+  &:disabled {
+    color: var(--color-line);
+    border-color: var(--color-line);
+    cursor: not-allowed;
+  }
+}
+
+.count-val {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  min-width: 28px;
+  text-align: center;
+  color: var(--color-ink);
+}
+
+// ─── Step 2: Tourist forms ────────────────────────────────
+.tourist-collapsed-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tourist-expanded-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tourist-num-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+
+  &.active {
+    background: var(--color-primary-50);
+    color: var(--color-primary);
+  }
+
+  &.pending {
+    background: var(--color-bg);
+    color: var(--color-ink-2);
+  }
+}
+
+.expand-btn,
+.collapse-btn {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--color-primary-50);
+  }
+}
+
+.tourist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-ink);
+
+  &.label-error {
+    color: var(--color-error);
+  }
+}
+
+.field-input {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  border: 1.5px solid var(--color-line);
+  border-radius: 12px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fff;
+  color: var(--color-ink);
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-50);
+  }
+
+  &.input-error {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+
+  &.ng-invalid.ng-touched {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+}
+
+.field-error {
+  font-size: 12px;
+  color: var(--color-error);
+  margin-top: 5px;
+}
+
+.gender-toggle {
+  display: flex;
+  gap: 8px;
+
+  button {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1.5px solid var(--color-line);
+    border-radius: 12px;
+    padding: 11px;
+    cursor: pointer;
+    background: #fff;
+    color: var(--color-ink-2);
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+
+    &.gender-selected {
+      border-color: var(--color-primary);
+      background: var(--color-primary-50);
+      color: var(--color-primary);
+    }
+  }
+}
+
+.alert-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--color-error);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+// ─── Step 3: Services ─────────────────────────────────────
+.service-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1.5px solid var(--color-line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
+  margin-bottom: 12px;
+
+  &:hover:not(.service-selected) {
+    border-color: var(--color-primary-100);
+  }
+
+  &.service-selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-50);
+  }
+}
+
+.service-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.service-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--color-line);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  background: #fff;
+
+  &.service-check-on {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+}
+
+// ─── Step 4: Review ───────────────────────────────────────
+.review-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-2);
+  margin-bottom: 14px;
+}
+
+.review-tourist-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 0;
+
+  &.review-row-border {
+    border-bottom: 1px solid var(--color-line);
+  }
+}
+
+.review-tourist-num {
+  padding-top: 2px;
+}
+
+.review-tourist-data {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+.review-service-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: var(--color-ink);
+  border-bottom: 1px solid var(--color-line);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// ─── Step 5: Payment ──────────────────────────────────────
+.pay-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1.5px solid var(--color-line);
+  color: var(--color-ink-2);
+  border-radius: 12px;
+  padding: 12px 18px;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+
+  &.pay-tab-active {
+    border-color: var(--color-primary);
+    background: var(--color-primary-50);
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+}
+
+.card-input-wrap {
+  position: relative;
+
+  .field-input {
+    padding-right: 44px;
+    letter-spacing: 1px;
+  }
+
+  .card-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+  }
+}
+
+.card-logos {
+  padding-top: 8px;
+  border-top: 1px solid var(--color-line);
+  text-align: center;
+}
+
+.pay-alt-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: var(--color-bg);
+  border-radius: 12px;
+  margin-bottom: 16px;
+
+  .pay-alt-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--color-primary-50);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+}
+
+.installment-amount {
+  text-align: center;
+  padding: 16px 0 4px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+// ─── Wizard Nav ───────────────────────────────────────────
+.wiz-nav {
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  gap: 12px;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+.btn-back {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-ink);
+  background: #fff;
+  border: 1.5px solid var(--color-line);
+  border-radius: 12px;
+  padding: 13px 26px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+
+  &:hover {
+    background: var(--color-bg);
+    border-color: var(--color-ink-2);
+  }
+}
+
+.btn-next {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 12px;
+  padding: 13px 36px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--color-primary-600);
+  }
+}
+
+.btn-pay {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  background: var(--color-secondary);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 40px;
+  cursor: pointer;
+  box-shadow: var(--shadow-cta);
+  transition: background 0.2s;
+
+  &:hover:not(:disabled) {
+    background: var(--color-secondary-600);
+  }
+
+  &:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+  }
+}
+
+// ─── Sidebar ──────────────────────────────────────────────
+.wiz-sidebar {
+  position: sticky;
+  top: 80px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-2);
+
+  @media (max-width: 1023px) {
+    display: none;
+  }
+}
+
+.sidebar-tour {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-line);
+  margin-bottom: 14px;
+}
+
+.sidebar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.sidebar-total {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 19px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-line);
+  margin-top: 4px;
+  color: var(--color-ink);
+}
+
+.sidebar-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--color-ink-2);
+  margin-top: 14px;
+  background: rgba(34, 197, 94, 0.08);
+  border-radius: 10px;
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+
+// ─── Mobile Bottom Bar ────────────────────────────────────
+.mobile-bottom-bar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid var(--color-line);
+  box-shadow: 0 -6px 20px rgba(16, 24, 40, 0.08);
+  padding: 13px 16px 22px;
+  align-items: center;
+  gap: 12px;
+  z-index: 90;
+
+  @media (max-width: 767px) {
+    display: flex;
+  }
+}
+
+.mobile-btn {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover:not(:disabled) {
+    background: var(--color-primary-600);
+  }
+
+  &:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+  }
+
+  &.mobile-btn-pay {
+    background: var(--color-secondary);
+    box-shadow: var(--shadow-cta);
+
+    &:hover:not(:disabled) {
+      background: var(--color-secondary-600);
+    }
+  }
+}

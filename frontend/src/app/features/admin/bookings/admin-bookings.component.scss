@@ -1,0 +1,231 @@
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--color-ink);
+}
+
+.page-sub {
+  font-size: 14px;
+  color: var(--color-ink-2);
+  margin-top: 2px;
+}
+
+// ─── Toolbar ──────────────────────────────────────────────
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 220px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-ink);
+  background: #fff;
+  border: 1.5px solid var(--color-line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus { border-color: var(--color-primary); }
+}
+
+.status-select {
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-ink);
+  background: #fff;
+  border: 1.5px solid var(--color-line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  &:focus { border-color: var(--color-primary); }
+}
+
+// ─── Table card ───────────────────────────────────────────
+.table-card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+
+  th {
+    font-weight: 700;
+    color: var(--color-ink-2);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-bg);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--color-bg);
+    color: var(--color-ink);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafcff; }
+}
+
+.num-cell {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.client-name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.client-email {
+  font-size: 12px;
+  color: var(--color-ink-2);
+  margin-top: 2px;
+}
+
+.tour-cell {
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date-cell {
+  white-space: nowrap;
+  color: var(--color-ink-2);
+}
+
+.center-cell {
+  text-align: center;
+}
+
+.price-cell {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.empty-row {
+  text-align: center;
+  color: var(--color-ink-2);
+  padding: 32px !important;
+}
+
+// ─── Status pill ──────────────────────────────────────────
+.status-pill {
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+// ─── Status edit ──────────────────────────────────────────
+.status-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-mini-select {
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 8px;
+  padding: 5px 8px;
+  outline: none;
+  background: #fff;
+  color: var(--color-ink);
+}
+
+.btn-confirm {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: none;
+  background: rgba(34,197,94,.15);
+  color: #157A3C;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+
+  &:hover { background: rgba(34,197,94,.25); }
+}
+
+.btn-cancel-edit {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: none;
+  background: rgba(239,68,68,.1);
+  color: var(--color-error);
+  font-size: 14px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+
+  &:hover { background: rgba(239,68,68,.2); }
+}
+
+// ─── Actions ──────────────────────────────────────────────
+.actions-cell {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.btn-icon {
+  font-size: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-line);
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.15s;
+
+  &:hover {
+    background: var(--color-bg);
+    border-color: var(--color-primary);
+  }
+}

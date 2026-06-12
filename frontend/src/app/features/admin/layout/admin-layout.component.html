@@ -1,0 +1,55 @@
+<div class="admin-shell">
+
+  <!-- ─── Sidebar ──────────────────────────────────────── -->
+  <aside class="admin-sidebar">
+    <!-- Logo -->
+    <a routerLink="/" class="admin-logo">
+      <span class="logo-icon">✈</span>
+      <span class="logo-text">TourMaster</span>
+      <span class="logo-badge">Admin</span>
+    </a>
+
+    <!-- Nav -->
+    <nav class="admin-nav">
+      <a routerLink="/admin"
+         class="admin-nav-item"
+         [class.admin-nav-active]="activeSection === 'dashboard'">
+        <span class="nav-icon">📊</span> Дашборд
+      </a>
+      <a routerLink="/admin/tours"
+         class="admin-nav-item"
+         [class.admin-nav-active]="activeSection === 'tours'">
+        <span class="nav-icon">🌍</span> Тури
+      </a>
+      <a routerLink="/admin/bookings"
+         class="admin-nav-item"
+         [class.admin-nav-active]="activeSection === 'bookings'">
+        <span class="nav-icon">🧳</span> Бронювання
+      </a>
+      <a routerLink="/admin/clients"
+         class="admin-nav-item"
+         [class.admin-nav-active]="activeSection === 'clients'">
+        <span class="nav-icon">👥</span> Клієнти
+      </a>
+    </nav>
+
+    <!-- Divider -->
+    <div class="sidebar-divider"></div>
+
+    <!-- User info + logout -->
+    <div class="sidebar-user">
+      <div class="admin-avatar">{{ userInitial }}</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">{{ userName }}</div>
+        <div class="sidebar-user-role">Менеджер</div>
+      </div>
+      <button class="sidebar-logout" (click)="logout()" title="Вийти">↩</button>
+    </div>
+  </aside>
+
+  <!-- ─── Main ─────────────────────────────────────────── -->
+  <div class="admin-main">
+    <ng-content />
+  </div>
+
+</div>

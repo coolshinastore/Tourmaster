@@ -1,0 +1,138 @@
+<app-cabinet-layout activeSection="profile" [wishlistCount]="0">
+
+  <div class="profile-page">
+
+    <!-- ── Personal info card ─────────────────────────────── -->
+    <div class="profile-card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Особисті дані</h2>
+          <p class="card-sub">Ім'я, прізвище, контактний телефон</p>
+        </div>
+        <!-- Avatar -->
+        <div class="profile-avatar">{{ (user()?.firstName?.charAt(0) ?? '?').toUpperCase() }}</div>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" novalidate>
+        <div class="form-grid">
+          <!-- First name -->
+          <div class="field-wrap">
+            <label class="field-label">Ім'я *</label>
+            <input class="field-input" [class.field-error]="hasError(f['firstName'])"
+                   formControlName="firstName" placeholder="Іван">
+            @if (hasError(f['firstName'])) {
+              <span class="field-hint error">Введіть ім'я (мін. 2 символи)</span>
+            }
+          </div>
+
+          <!-- Last name -->
+          <div class="field-wrap">
+            <label class="field-label">Прізвище *</label>
+            <input class="field-input" [class.field-error]="hasError(f['lastName'])"
+                   formControlName="lastName" placeholder="Петренко">
+            @if (hasError(f['lastName'])) {
+              <span class="field-hint error">Введіть прізвище (мін. 2 символи)</span>
+            }
+          </div>
+
+          <!-- Email (readonly) -->
+          <div class="field-wrap">
+            <label class="field-label">Email</label>
+            <div class="field-input field-readonly">
+              <span class="text-ink-2">{{ user()?.email ?? '—' }}</span>
+              <span class="readonly-tag">не змінюється</span>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="field-wrap">
+            <label class="field-label">Телефон</label>
+            <input class="field-input" [class.field-error]="hasError(f['phone'])"
+                   formControlName="phone" placeholder="+380 50 123 45 67" type="tel">
+            @if (hasError(f['phone'])) {
+              <span class="field-hint error">Невірний формат телефону</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-footer">
+          @if (profileSaved()) {
+            <div class="save-success">✓ Зміни збережено</div>
+          }
+          <button class="btn-save" type="submit" [disabled]="profileSaving()">
+            @if (profileSaving()) { Збереження... } @else { Зберегти зміни }
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── Password card ──────────────────────────────────── -->
+    <div class="profile-card mt-5">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Зміна пароля</h2>
+          <p class="card-sub">Мінімум 8 символів, рекомендується змінювати раз на рік</p>
+        </div>
+        <div class="lock-icon">🔒</div>
+      </div>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" novalidate>
+        <div class="form-col">
+          <!-- Current password -->
+          <div class="field-wrap">
+            <label class="field-label">Поточний пароль *</label>
+            <input class="field-input" [class.field-error]="hasError(p['currentPassword'])"
+                   formControlName="currentPassword" type="password" autocomplete="current-password">
+            @if (hasError(p['currentPassword'])) {
+              <span class="field-hint error">Введіть поточний пароль</span>
+            }
+          </div>
+
+          <div class="form-grid">
+            <!-- New password -->
+            <div class="field-wrap">
+              <label class="field-label">Новий пароль *</label>
+              <input class="field-input" [class.field-error]="hasError(p['newPassword'])"
+                     formControlName="newPassword" type="password" autocomplete="new-password">
+              @if (hasError(p['newPassword'])) {
+                <span class="field-hint error">Мінімум 8 символів</span>
+              }
+            </div>
+
+            <!-- Confirm password -->
+            <div class="field-wrap">
+              <label class="field-label">Підтвердження *</label>
+              <input class="field-input"
+                     [class.field-error]="hasError(p['confirmPassword']) || (passwordForm.errors?.['mismatch'] && p['confirmPassword'].touched)"
+                     formControlName="confirmPassword" type="password" autocomplete="new-password">
+              @if (passwordForm.errors?.['mismatch'] && p['confirmPassword'].touched) {
+                <span class="field-hint error">Паролі не збігаються</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          @if (passwordError()) {
+            <div class="save-error">⚠ {{ passwordError() }}</div>
+          }
+          @if (passwordSaved()) {
+            <div class="save-success">✓ Пароль успішно змінено</div>
+          }
+          <button class="btn-save" type="submit" [disabled]="passwordSaving()">
+            @if (passwordSaving()) { Збереження... } @else { Змінити пароль }
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── Danger zone ─────────────────────────────────────── -->
+    <div class="profile-card danger-card mt-5">
+      <h2 class="card-title danger-title">Небезпечна зона</h2>
+      <p class="text-sm text-ink-2 mt-1">Видалення акаунта — незворотна операція. Всі дані буде втрачено.</p>
+      <button class="btn-danger mt-4" type="button">Видалити акаунт</button>
+    </div>
+
+  </div>
+
+</app-cabinet-layout>

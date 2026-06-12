@@ -1,0 +1,125 @@
+.cabinet-page {
+  background: var(--color-bg);
+  min-height: 100svh;
+  padding-bottom: 32px;
+
+  @media (max-width: 767px) {
+    padding-bottom: 80px;
+  }
+}
+
+.cabinet-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 1023px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Sidebar ──────────────────────────────────────────────
+.cabinet-sidebar {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 22px;
+  position: sticky;
+  top: 80px;
+
+  @media (max-width: 1023px) {
+    display: none;
+  }
+}
+
+.avatar-circle {
+  display: inline-grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+}
+
+.loyalty-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--color-secondary-50);
+  color: var(--color-secondary-600);
+  border-radius: 999px;
+  padding: 7px 13px;
+  margin-bottom: 18px;
+  width: 100%;
+  justify-content: center;
+}
+
+.cabinet-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cabinet-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+  padding: 11px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  text-align: left;
+
+  &:hover:not(.cabinet-nav-active) {
+    background: var(--color-bg);
+  }
+
+  &.cabinet-nav-active {
+    font-weight: 700;
+    color: var(--color-primary);
+    background: var(--color-primary-50);
+  }
+
+  &.cabinet-nav-logout {
+    color: var(--color-ink-2);
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.06);
+      color: var(--color-error);
+    }
+  }
+}
+
+.nav-badge {
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--color-primary-50);
+  color: var(--color-primary);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.cabinet-nav-active .nav-badge {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+// ─── Content ──────────────────────────────────────────────
+.cabinet-content {
+  min-width: 0;
+}

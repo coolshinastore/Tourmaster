@@ -1,0 +1,106 @@
+<app-admin-layout activeSection="tours">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Тури</h1>
+      <p class="page-sub">Каталог турів агентства</p>
+    </div>
+    <button class="btn-primary" type="button">+ Додати тур</button>
+  </div>
+
+  <!-- ── Toolbar ─────────────────────────────────────────── -->
+  <div class="toolbar">
+    <input class="search-input"
+           type="text"
+           placeholder="🔍  Пошук за назвою або країною…"
+           [ngModel]="searchQuery()"
+           (ngModelChange)="searchQuery.set($event)">
+
+    <div class="status-tabs">
+      @for (s of [['ALL','Всі'],['ACTIVE','Активні'],['ARCHIVED','Архів']]; track s[0]) {
+        <button class="status-tab"
+                [class.status-tab-active]="filterStatus() === s[0]"
+                (click)="filterStatus.set($any(s[0]))"
+                type="button">
+          {{ s[1] }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── Table ───────────────────────────────────────────── -->
+  <div class="table-card">
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Назва туру</th>
+            <th>Країна</th>
+            <th>Ціна від</th>
+            <th>Ночей</th>
+            <th>Броні</th>
+            <th>Статус</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (filteredTours().length === 0) {
+            <tr>
+              <td colspan="7" class="empty-row">Нічого не знайдено</td>
+            </tr>
+          }
+          @for (t of filteredTours(); track t.id) {
+            <tr [class.row-archived]="t.status === 'ARCHIVED'">
+              <td>
+                <div class="tour-title-cell">
+                  <span>{{ t.title }}</span>
+                  @if (t.badge) {
+                    <span class="tour-badge">{{ t.badge }}</span>
+                  }
+                </div>
+                <div class="stars-row">
+                  @for (s of starsOf(t.hotelStars); track s) {
+                    <span style="color:#F59E0B; font-size:11px;">★</span>
+                  }
+                </div>
+              </td>
+              <td>{{ t.country }}</td>
+              <td class="price-cell">{{ formatPrice(t.priceFrom) }}</td>
+              <td>{{ t.durationNights }}</td>
+              <td>{{ t.bookingsCount }}</td>
+              <td>
+                @if (t.status === 'ACTIVE') {
+                  <span class="status-pill status-active">Активний</span>
+                } @else {
+                  <span class="status-pill status-archived">Архів</span>
+                }
+              </td>
+              <td class="actions-cell">
+                <button class="btn-icon" type="button" title="Редагувати">✏️</button>
+                @if (t.status === 'ACTIVE') {
+                  @if (archiveConfirmId() === t.id) {
+                    <button class="btn-icon btn-icon-danger" type="button"
+                            (click)="archiveTour(t.id)">Підтвердити</button>
+                    <button class="btn-icon" type="button"
+                            (click)="archiveConfirmId.set(null)">Ні</button>
+                  } @else {
+                    <button class="btn-icon" type="button"
+                            title="Архівувати"
+                            [disabled]="t.bookingsCount > 0"
+                            (click)="archiveConfirmId.set(t.id)">📦</button>
+                  }
+                } @else {
+                  <button class="btn-icon" type="button"
+                          title="Відновити"
+                          (click)="restoreTour(t.id)">♻️</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</app-admin-layout>
