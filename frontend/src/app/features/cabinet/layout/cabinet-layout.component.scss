@@ -1,7 +1,12 @@
 .cabinet-page {
   background: var(--color-bg);
   min-height: 100svh;
+  padding-top: 4rem;
   padding-bottom: 32px;
+
+  @media (min-width: 768px) {
+    padding-top: 4.5rem;
+  }
 
   @media (max-width: 767px) {
     padding-bottom: 80px;

@@ -324,6 +324,8 @@ cd backend  && mvn clean package -DskipTests
 - [x] **Unit-тести Backend** — 39 тестів, `@ExtendWith(MockitoExtension.class)`, без Spring контексту та БД: `AuthServiceTest` (8), `BookingServiceTest` (10), `TourServiceTest` (4), `AdminTourServiceTest` (5), `AdminBookingServiceTest` (7), `JwtServiceTest` (5)
 
 - [x] **Виправлення помилок компіляції Frontend** — `greeting()` → `greeting` у `cabinet-layout.component.html` (getter не є функцією); видалено невикористаний `RouterLink` з `admin-tours.component.ts`
+- [x] **Фікс зсуву контенту під хедер** — додано `pt-16 md:pt-18` на `<main>` у каталозі, деталі туру, booking-success, cabinet; sticky toolbar у каталозі: `top-0` → `top-16 md:top-18`
+- [x] **Demo data initializer** — `DemoDataInitializer` (`@Profile("!prod")`) автоматично створює клієнта `client@tourmaster.ua` / `Client@2025` при старті (якщо ще не існує)
 
 ### В роботі / Наступні кроки
 - [ ] Написання пояснювальної записки — технічний розділ
