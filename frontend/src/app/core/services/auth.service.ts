@@ -51,6 +51,15 @@ export class AuthService {
     return localStorage.getItem(ACCESS_KEY);
   }
 
+  patchUser(partial: Pick<AuthResponse, 'firstName' | 'lastName'>) {
+    const current = this._user();
+    if (current) {
+      const updated = { ...current, ...partial };
+      localStorage.setItem(USER_KEY, JSON.stringify(updated));
+      this._user.set(updated);
+    }
+  }
+
   private saveSession(res: AuthResponse) {
     localStorage.setItem(ACCESS_KEY, res.accessToken);
     localStorage.setItem(REFRESH_KEY, res.refreshToken);

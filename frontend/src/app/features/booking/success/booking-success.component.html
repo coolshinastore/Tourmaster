@@ -18,10 +18,65 @@
       </p>
 
       <!-- Booking number -->
-      <div class="booking-num-badge">
-        <span class="text-ink-2 text-xs font-semibold">Номер бронювання</span>
-        <span class="font-heading font-black text-primary" style="font-size:22px">{{ bookingId() }}</span>
-      </div>
+      @if (bookingId()) {
+        <div class="booking-num-badge">
+          <span class="text-ink-2 text-xs font-semibold">Номер бронювання</span>
+          <span class="font-heading font-black text-primary" style="font-size:22px">{{ bookingId() }}</span>
+        </div>
+      }
+
+      <!-- Booking details -->
+      @if (loading()) {
+        <div class="flex flex-col gap-3 my-5">
+          <div class="skeleton h-20 rounded-xl w-full"></div>
+          <div class="skeleton h-10 rounded-xl w-full"></div>
+        </div>
+      } @else if (booking(); as b) {
+        <div class="booking-detail-block">
+          <!-- Tour row -->
+          <div class="flex items-center gap-3 mb-4">
+            @if (b.imageUrl) {
+              <img [src]="b.imageUrl" [alt]="b.tourTitle"
+                   class="rounded-lg object-cover flex-shrink-0"
+                   style="width:64px;height:64px">
+            }
+            <div class="min-w-0">
+              <div class="font-heading font-extrabold text-ink text-sm leading-snug line-clamp-2">
+                {{ b.tourTitle }}
+              </div>
+              <div class="text-xs text-ink-2 mt-0.5">
+                📍 {{ b.country }} &nbsp;·&nbsp; 🌙 {{ b.durationNights }} ночей
+                &nbsp;·&nbsp; 🍽 {{ mealLabel(b.mealType) }}
+              </div>
+            </div>
+          </div>
+          <!-- Date / tourists / price rows -->
+          <div class="flex flex-col gap-2">
+            <div class="detail-row">
+              <span class="text-ink-2">Дата вильоту</span>
+              <span class="font-semibold text-ink">{{ formatDate(b.departureDate) }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="text-ink-2">Повернення</span>
+              <span class="font-semibold text-ink">{{ formatDate(b.returnDate) }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="text-ink-2">Місто вильоту</span>
+              <span class="font-semibold text-ink">{{ b.departureCity }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="text-ink-2">Туристів</span>
+              <span class="font-semibold text-ink">{{ b.touristsCount }}</span>
+            </div>
+            <div class="detail-row" style="border-top:1px solid var(--color-border);padding-top:10px;margin-top:4px">
+              <span class="font-semibold text-ink">До сплати</span>
+              <span class="font-heading font-black text-primary" style="font-size:18px">
+                {{ formatPrice(b.totalPrice) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
 
       <!-- Info steps -->
       <div class="success-steps">

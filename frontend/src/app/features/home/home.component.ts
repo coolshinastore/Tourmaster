@@ -11,17 +11,11 @@ import { HeaderComponent }       from '../../shared/components/header/header.com
 import { FooterComponent }       from '../../shared/components/footer/footer.component';
 import { MobileTabBarComponent } from '../../shared/components/mobile-tab-bar/mobile-tab-bar.component';
 import { TourService }           from '../../core/services/tour.service';
-import { TourSummary }           from '../../core/models/tour.models';
+import { TourSummary, DestinationStats, Review } from '../../core/models/tour.models';
 
 interface Slide {
   title: string; subtitle: string; badge: string;
   image: string; price: number; country: string;
-}
-interface Destination {
-  name: string; image: string; toursCount: number; priceFrom: number;
-}
-interface ReviewItem {
-  id: number; author: string; rating: number; text: string; date: string;
 }
 
 @Component({
@@ -38,8 +32,13 @@ export class HomeComponent implements OnInit {
   private tourService = inject(TourService);
   private router      = inject(Router);
 
-  hotTours    = signal<TourSummary[]>([]);
-  loadingTours = signal(true);
+  hotTours     = signal<TourSummary[]>([]);
+  destinations = signal<DestinationStats[]>([]);
+  reviews      = signal<Review[]>([]);
+
+  loadingTours        = signal(true);
+  loadingDestinations = signal(true);
+  loadingReviews      = signal(true);
 
   search = { destination: '', tourists: 2 };
 
@@ -82,23 +81,27 @@ export class HomeComponent implements OnInit {
     },
   ];
 
-  destinations: Destination[] = [
-    { name: 'Туреччина', toursCount: 142, priceFrom: 24900, image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600&q=80' },
-    { name: 'Єгипет',    toursCount: 87,  priceFrom: 18900, image: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=600&q=80' },
-    { name: 'ОАЕ',       toursCount: 56,  priceFrom: 42500, image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80' },
-    { name: 'Греція',    toursCount: 93,  priceFrom: 31200, image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80' },
-    { name: 'Іспанія',   toursCount: 74,  priceFrom: 27800, image: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=600&q=80' },
-    { name: 'Таїланд',   toursCount: 48,  priceFrom: 38700, image: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80' },
-  ];
+  private readonly destImages: Record<string, string> = {
+    'Туреччина': 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600&q=80',
+    'Єгипет':    'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=600&q=80',
+    'ОАЕ':       'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80',
+    'Греція':    'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80',
+    'Іспанія':   'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=600&q=80',
+    'Таїланд':   'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80',
+  };
 
-  reviews: ReviewItem[] = [
-    { id: 1, rating: 5, author: 'Марія К.', date: 'Листопад 2024',
-      text: 'Чудова агенція! Все організовано бездоганно — від трансферу до готелю. Тур до Туреччини перевершив усі очікування. Обов\'язково повернуся!' },
-    { id: 2, rating: 5, author: 'Олег В.', date: 'Жовтень 2024',
-      text: 'Дякую менеджеру за чудову підбірку туру в Єгипет. Готель — 5 зірок, харчування відмінне. Сервіс на найвищому рівні!' },
-    { id: 3, rating: 4, author: 'Тетяна М.', date: 'Вересень 2024',
-      text: 'Перший раз замовляла тур онлайн і дуже задоволена. Зручний сайт, швидка відповідь менеджерів. Тур до Греції був казковим!' },
-  ];
+  destImage(country: string): string {
+    return this.destImages[country]
+      ?? 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80';
+  }
+
+  reviewAuthor(r: Review): string {
+    return `${r.authorFirstName} ${r.authorLastLetter}`;
+  }
+
+  reviewDate(createdAt: string): string {
+    return new Date(createdAt).toLocaleDateString('uk-UA', { month: 'long', year: 'numeric' });
+  }
 
   badgeClass(badge: string): string {
     if (badge.includes('ХІТ'))     return 'badge-hit';
@@ -131,6 +134,16 @@ export class HomeComponent implements OnInit {
     this.tourService.getCatalog({ badge: 'HIT', size: 8, sort: 'rating' }).subscribe({
       next: res => { this.hotTours.set(res.content); this.loadingTours.set(false); },
       error: ()  => this.loadingTours.set(false),
+    });
+
+    this.tourService.getDestinations().subscribe({
+      next: data => { this.destinations.set(data.slice(0, 6)); this.loadingDestinations.set(false); },
+      error: ()   => this.loadingDestinations.set(false),
+    });
+
+    this.tourService.getLatestReviews(3).subscribe({
+      next: data => { this.reviews.set(data); this.loadingReviews.set(false); },
+      error: ()   => this.loadingReviews.set(false),
     });
   }
 }

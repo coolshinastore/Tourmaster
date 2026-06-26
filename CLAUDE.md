@@ -157,13 +157,25 @@ notifications  — журнал email/push-сповіщень
 | `GET` | `/api/tours` | PUBLIC | Каталог з фільтрами та пагінацією |
 | `GET` | `/api/tours/{id}` | PUBLIC | Деталі туру |
 | `GET` | `/api/tours/search` | PUBLIC | Пошук за параметрами |
+| `GET` | `/api/tours/destinations` | PUBLIC | Статистика по країнах (count, priceFrom) |
+| `GET` | `/api/tours/latest-reviews` | PUBLIC | Останні відгуки (для головної) |
 | `POST` | `/api/bookings` | CLIENT | Створити бронювання |
 | `GET` | `/api/bookings/my` | CLIENT | Мої бронювання |
+| `GET` | `/api/bookings/{id}` | CLIENT | Деталі бронювання |
+| `POST` | `/api/bookings/{id}/cancel` | CLIENT | Скасувати бронювання |
+| `GET` | `/api/bookings/extra-services` | CLIENT | Список додаткових послуг |
 | `GET` | `/api/bookings/{id}/pdf` | CLIENT | Завантажити PDF |
 | `POST` | `/api/reviews` | CLIENT | Залишити відгук |
+| `GET` | `/api/users/me` | CLIENT | Профіль поточного користувача |
+| `PUT` | `/api/users/me` | CLIENT | Оновити профіль |
+| `PATCH` | `/api/users/me/password` | CLIENT | Змінити пароль |
+| `GET` | `/api/wishlist` | CLIENT | Список збережених турів |
+| `POST` | `/api/wishlist/{tourId}` | CLIENT | Додати тур до wishlist |
+| `DELETE` | `/api/wishlist/{tourId}` | CLIENT | Видалити тур з wishlist |
 | `GET` | `/api/admin/tours` | MANAGER | Список турів (адмін) |
 | `POST` | `/api/admin/tours` | MANAGER | Створити тур |
 | `PUT` | `/api/admin/tours/{id}` | MANAGER | Редагувати тур |
+| `DELETE` | `/api/admin/tours/{id}` | MANAGER | Архівувати тур |
 | `GET` | `/api/admin/bookings` | MANAGER | Всі бронювання |
 | `PATCH` | `/api/admin/bookings/{id}/status` | MANAGER | Змінити статус |
 | `GET` | `/api/admin/clients` | MANAGER | База клієнтів |
@@ -307,28 +319,41 @@ cd backend  && mvn clean package -DskipTests
 - [x] **Frontend: `/`** — HomeComponent (hero + search, carousel, destinations, hot tours, reviews, CTA)
 - [x] **Frontend: `/auth/login`** — split layout, reactive form, p-password, returnUrl redirect
 - [x] **Frontend: `/auth/register`** — split layout, password strength, terms checkbox, passwordsMatch validator
-- [x] **Frontend: `/tours`** — TourCatalogComponent (sidebar filters, grid/list toggle, paginator, mock fallback)
-
-- [x] **Frontend: `/tours/:id`** — TourDetailComponent (Galleria fullscreen, 4 вкладки, sticky sidebar, tourist stepper, mobile floating bar, mock fallback)
-
-- [x] **Frontend: `/booking`** — BookingWizardComponent (5 кроків: Тур/дати → Туристи → Послуги → Огляд → Оплата; standalone wizard header, progress bar з анімацією, sticky sidebar, reactive forms, mock fallback)
-- [x] **Frontend: `/booking/success`** — BookingSuccessComponent (номер бронювання, кроки підтвердження, CTA кнопки)
-
-- [x] **Frontend: `/cabinet`** — CabinetLayoutComponent (sidebar з профілем, nav), MyBookingsComponent (фільтри, статуси, дії), WishlistComponent (grid карток, видалення), ProfileComponent (редагування даних, зміна пароля)
-
-- [x] **Frontend: `/admin`** — AdminLayoutComponent (фіксований sidebar, nav), AdminDashboardComponent (stat cards, таблиця останніх броні, топ турів), AdminToursComponent (таблиця + пошук + фільтр + архівування), AdminBookingsComponent (таблиця + inline зміна статусу), AdminClientsComponent (таблиця + loyalty рівні)
+- [x] **Frontend: `/tours`** — TourCatalogComponent (sidebar filters, grid/list toggle, paginator, real API)
+- [x] **Frontend: `/tours/:id`** — TourDetailComponent (Galleria fullscreen, 4 вкладки, sticky sidebar, tourist stepper, wishlist toggle, similar tours — real API)
+- [x] **Frontend: `/booking`** — BookingWizardComponent (5 кроків: Тур/дати → Туристи → Послуги → Огляд → Оплата; real API: tour, extra-services, create booking; Toast на помилку)
+- [x] **Frontend: `/booking/success`** — BookingSuccessComponent (real API: завантаження деталей бронювання — тур, дати, ціна, туристів)
+- [x] **Frontend: `/cabinet`** — CabinetLayoutComponent (wishlist count з API), MyBookingsComponent (real API: getMyBookings size=50, cancel з confirm, кнопки-посилання на тур), WishlistComponent (real API), ProfileComponent (real API: getProfile, updateProfile, changePassword)
+- [x] **Frontend: `/admin`** — AdminDashboardComponent, AdminToursComponent, AdminBookingsComponent, AdminClientsComponent — всі підключені до реальних API через `AdminService`
 
 - [x] **Інтеграція** — `angular.json` fileReplacements для production env; `BookingDetailResponse` + mapper отримали `touristsCount`; SecurityConfig відкрив `/actuator/health`
 - [x] **Розгортання** — `backend/Dockerfile` (Maven multi-stage), `frontend/Dockerfile` (Node 22 + nginx:1.27-alpine), `docker-compose.yml` (4 сервіси: db/backend/frontend/nginx), `nginx.conf` (reverse proxy), `.env.example`, `.gitignore`, actuator dependency + config
-
 - [x] **Unit-тести Backend** — 39 тестів, `@ExtendWith(MockitoExtension.class)`, без Spring контексту та БД: `AuthServiceTest` (8), `BookingServiceTest` (10), `TourServiceTest` (4), `AdminTourServiceTest` (5), `AdminBookingServiceTest` (7), `JwtServiceTest` (5)
+- [x] **Виправлення помилок компіляції Frontend** — `greeting()` → `greeting` у `cabinet-layout.component.html`; видалено невикористаний `RouterLink` з `admin-tours.component.ts`
+- [x] **Фікс зсуву контенту під хедер** — `pt-16 md:pt-18` на `<main>` у каталозі, деталі туру, booking-success, cabinet
+- [x] **Demo data** — `DataSeeder` (`@Profile("!prod")`) створює клієнтів і менеджера при старті
 
-- [x] **Виправлення помилок компіляції Frontend** — `greeting()` → `greeting` у `cabinet-layout.component.html` (getter не є функцією); видалено невикористаний `RouterLink` з `admin-tours.component.ts`
-- [x] **Фікс зсуву контенту під хедер** — додано `pt-16 md:pt-18` на `<main>` у каталозі, деталі туру, booking-success, cabinet; sticky toolbar у каталозі: `top-0` → `top-16 md:top-18`
-- [x] **Demo data initializer** — `DemoDataInitializer` (`@Profile("!prod")`) автоматично створює клієнта `client@tourmaster.ua` / `Client@2025` при старті (якщо ще не існує)
+- [x] **Backend: нові ендпоінти (API-інтеграція)**
+  - `GET /api/tours/destinations` — статистика по країнах (GROUP BY + COUNT + MIN price)
+  - `GET /api/tours/latest-reviews` — останні відгуки з усіх турів
+  - `GET|PUT /api/users/me` — профіль поточного користувача
+  - `PATCH /api/users/me/password` — зміна пароля (BCrypt verify)
+  - `GET|POST|DELETE /api/wishlist/{tourId}` — управління wishlist
+  - Нові entity: `Wishlist`, `WishlistId` (EmbeddedId), `WishlistRepository`
+  - Нові DTO: `UpdateProfileRequest`, `ChangePasswordRequest`, `UserProfileResponse`, `DestinationStatsResponse`
+
+- [x] **Frontend: нові сервіси та моделі (API-інтеграція)**
+  - `user.service.ts` — getProfile, updateProfile, changePassword, getWishlist, addToWishlist, removeFromWishlist
+  - `admin.service.ts` — getTours, archiveTour, getBookings, updateBookingStatus, getClients
+  - `tour.service.ts` — додано getDestinations(), getLatestReviews()
+  - `admin.models.ts` — `AdminTour`, `AdminBooking`, `AdminClient`
+  - `tour.models.ts` — додано `DestinationStats`
+  - `auth.service.ts` — додано `patchUser()` для оновлення сигналу після збереження профілю
+  - `CabinetLayoutComponent` — wishlist count тепер завантажується всередині layout (не передається як Input)
 
 ### В роботі / Наступні кроки
-- [ ] Написання пояснювальної записки — технічний розділ
+- [ ] PDF-ваучер (`GET /api/bookings/{id}/pdf`) — backend ендпоінт + кнопка у MyBookings
+- [ ] Форма відгуку (`POST /api/reviews`) — після завершення туру у MyBookings
 
 ---
 
@@ -348,5 +373,4 @@ cd backend  && mvn clean package -DskipTests
 
 ---
 
-*Останнє оновлення: виправлення помилок компіляції frontend (2026-06-26)*  
-*Поточний крок: написання пояснювальної записки — технічний розділ*
+*Останнє оновлення: підключення реальних API до всіх frontend-компонентів (2026-06-26)*  

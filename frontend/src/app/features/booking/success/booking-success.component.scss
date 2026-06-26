@@ -55,6 +55,23 @@
   text-align: center;
 }
 
+.booking-detail-block {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 16px 0;
+  background: var(--color-bg);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
 .success-steps {
   width: 100%;
   display: flex;

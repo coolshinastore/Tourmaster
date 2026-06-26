@@ -1,6 +1,8 @@
 package com.tourmaster.controller;
 
+import com.tourmaster.dto.response.DestinationStatsResponse;
 import com.tourmaster.dto.response.PageResponse;
+import com.tourmaster.dto.response.ReviewResponse;
 import com.tourmaster.dto.response.TourDetailResponse;
 import com.tourmaster.dto.response.TourSummaryResponse;
 import com.tourmaster.service.TourService;
@@ -59,6 +61,20 @@ public class TourController {
                 null, null, null, null, null,
                 page, size, "newest"
         );
+    }
+
+    @GetMapping("/destinations")
+    @Operation(summary = "Статистика по популярних напрямках")
+    public List<DestinationStatsResponse> getDestinations() {
+        return tourService.getDestinationStats();
+    }
+
+    @GetMapping("/latest-reviews")
+    @Operation(summary = "Останні відгуки клієнтів")
+    public List<ReviewResponse> getLatestReviews(
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        return tourService.getLatestReviews(size);
     }
 
     @GetMapping("/{id}")

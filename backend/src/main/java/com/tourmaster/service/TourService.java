@@ -1,5 +1,6 @@
 package com.tourmaster.service;
 
+import com.tourmaster.dto.response.DestinationStatsResponse;
 import com.tourmaster.dto.response.PageResponse;
 import com.tourmaster.dto.response.ReviewResponse;
 import com.tourmaster.dto.response.TourDateResponse;
@@ -85,6 +86,19 @@ public class TourService {
                 base.imageUrl(), base.galleryUrls(), base.status(),
                 dates, reviews
         );
+    }
+
+    public List<DestinationStatsResponse> getDestinationStats() {
+        return tourRepository.findDestinationStats();
+    }
+
+    public List<ReviewResponse> getLatestReviews(int size) {
+        return reviewRepository
+                .findAll(PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt")))
+                .getContent()
+                .stream()
+                .map(tourMapper::toReviewResponse)
+                .toList();
     }
 
     private Sort resolveSort(String sort) {

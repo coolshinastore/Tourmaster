@@ -3,7 +3,7 @@
   <div class="page-header">
     <div>
       <h1 class="page-title">Клієнти</h1>
-      <p class="page-sub">{{ clients().length }} клієнтів · Загальна виручка {{ formatPrice(totalRevenue) }}</p>
+      <p class="page-sub">{{ clients().length }} клієнтів</p>
     </div>
   </div>
 
@@ -36,16 +36,15 @@
             <th>Клієнт</th>
             <th>Телефон</th>
             <th>Бронювань</th>
-            <th>Витрачено</th>
+            <th>Бали</th>
             <th>Рівень</th>
-            <th>Реєстрація</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           @if (filteredClients().length === 0) {
             <tr>
-              <td colspan="7" class="empty-row">Нічого не знайдено</td>
+              <td colspan="6" class="empty-row">Нічого не знайдено</td>
             </tr>
           }
           @for (c of filteredClients(); track c.id) {
@@ -60,16 +59,15 @@
                 </div>
               </td>
               <td class="phone-cell">{{ c.phone }}</td>
-              <td class="center-cell">{{ c.bookingsCount }}</td>
-              <td class="price-cell">{{ formatPrice(c.totalSpent) }}</td>
+              <td class="center-cell">{{ c.totalBookings }}</td>
+              <td class="center-cell">{{ c.loyaltyPoints }}</td>
               <td>
                 <span class="loyalty-pill"
-                      [style.background]="loyaltyConfig(c.loyaltyLevel).bg"
-                      [style.color]="loyaltyConfig(c.loyaltyLevel).color">
-                  {{ loyaltyConfig(c.loyaltyLevel).icon }} {{ loyaltyConfig(c.loyaltyLevel).label }}
+                      [style.background]="loyaltyConfig(loyaltyLevel(c.loyaltyPoints)).bg"
+                      [style.color]="loyaltyConfig(loyaltyLevel(c.loyaltyPoints)).color">
+                  {{ loyaltyConfig(loyaltyLevel(c.loyaltyPoints)).icon }} {{ loyaltyConfig(loyaltyLevel(c.loyaltyPoints)).label }}
                 </span>
               </td>
-              <td class="date-cell">{{ c.registeredAt }}</td>
               <td class="actions-cell">
                 <button class="btn-icon" type="button" title="Деталі">👁</button>
               </td>

@@ -51,13 +51,13 @@
             <tr>
               <td class="num-cell">{{ bookingNum(b.id) }}</td>
               <td>
-                <div class="client-name">{{ b.client }}</div>
-                <div class="client-email">{{ b.email }}</div>
+                <div class="client-name">{{ b.clientFullName }}</div>
+                <div class="client-email">{{ b.clientEmail }}</div>
               </td>
-              <td class="tour-cell">{{ b.tour }}</td>
+              <td class="tour-cell">{{ b.tourTitle }}</td>
               <td class="date-cell">{{ b.departureDate }}</td>
               <td class="center-cell">{{ b.touristsCount }}</td>
-              <td class="price-cell">{{ formatPrice(b.total) }}</td>
+              <td class="price-cell">{{ formatPrice(b.totalPrice) }}</td>
               <td>
                 @if (editStatusId() === b.id) {
                   <div class="status-edit-row">

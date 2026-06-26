@@ -7,6 +7,8 @@ import { HeaderComponent } from '../../../shared/components/header/header.compon
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { MobileTabBarComponent } from '../../../shared/components/mobile-tab-bar/mobile-tab-bar.component';
 import { TourService } from '../../../core/services/tour.service';
+import { UserService } from '../../../core/services/user.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { TourDetail, TourDate, TourSummary } from '../../../core/models/tour.models';
 
 type TabId = 'description' | 'program' | 'included' | 'reviews';
@@ -28,56 +30,17 @@ const MOCK_TOUR: TourDetail = {
   imageUrl: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1200&q=80',
   status: 'ACTIVE',
   description:
-    'Ласкаво просимо до розкішного відпочинку на узбережжі Анталії! Limak Lara De Luxe Hotel & Resort розташований прямо на піщаному пляжі Лари і пропонує незабутній відпочинок у форматі «Все включено». Готель входить до топ-5 найкращих курортів Туреччини за версією TripAdvisor і приймає гостей з усього світу. Ви зможете насолоджуватися кристально чистим морем Середземномор\'я, різноманітним харчуванням у 6 ресторанах і відпочинком у повноцінному аквапарку з 17 гірками. Анімаційна програма для дорослих і дітей, фітнес-центр із сучасним обладнанням, тенісний корт і SPA-центр — все це зробить ваш відпочинок незабутнім.',
+    'Ласкаво просимо до розкішного відпочинку на узбережжі Анталії! Limak Lara De Luxe Hotel & Resort розташований прямо на піщаному пляжі Лари і пропонує незабутній відпочинок у форматі «Все включено».',
   galleryUrls: [
     'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1200&q=80',
     'https://images.unsplash.com/photo-1596436208045-d5dc78e5a6a6?w=800&q=80',
     'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80',
-    'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&q=80',
-    'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&q=80',
-    'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=800&q=80',
-    'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
-    'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80',
   ],
   dates: [
     { id: 1, departureDate: '2025-07-15', returnDate: '2025-07-22', departureCity: 'Київ', totalSeats: 20, availableSeats: 8, price: 24900 },
-    { id: 2, departureDate: '2025-07-22', returnDate: '2025-07-29', departureCity: 'Київ', totalSeats: 20, availableSeats: 15, price: 26500 },
-    { id: 3, departureDate: '2025-08-05', returnDate: '2025-08-12', departureCity: 'Київ', totalSeats: 20, availableSeats: 3, price: 28900 },
-    { id: 4, departureDate: '2025-08-19', returnDate: '2025-08-26', departureCity: 'Київ', totalSeats: 20, availableSeats: 12, price: 27800 },
   ],
-  latestReviews: [
-    {
-      id: 1,
-      authorFirstName: 'Олена',
-      authorLastLetter: 'М',
-      rating: 5,
-      comment: 'Чудовий відпочинок! Готель просто фантастичний, персонал дуже привітний. Пляж чистий, море тепле. Однозначно повернемося наступного літа!',
-      createdAt: '2025-05-20',
-    },
-    {
-      id: 2,
-      authorFirstName: 'Максим',
-      authorLastLetter: 'К',
-      rating: 5,
-      comment: 'Відпочивали сімʼєю з дітьми. Анімація на висоті, дитячий клуб, аквапарк — всі задоволені. Харчування різноманітне і смачне.',
-      createdAt: '2025-05-15',
-    },
-    {
-      id: 3,
-      authorFirstName: 'Наталія',
-      authorLastLetter: 'В',
-      rating: 4,
-      comment: 'Загалом все дуже добре. Єдиний мінус — черги на ресепшн при заселенні. Але сам готель і пляж — просто супер!',
-      createdAt: '2025-05-10',
-    },
-  ],
+  latestReviews: [],
 };
-
-const SIMILAR_TOURS: TourSummary[] = [
-  { id: 9, title: 'Туреччина — Бодрум. Aegean Riviera 5*', country: 'Туреччина', city: 'Бодрум', hotelName: 'Bodrum Palace', hotelStars: 5, mealType: 'AI', durationNights: 7, priceFrom: 28300, oldPrice: 35000, badge: 'SALE', rating: 4.7, reviewsCount: 156, imageUrl: 'https://images.unsplash.com/photo-1547970810-dc1eac37d174?w=600&q=80', status: 'ACTIVE' },
-  { id: 4, title: 'Греція — Крит. Острів мінойської цивілізації', country: 'Греція', city: 'Іракліон', hotelName: 'Grecotel Creta Palace', hotelStars: 5, mealType: 'HB', durationNights: 10, priceFrom: 31200, badge: 'HIT', rating: 4.8, reviewsCount: 224, imageUrl: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80', status: 'ACTIVE' },
-  { id: 2, title: 'Єгипет — Шарм-ель-Шейх. Рифи та сонце', country: 'Єгипет', city: 'Шарм-ель-Шейх', hotelName: 'Rixos Premium', hotelStars: 5, mealType: 'AI', durationNights: 7, priceFrom: 18900, oldPrice: 24000, badge: 'SALE', rating: 4.8, reviewsCount: 187, imageUrl: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=600&q=80', status: 'ACTIVE' },
-];
 
 @Component({
   selector: 'app-tour-detail',
@@ -89,6 +52,8 @@ export class TourDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private tourService = inject(TourService);
+  private userService = inject(UserService);
+  private auth = inject(AuthService);
 
   tour = signal<TourDetail | null>(null);
   loading = signal(true);
@@ -96,6 +61,8 @@ export class TourDetailComponent implements OnInit {
   selectedDate = signal<TourDate | null>(null);
   touristCount = signal(2);
   inWishlist = signal(false);
+  wishlistLoading = signal(false);
+  similarTours = signal<TourSummary[]>([]);
 
   galleryVisible = false;
   galleryActiveIndex = 0;
@@ -145,15 +112,15 @@ export class TourDetailComponent implements OnInit {
     'Чайові персоналу',
   ];
 
-  readonly similarTours = SIMILAR_TOURS;
-
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+
     this.tourService.getById(id).subscribe({
       next: tour => {
         this.tour.set(tour);
         if (tour.dates?.length) this.selectedDate.set(tour.dates[0]);
         this.loading.set(false);
+        this.loadSimilarTours(tour.country, tour.id);
       },
       error: () => {
         this.tour.set(MOCK_TOUR);
@@ -161,6 +128,43 @@ export class TourDetailComponent implements OnInit {
         this.loading.set(false);
       },
     });
+
+    if (this.auth.isLoggedIn()) {
+      this.userService.getWishlist().subscribe({
+        next: items => this.inWishlist.set(items.some(t => t.id === id)),
+        error: () => {},
+      });
+    }
+  }
+
+  private loadSimilarTours(country: string, excludeId: number) {
+    this.tourService.getCatalog({ country, size: 4 }).subscribe({
+      next: res => this.similarTours.set(res.content.filter(t => t.id !== excludeId).slice(0, 3)),
+      error: () => {},
+    });
+  }
+
+  toggleWishlist() {
+    const tourId = this.tour()?.id;
+    if (!tourId) return;
+
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/auth/login'], { queryParams: { returnUrl: this.router.url } });
+      return;
+    }
+
+    this.wishlistLoading.set(true);
+    if (this.inWishlist()) {
+      this.userService.removeFromWishlist(tourId).subscribe({
+        next: () => { this.inWishlist.set(false); this.wishlistLoading.set(false); },
+        error: () => this.wishlistLoading.set(false),
+      });
+    } else {
+      this.userService.addToWishlist(tourId).subscribe({
+        next: () => { this.inWishlist.set(true); this.wishlistLoading.set(false); },
+        error: () => this.wishlistLoading.set(false),
+      });
+    }
   }
 
   openGallery(index: number) {

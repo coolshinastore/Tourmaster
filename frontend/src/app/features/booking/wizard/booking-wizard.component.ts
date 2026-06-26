@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
+import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 import { TourService } from '../../../core/services/tour.service';
@@ -11,40 +12,30 @@ import { TourDetail, TourDate } from '../../../core/models/tour.models';
 import { ExtraService } from '../../../core/models/booking.models';
 
 const MOCK_TOUR: TourDetail = {
-  id: 1,
-  title: 'Rixos Premium Belek 5★',
+  id: 0,
+  title: 'Туреччина — Анталія All Inclusive 7 ночей',
   country: 'Туреччина',
-  city: 'Белек',
-  hotelName: 'Rixos Premium Belek',
+  city: 'Анталія',
+  hotelName: 'Limak Lara De Luxe Hotel',
   hotelStars: 5,
   mealType: 'AI',
   durationNights: 7,
-  priceFrom: 27200,
-  oldPrice: 34000,
-  badge: 'HIT',
+  priceFrom: 24900,
   rating: 4.9,
-  reviewsCount: 212,
-  imageUrl: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80',
+  reviewsCount: 312,
+  imageUrl: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1200&q=80',
   status: 'ACTIVE',
   description: '',
   galleryUrls: [],
   dates: [
-    { id: 1, departureDate: '2025-07-12', returnDate: '2025-07-19', departureCity: 'Київ', totalSeats: 20, availableSeats: 8, price: 27200 },
-    { id: 2, departureDate: '2025-07-26', returnDate: '2025-08-02', departureCity: 'Київ', totalSeats: 20, availableSeats: 12, price: 28900 },
-    { id: 3, departureDate: '2025-08-09', returnDate: '2025-08-16', departureCity: 'Київ', totalSeats: 20, availableSeats: 5, price: 30500 },
+    { id: 1, departureDate: '2025-07-15', returnDate: '2025-07-22', departureCity: 'Київ', totalSeats: 20, availableSeats: 8, price: 24900 },
   ],
   latestReviews: [],
 };
 
-const MOCK_SERVICES: ExtraService[] = [
-  { id: 1, name: 'Медична страховка', description: 'Покриття до 50 000 USD на весь час поїздки', price: 900, type: 'INSURANCE' },
-  { id: 2, name: 'Трансфер аеропорт ↔ готель', description: 'Комфортне авто для групи до 4 осіб', price: 600, type: 'TRANSFER' },
-  { id: 3, name: 'Екскурсія до Памуккале', description: 'Гід + транспорт + вхідні квитки, повний день', price: 1400, type: 'EXCURSION' },
-];
-
 @Component({
   selector: 'app-booking-wizard',
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, Toast],
   templateUrl: './booking-wizard.component.html',
   styleUrl: './booking-wizard.component.scss',
 })
@@ -67,7 +58,7 @@ export class BookingWizardComponent implements OnInit {
   touristsCount = signal(2);
   expandedTourists = signal<Set<number>>(new Set([0]));
 
-  extraServices = signal<ExtraService[]>(MOCK_SERVICES);
+  extraServices = signal<ExtraService[]>([]);
   selectedServices = signal<ExtraService[]>([]);
 
   paymentMethod = signal<'card' | 'apple' | 'installment'>('card');
@@ -267,9 +258,10 @@ export class BookingWizardComponent implements OnInit {
         this.cartService.clear();
         this.router.navigate(['/booking/success'], { queryParams: { bookingId: booking.id } });
       },
-      error: () => {
-        this.cartService.clear();
-        this.router.navigate(['/booking/success']);
+      error: (err) => {
+        this.submitting.set(false);
+        const msg = err?.error?.message ?? 'Не вдалося створити бронювання. Спробуйте ще раз.';
+        this.toast.add({ severity: 'error', summary: 'Помилка оплати', detail: msg, life: 6000 });
       },
     });
   }

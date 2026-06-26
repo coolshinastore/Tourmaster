@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 
 import { CabinetLayoutComponent } from '../layout/cabinet-layout.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { UserService } from '../../../core/services/user.service';
 
 function passwordsMatch(ctrl: AbstractControl): ValidationErrors | null {
   const pw = ctrl.get('newPassword')?.value;
@@ -17,8 +18,9 @@ function passwordsMatch(ctrl: AbstractControl): ValidationErrors | null {
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   private auth = inject(AuthService);
+  private userService = inject(UserService);
   private fb = inject(FormBuilder);
 
   readonly user = this.auth.user;
@@ -42,26 +44,51 @@ export class ProfileComponent {
     confirmPassword: ['', Validators.required],
   }, { validators: passwordsMatch });
 
+  ngOnInit() {
+    this.userService.getProfile().subscribe({
+      next: profile => {
+        this.profileForm.patchValue({
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          phone: profile.phone ?? '',
+        });
+      },
+      error: () => {},
+    });
+  }
+
   saveProfile() {
     if (this.profileForm.invalid) { this.profileForm.markAllAsTouched(); return; }
     this.profileSaving.set(true);
-    setTimeout(() => {
-      this.profileSaving.set(false);
-      this.profileSaved.set(true);
-      setTimeout(() => this.profileSaved.set(false), 3000);
-    }, 800);
+    const { firstName, lastName, phone } = this.profileForm.value;
+    this.userService.updateProfile({ firstName: firstName!, lastName: lastName!, phone: phone ?? undefined }).subscribe({
+      next: updated => {
+        this.auth.patchUser({ firstName: updated.firstName, lastName: updated.lastName });
+        this.profileSaving.set(false);
+        this.profileSaved.set(true);
+        setTimeout(() => this.profileSaved.set(false), 3000);
+      },
+      error: () => this.profileSaving.set(false),
+    });
   }
 
   changePassword() {
     if (this.passwordForm.invalid) { this.passwordForm.markAllAsTouched(); return; }
     this.passwordSaving.set(true);
     this.passwordError.set('');
-    setTimeout(() => {
-      this.passwordSaving.set(false);
-      this.passwordSaved.set(true);
-      this.passwordForm.reset();
-      setTimeout(() => this.passwordSaved.set(false), 3000);
-    }, 800);
+    const { currentPassword, newPassword } = this.passwordForm.value;
+    this.userService.changePassword({ currentPassword: currentPassword!, newPassword: newPassword! }).subscribe({
+      next: () => {
+        this.passwordSaving.set(false);
+        this.passwordSaved.set(true);
+        this.passwordForm.reset();
+        setTimeout(() => this.passwordSaved.set(false), 3000);
+      },
+      error: (err) => {
+        this.passwordSaving.set(false);
+        this.passwordError.set(err?.error?.message ?? 'Не вдалося змінити пароль');
+      },
+    });
   }
 
   get f() { return this.profileForm.controls; }

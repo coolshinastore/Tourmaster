@@ -42,6 +42,12 @@ export interface TourDetail extends TourSummary {
   latestReviews: Review[];
 }
 
+export interface DestinationStats {
+  country: string;
+  toursCount: number;
+  priceFrom: number;
+}
+
 export interface TourFilter {
   q?: string;
   country?: string;

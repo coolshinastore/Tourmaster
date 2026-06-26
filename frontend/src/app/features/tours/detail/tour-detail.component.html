@@ -96,8 +96,9 @@
                 <span class="text-ink-2 text-sm">· {{ t.reviewsCount }} відгуків</span>
               </div>
               <span class="badge-choice">✦ Чудовий вибір</span>
-              <button class="ml-auto wish-btn" (click)="inWishlist.set(!inWishlist())"
-                      [class.active]="inWishlist()">
+              <button class="ml-auto wish-btn" (click)="toggleWishlist()"
+                      [class.active]="inWishlist()"
+                      [disabled]="wishlistLoading()">
                 <i [class]="inWishlist() ? 'pi pi-heart-fill' : 'pi pi-heart'"></i>
                 {{ inWishlist() ? 'В обраному' : 'В обране' }}
               </button>
@@ -355,10 +356,11 @@
       </div><!-- /tour-layout -->
 
       <!-- ═══ SIMILAR TOURS ═══ -->
+      @if (similarTours().length > 0) {
       <section class="container-app similar-section">
         <h2 class="section-title">Схожі тури</h2>
         <div class="similar-grid">
-          @for (tour of similarTours; track tour.id) {
+          @for (tour of similarTours(); track tour.id) {
             <div class="similar-card" [routerLink]="['/tours', tour.id]">
               <div class="similar-card__img">
                 <img [src]="tour.imageUrl" [alt]="tour.title" class="w-full h-full object-cover" />
@@ -394,6 +396,7 @@
           }
         </div>
       </section>
+      }
 
     }<!-- /tour() -->
   }<!-- /!loading() -->

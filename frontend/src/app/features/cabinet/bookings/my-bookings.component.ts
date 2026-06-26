@@ -8,89 +8,6 @@ import { BookingSummary, BookingStatus } from '../../../core/models/booking.mode
 
 type FilterKey = 'all' | 'upcoming' | 'completed' | 'cancelled';
 
-const MOCK_BOOKINGS: BookingSummary[] = [
-  {
-    id: 10428,
-    tourId: 1,
-    tourTitle: 'Rixos Premium Belek 5★',
-    country: 'Туреччина',
-    imageUrl: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=300&q=80&auto=format&fit=crop',
-    durationNights: 7,
-    departureDate: '2026-07-12',
-    returnDate: '2026-07-19',
-    departureCity: 'Київ',
-    status: 'PAID',
-    totalPrice: 48400,
-    discount: 6000,
-    touristsCount: 2,
-    createdAt: '2026-05-15',
-  },
-  {
-    id: 10510,
-    tourId: 2,
-    tourTitle: 'Єгипет — Шарм-ель-Шейх. Rixos Premium 5★',
-    country: 'Єгипет',
-    imageUrl: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=300&q=80&auto=format&fit=crop',
-    durationNights: 7,
-    departureDate: '2026-08-10',
-    returnDate: '2026-08-17',
-    departureCity: 'Київ',
-    status: 'CONFIRMED',
-    totalPrice: 36800,
-    discount: 0,
-    touristsCount: 2,
-    createdAt: '2026-06-01',
-  },
-  {
-    id: 9114,
-    tourId: 3,
-    tourTitle: 'Atlantis The Palm 5★',
-    country: 'ОАЕ',
-    imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=300&q=80&auto=format&fit=crop',
-    durationNights: 7,
-    departureDate: '2026-02-03',
-    returnDate: '2026-02-10',
-    departureCity: 'Київ',
-    status: 'COMPLETED',
-    totalPrice: 76200,
-    discount: 0,
-    touristsCount: 2,
-    createdAt: '2025-12-10',
-  },
-  {
-    id: 8770,
-    tourId: 4,
-    tourTitle: 'Steigenberger Alcazar 5★',
-    country: 'Єгипет',
-    imageUrl: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&q=80&auto=format&fit=crop',
-    durationNights: 8,
-    departureDate: '2025-12-18',
-    returnDate: '2025-12-26',
-    departureCity: 'Київ',
-    status: 'CANCELLED',
-    totalPrice: 28400,
-    discount: 0,
-    touristsCount: 2,
-    createdAt: '2025-11-05',
-  },
-  {
-    id: 10601,
-    tourId: 5,
-    tourTitle: 'Греція — Крит. Grecotel Creta Palace 5★',
-    country: 'Греція',
-    imageUrl: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=300&q=80&auto=format&fit=crop',
-    durationNights: 10,
-    departureDate: '2026-09-05',
-    returnDate: '2026-09-15',
-    departureCity: 'Київ',
-    status: 'NEW',
-    totalPrice: 62400,
-    discount: 0,
-    touristsCount: 2,
-    createdAt: '2026-06-10',
-  },
-];
-
 @Component({
   selector: 'app-my-bookings',
   imports: [CommonModule, RouterLink, CabinetLayoutComponent],
@@ -100,8 +17,8 @@ const MOCK_BOOKINGS: BookingSummary[] = [
 export class MyBookingsComponent implements OnInit {
   private bookingService = inject(BookingService);
 
-  bookings = signal<BookingSummary[]>(MOCK_BOOKINGS);
-  loading = signal(false);
+  bookings = signal<BookingSummary[]>([]);
+  loading = signal(true);
   activeFilter = signal<FilterKey>('all');
 
   readonly filters: { key: FilterKey; label: string }[] = [
@@ -142,8 +59,21 @@ export class MyBookingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.bookingService.getMyBookings().subscribe({
-      next: page => this.bookings.set(page.content),
+    this.bookingService.getMyBookings(undefined, 0, 50).subscribe({
+      next: page => {
+        this.bookings.set(page.content);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
+  }
+
+  cancelBooking(id: number) {
+    if (!confirm('Скасувати бронювання? Цю дію неможливо відмінити.')) return;
+    this.bookingService.cancel(id).subscribe({
+      next: () => this.bookings.update(list =>
+        list.map(b => b.id === id ? { ...b, status: 'CANCELLED' as BookingStatus } : b)
+      ),
       error: () => {},
     });
   }

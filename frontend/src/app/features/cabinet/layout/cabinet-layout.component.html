@@ -32,8 +32,8 @@
              class="cabinet-nav-item"
              [class.cabinet-nav-active]="activeSection === 'wishlist'">
             ♡ Wishlist
-            @if (wishlistCount > 0) {
-              <span class="nav-badge">{{ wishlistCount }}</span>
+            @if (wishlistCount() > 0) {
+              <span class="nav-badge">{{ wishlistCount() }}</span>
             }
           </a>
           <a routerLink="/cabinet/profile"

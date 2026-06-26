@@ -1,4 +1,4 @@
-<app-cabinet-layout activeSection="bookings" [wishlistCount]="4">
+<app-cabinet-layout activeSection="bookings">
 
   <!-- Filter chips -->
   <div class="filter-chips">
@@ -71,14 +71,15 @@
                     <button class="btn-outline" type="button">⤓ Ваучер</button>
                   }
                   @if (isCompleted(b)) {
-                    <button class="btn-review" type="button">★ Залишити відгук</button>
-                    <button class="btn-outline" type="button">Повторити</button>
+                    <button class="btn-review" type="button">★ Відгук</button>
+                    <a [routerLink]="['/tours', b.tourId]" class="btn-outline">Повторити</a>
                   }
                   @if (canCancel(b)) {
-                    <button class="btn-outline btn-outline-danger" type="button">Скасувати</button>
+                    <button class="btn-outline btn-outline-danger" type="button"
+                            (click)="cancelBooking(b.id)">Скасувати</button>
                   }
-                  @if (!isCompleted(b)) {
-                    <button class="btn-primary-sm" type="button">Деталі</button>
+                  @if (!isCompleted(b) && !isCancelled(b)) {
+                    <a [routerLink]="['/tours', b.tourId]" class="btn-primary-sm">Деталі туру</a>
                   }
                 </div>
               </div>

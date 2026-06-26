@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { PageResponse, TourDetail, TourFilter, TourSummary } from '../models/tour.models';
+import { DestinationStats, PageResponse, Review, TourDetail, TourFilter, TourSummary } from '../models/tour.models';
 
 @Injectable({ providedIn: 'root' })
 export class TourService {
@@ -31,6 +31,16 @@ export class TourService {
   search(q: string, page = 0, size = 12) {
     return this.http.get<PageResponse<TourSummary>>(`${this.api}/search`, {
       params: new HttpParams().set('q', q).set('page', page).set('size', size),
+    });
+  }
+
+  getDestinations() {
+    return this.http.get<DestinationStats[]>(`${this.api}/destinations`);
+  }
+
+  getLatestReviews(size = 3) {
+    return this.http.get<Review[]>(`${this.api}/latest-reviews`, {
+      params: new HttpParams().set('size', size),
     });
   }
 }

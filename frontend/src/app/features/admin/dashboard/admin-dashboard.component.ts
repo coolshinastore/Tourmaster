@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AdminLayoutComponent } from '../layout/admin-layout.component';
+import { AdminService } from '../../../core/services/admin.service';
+import { AdminBooking } from '../../../core/models/admin.models';
 
 interface StatCard { label: string; value: string; delta: string; positive: boolean; icon: string; }
 
@@ -11,21 +13,17 @@ interface StatCard { label: string; value: string; delta: string; positive: bool
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss',
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
+  private adminService = inject(AdminService);
+
   readonly stats: StatCard[] = [
-    { label: 'Бронювань цього місяця', value: '148',       delta: '+12% до минулого',  positive: true,  icon: '🧳' },
+    { label: 'Бронювань цього місяця', value: '148',         delta: '+12% до минулого', positive: true,  icon: '🧳' },
     { label: 'Виручка (червень)',       value: '₴ 1 842 600', delta: '+8% до минулого', positive: true,  icon: '💰' },
-    { label: 'Нові клієнти',           value: '37',        delta: '+5 за тиждень',    positive: true,  icon: '👤' },
-    { label: 'Скасувань',              value: '6',         delta: '-2 порівняно',      positive: false, icon: '⚠️' },
+    { label: 'Нові клієнти',           value: '37',          delta: '+5 за тиждень',   positive: true,  icon: '👤' },
+    { label: 'Скасувань',              value: '6',           delta: '-2 порівняно',     positive: false, icon: '⚠️' },
   ];
 
-  readonly recentBookings = [
-    { id: 10628, client: 'Іван Петренко',  tour: 'Туреччина — Rixos Premium Belek',   date: '2026-07-12', status: 'PAID',      total: 48400 },
-    { id: 10615, client: 'Олена Коваль',   tour: 'Єгипет — Rixos Premium Seagate',    date: '2026-08-05', status: 'CONFIRMED', total: 36800 },
-    { id: 10601, client: 'Андрій Мороз',   tour: 'Греція — Grecotel Creta Palace',    date: '2026-09-05', status: 'NEW',       total: 62400 },
-    { id: 10598, client: 'Марія Бойко',    tour: 'ОАЕ — Atlantis The Palm',           date: '2026-06-28', status: 'CONFIRMED', total: 76200 },
-    { id: 10581, client: 'Сергій Лисенко', tour: 'Таїланд — Anantara Kihavah',        date: '2026-07-20', status: 'CANCELLED', total: 54100 },
-  ];
+  recentBookings = signal<AdminBooking[]>([]);
 
   readonly topTours = [
     { title: 'Туреччина — Rixos Premium Belek',  bookings: 34, revenue: 1470000 },
@@ -33,6 +31,13 @@ export class AdminDashboardComponent {
     { title: 'ОАЕ — Atlantis The Palm',           bookings: 21, revenue: 1200000 },
     { title: 'Греція — Grecotel Creta Palace',    bookings: 18, revenue: 742000  },
   ];
+
+  ngOnInit() {
+    this.adminService.getBookings(undefined, 0, 5).subscribe({
+      next: res => this.recentBookings.set(res.content),
+      error: () => {},
+    });
+  }
 
   statusConfig(status: string): { label: string; bg: string; color: string } {
     const map: Record<string, { label: string; bg: string; color: string }> = {

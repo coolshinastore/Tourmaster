@@ -1,40 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { CabinetLayoutComponent } from '../layout/cabinet-layout.component';
+import { UserService } from '../../../core/services/user.service';
 import { TourSummary } from '../../../core/models/tour.models';
-
-const MOCK_WISHLIST: TourSummary[] = [
-  {
-    id: 1, title: 'Туреччина — Анталія. Limak Lara 5★', country: 'Туреччина', city: 'Анталія',
-    hotelName: 'Limak Lara De Luxe', hotelStars: 5, mealType: 'AI', durationNights: 7,
-    priceFrom: 24900, oldPrice: 32000, badge: 'HIT', rating: 4.9, reviewsCount: 312,
-    imageUrl: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=400&q=80&auto=format&fit=crop',
-    status: 'ACTIVE',
-  },
-  {
-    id: 2, title: 'Єгипет — Шарм. Rixos Premium 5★', country: 'Єгипет', city: 'Шарм-ель-Шейх',
-    hotelName: 'Rixos Premium Seagate', hotelStars: 5, mealType: 'AI', durationNights: 7,
-    priceFrom: 18900, oldPrice: 24000, badge: 'SALE', rating: 4.8, reviewsCount: 187,
-    imageUrl: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400&q=80&auto=format&fit=crop',
-    status: 'ACTIVE',
-  },
-  {
-    id: 3, title: 'ОАЕ — Дубай. Atlantis The Palm 5★', country: 'ОАЕ', city: 'Дубай',
-    hotelName: 'Atlantis The Palm', hotelStars: 5, mealType: 'BB', durationNights: 7,
-    priceFrom: 42500, badge: 'NEW', rating: 4.9, reviewsCount: 94,
-    imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&q=80&auto=format&fit=crop',
-    status: 'ACTIVE',
-  },
-  {
-    id: 4, title: 'Греція — Крит. Grecotel Creta Palace 5★', country: 'Греція', city: 'Іракліон',
-    hotelName: 'Grecotel Creta Palace', hotelStars: 5, mealType: 'HB', durationNights: 10,
-    priceFrom: 31200, badge: 'HIT', rating: 4.8, reviewsCount: 224,
-    imageUrl: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=400&q=80&auto=format&fit=crop',
-    status: 'ACTIVE',
-  },
-];
 
 @Component({
   selector: 'app-wishlist',
@@ -42,11 +12,27 @@ const MOCK_WISHLIST: TourSummary[] = [
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss',
 })
-export class WishlistComponent {
-  wishlist = signal<TourSummary[]>(MOCK_WISHLIST);
+export class WishlistComponent implements OnInit {
+  private userService = inject(UserService);
+
+  wishlist = signal<TourSummary[]>([]);
+  loading = signal(true);
+
+  ngOnInit() {
+    this.userService.getWishlist().subscribe({
+      next: items => {
+        this.wishlist.set(items);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
+  }
 
   removeFromWishlist(id: number) {
-    this.wishlist.update(items => items.filter(t => t.id !== id));
+    this.userService.removeFromWishlist(id).subscribe({
+      next: () => this.wishlist.update(items => items.filter(t => t.id !== id)),
+      error: () => {},
+    });
   }
 
   badgeLabel(badge?: string): string {

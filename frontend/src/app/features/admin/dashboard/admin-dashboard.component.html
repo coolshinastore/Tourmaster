@@ -45,12 +45,12 @@
             </tr>
           </thead>
           <tbody>
-            @for (b of recentBookings; track b.id) {
+            @for (b of recentBookings(); track b.id) {
               <tr>
                 <td class="booking-num-cell">{{ bookingNum(b.id) }}</td>
-                <td>{{ b.client }}</td>
-                <td class="tour-cell">{{ b.tour }}</td>
-                <td class="date-cell">{{ b.date }}</td>
+                <td>{{ b.clientFullName }}</td>
+                <td class="tour-cell">{{ b.tourTitle }}</td>
+                <td class="date-cell">{{ b.departureDate }}</td>
                 <td>
                   <span class="status-pill"
                         [style.background]="statusConfig(b.status).bg"
@@ -58,7 +58,7 @@
                     {{ statusConfig(b.status).label }}
                   </span>
                 </td>
-                <td class="text-right price-cell">{{ formatPrice(b.total) }}</td>
+                <td class="text-right price-cell">{{ formatPrice(b.totalPrice) }}</td>
               </tr>
             }
           </tbody>

@@ -1,31 +1,10 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminLayoutComponent } from '../layout/admin-layout.component';
-
-type BookingStatus = 'NEW' | 'CONFIRMED' | 'PAID' | 'COMPLETED' | 'CANCELLED';
-
-interface AdminBooking {
-  id: number;
-  client: string;
-  email: string;
-  tour: string;
-  departureDate: string;
-  touristsCount: number;
-  total: number;
-  status: BookingStatus;
-  createdAt: string;
-}
-
-const MOCK_BOOKINGS: AdminBooking[] = [
-  { id: 10628, client: 'Іван Петренко',   email: 'ivan@email.com',   tour: 'Rixos Premium Belek 5★',    departureDate: '2026-07-12', touristsCount: 2, total: 48400, status: 'PAID',      createdAt: '2026-06-01' },
-  { id: 10615, client: 'Олена Коваль',    email: 'olena@email.com',  tour: 'Rixos Premium Seagate 5★',  departureDate: '2026-08-05', touristsCount: 2, total: 36800, status: 'CONFIRMED', createdAt: '2026-06-03' },
-  { id: 10601, client: 'Андрій Мороз',    email: 'andrii@email.com', tour: 'Grecotel Creta Palace 5★',  departureDate: '2026-09-05', touristsCount: 4, total: 62400, status: 'NEW',       createdAt: '2026-06-10' },
-  { id: 10598, client: 'Марія Бойко',     email: 'maria@email.com',  tour: 'Atlantis The Palm 5★',      departureDate: '2026-06-28', touristsCount: 2, total: 76200, status: 'CONFIRMED', createdAt: '2026-05-28' },
-  { id: 10581, client: 'Сергій Лисенко',  email: 'serhii@email.com', tour: 'Anantara Kihavah 5★',       departureDate: '2026-07-20', touristsCount: 2, total: 54100, status: 'CANCELLED', createdAt: '2026-05-20' },
-  { id: 10562, client: 'Тетяна Шевченко', email: 'tanya@email.com',  tour: 'Gran Meliá Palacio 5★',     departureDate: '2026-05-10', touristsCount: 2, total: 28400, status: 'COMPLETED', createdAt: '2026-04-01' },
-  { id: 10540, client: 'Олексій Гайда',   email: 'alex@email.com',   tour: 'Rixos Premium Belek 5★',    departureDate: '2026-07-05', touristsCount: 3, total: 72600, status: 'PAID',      createdAt: '2026-05-18' },
-];
+import { AdminService } from '../../../core/services/admin.service';
+import { AdminBooking } from '../../../core/models/admin.models';
+import { BookingStatus } from '../../../core/models/booking.models';
 
 const STATUS_ORDER: BookingStatus[] = ['NEW', 'CONFIRMED', 'PAID', 'COMPLETED', 'CANCELLED'];
 
@@ -35,8 +14,11 @@ const STATUS_ORDER: BookingStatus[] = ['NEW', 'CONFIRMED', 'PAID', 'COMPLETED', 
   templateUrl: './admin-bookings.component.html',
   styleUrl: './admin-bookings.component.scss',
 })
-export class AdminBookingsComponent {
-  bookings = signal<AdminBooking[]>(MOCK_BOOKINGS);
+export class AdminBookingsComponent implements OnInit {
+  private adminService = inject(AdminService);
+
+  bookings = signal<AdminBooking[]>([]);
+  loading = signal(true);
   searchQuery = signal('');
   filterStatus = signal<BookingStatus | 'ALL'>('ALL');
   editStatusId = signal<number | null>(null);
@@ -47,12 +29,28 @@ export class AdminBookingsComponent {
   filteredBookings = computed(() => {
     const q = this.searchQuery().toLowerCase();
     return this.bookings().filter(b => {
-      const matchQ = !q || b.client.toLowerCase().includes(q) || b.tour.toLowerCase().includes(q) ||
+      const matchQ = !q || b.clientFullName.toLowerCase().includes(q) ||
+                     b.tourTitle.toLowerCase().includes(q) ||
                      this.bookingNum(b.id).toLowerCase().includes(q);
       const matchS = this.filterStatus() === 'ALL' || b.status === this.filterStatus();
       return matchQ && matchS;
     });
   });
+
+  ngOnInit() {
+    this.loadBookings();
+  }
+
+  private loadBookings() {
+    this.loading.set(true);
+    this.adminService.getBookings().subscribe({
+      next: res => {
+        this.bookings.set(res.content);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
+  }
 
   openEditStatus(b: AdminBooking) {
     this.editStatusId.set(b.id);
@@ -60,17 +58,23 @@ export class AdminBookingsComponent {
   }
 
   confirmStatusChange(id: number) {
-    this.bookings.update(list => list.map(b => b.id === id ? { ...b, status: this.editStatusValue() } : b));
-    this.editStatusId.set(null);
+    const newStatus = this.editStatusValue();
+    this.adminService.updateBookingStatus(id, newStatus).subscribe({
+      next: updated => {
+        this.bookings.update(list => list.map(b => b.id === id ? { ...b, status: updated.status } : b));
+        this.editStatusId.set(null);
+      },
+      error: () => this.editStatusId.set(null),
+    });
   }
 
   statusConfig(status: BookingStatus): { label: string; bg: string; color: string } {
     const map: Record<BookingStatus, { label: string; bg: string; color: string }> = {
-      NEW:       { label: 'Нове',        bg: '#FFFBEB',              color: '#92610A' },
-      CONFIRMED: { label: 'Підтверджено', bg: '#E9F2FB',             color: '#15598F' },
-      PAID:      { label: 'Оплачено',    bg: 'rgba(34,197,94,.1)',  color: '#157A3C' },
-      COMPLETED: { label: 'Завершено',   bg: '#EEF0F3',              color: '#4B5563' },
-      CANCELLED: { label: 'Скасовано',   bg: 'rgba(239,68,68,.08)', color: '#B42323' },
+      NEW:       { label: 'Нове',         bg: '#FFFBEB',              color: '#92610A' },
+      CONFIRMED: { label: 'Підтверджено', bg: '#E9F2FB',              color: '#15598F' },
+      PAID:      { label: 'Оплачено',     bg: 'rgba(34,197,94,.1)',   color: '#157A3C' },
+      COMPLETED: { label: 'Завершено',    bg: '#EEF0F3',              color: '#4B5563' },
+      CANCELLED: { label: 'Скасовано',    bg: 'rgba(239,68,68,.08)', color: '#B42323' },
     };
     return map[status];
   }

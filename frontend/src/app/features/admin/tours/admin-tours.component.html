@@ -39,7 +39,7 @@
             <th>Країна</th>
             <th>Ціна від</th>
             <th>Ночей</th>
-            <th>Броні</th>
+            <th>Дати</th>
             <th>Статус</th>
             <th></th>
           </tr>
@@ -68,7 +68,7 @@
               <td>{{ t.country }}</td>
               <td class="price-cell">{{ formatPrice(t.priceFrom) }}</td>
               <td>{{ t.durationNights }}</td>
-              <td>{{ t.bookingsCount }}</td>
+              <td>{{ t.activeDatesCount }}</td>
               <td>
                 @if (t.status === 'ACTIVE') {
                   <span class="status-pill status-active">Активний</span>
@@ -87,7 +87,6 @@
                   } @else {
                     <button class="btn-icon" type="button"
                             title="Архівувати"
-                            [disabled]="t.bookingsCount > 0"
                             (click)="archiveConfirmId.set(t.id)">📦</button>
                   }
                 } @else {
