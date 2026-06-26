@@ -42,6 +42,22 @@ export interface AdminClient {
   totalBookings: number;
 }
 
+export interface TourUpsertRequest {
+  title: string;
+  description?: string | null;
+  country: string;
+  city?: string | null;
+  hotelName?: string | null;
+  hotelStars?: number | null;
+  mealType?: string | null;
+  durationNights: number;
+  priceFrom: number;
+  oldPrice?: number | null;
+  badge?: string | null;
+  imageUrl?: string | null;
+  galleryUrls?: string[] | null;
+}
+
 export interface SalesReport {
   totalRevenue: number;
   totalBookings: number;

@@ -6,7 +6,7 @@
       <h1 class="page-title">Тури</h1>
       <p class="page-sub">Каталог турів агентства</p>
     </div>
-    <button class="btn-primary" type="button">+ Додати тур</button>
+    <button class="btn-primary" type="button" (click)="openCreate()">+ Додати тур</button>
   </div>
 
   <!-- ── Toolbar ─────────────────────────────────────────── -->
@@ -39,63 +39,72 @@
             <th>Країна</th>
             <th>Ціна від</th>
             <th>Ночей</th>
-            <th>Дати</th>
+            <th>Дат</th>
             <th>Статус</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          @if (filteredTours().length === 0) {
+          @if (loading()) {
+            @for (i of [1,2,3,4,5]; track i) {
+              <tr>
+                <td><div class="skeleton w-48 h-4 rounded"></div></td>
+                <td><div class="skeleton w-20 h-4 rounded"></div></td>
+                <td><div class="skeleton w-16 h-4 rounded"></div></td>
+                <td><div class="skeleton w-8 h-4 rounded"></div></td>
+                <td><div class="skeleton w-8 h-4 rounded"></div></td>
+                <td><div class="skeleton w-20 h-5 rounded-full"></div></td>
+                <td></td>
+              </tr>
+            }
+          } @else if (filteredTours().length === 0) {
             <tr>
               <td colspan="7" class="empty-row">Нічого не знайдено</td>
             </tr>
-          }
-          @for (t of filteredTours(); track t.id) {
-            <tr [class.row-archived]="t.status === 'ARCHIVED'">
-              <td>
-                <div class="tour-title-cell">
-                  <span>{{ t.title }}</span>
-                  @if (t.badge) {
-                    <span class="tour-badge">{{ t.badge }}</span>
-                  }
-                </div>
-                <div class="stars-row">
-                  @for (s of starsOf(t.hotelStars); track s) {
-                    <span style="color:#F59E0B; font-size:11px;">★</span>
-                  }
-                </div>
-              </td>
-              <td>{{ t.country }}</td>
-              <td class="price-cell">{{ formatPrice(t.priceFrom) }}</td>
-              <td>{{ t.durationNights }}</td>
-              <td>{{ t.activeDatesCount }}</td>
-              <td>
-                @if (t.status === 'ACTIVE') {
-                  <span class="status-pill status-active">Активний</span>
-                } @else {
-                  <span class="status-pill status-archived">Архів</span>
-                }
-              </td>
-              <td class="actions-cell">
-                <button class="btn-icon" type="button" title="Редагувати">✏️</button>
-                @if (t.status === 'ACTIVE') {
-                  @if (archiveConfirmId() === t.id) {
-                    <button class="btn-icon btn-icon-danger" type="button"
-                            (click)="archiveTour(t.id)">Підтвердити</button>
-                    <button class="btn-icon" type="button"
-                            (click)="archiveConfirmId.set(null)">Ні</button>
+          } @else {
+            @for (t of filteredTours(); track t.id) {
+              <tr [class.row-archived]="t.status === 'ARCHIVED'">
+                <td>
+                  <div class="tour-title-cell">
+                    <span>{{ t.title }}</span>
+                    @if (t.badge) {
+                      <span class="tour-badge">{{ t.badge }}</span>
+                    }
+                  </div>
+                  <div class="stars-row">
+                    @for (s of starsOf(t.hotelStars); track s) {
+                      <span style="color:#F59E0B; font-size:11px;">★</span>
+                    }
+                  </div>
+                </td>
+                <td>{{ t.country }}</td>
+                <td class="price-cell">{{ formatPrice(t.priceFrom) }}</td>
+                <td>{{ t.durationNights }}</td>
+                <td>{{ t.activeDatesCount }}</td>
+                <td>
+                  @if (t.status === 'ACTIVE') {
+                    <span class="status-pill status-active">Активний</span>
                   } @else {
-                    <button class="btn-icon" type="button"
-                            title="Архівувати"
-                            (click)="archiveConfirmId.set(t.id)">📦</button>
+                    <span class="status-pill status-archived">Архів</span>
                   }
-                } @else {
-                  <button class="btn-icon" type="button"
-                          title="Відновити"
-                          (click)="restoreTour(t.id)">♻️</button>
-                }
-              </td>
-            </tr>
+                </td>
+                <td class="actions-cell">
+                  <button class="btn-icon" type="button" title="Редагувати"
+                          (click)="openEdit(t)">✏️</button>
+                  @if (t.status === 'ACTIVE') {
+                    @if (archiveConfirmId() === t.id) {
+                      <button class="btn-icon btn-icon-danger" type="button"
+                              (click)="archiveTour(t.id)">Підтвердити</button>
+                      <button class="btn-icon" type="button"
+                              (click)="archiveConfirmId.set(null)">Ні</button>
+                    } @else {
+                      <button class="btn-icon" type="button" title="Архівувати"
+                              (click)="archiveConfirmId.set(t.id)">📦</button>
+                    }
+                  }
+                </td>
+              </tr>
+            }
           }
         </tbody>
       </table>
@@ -103,3 +112,162 @@
   </div>
 
 </app-admin-layout>
+
+<!-- ── Form drawer overlay ─────────────────────────────── -->
+@if (showForm()) {
+  <div class="drawer-overlay" (click)="closeForm()"></div>
+
+  <aside class="drawer" [class.drawer-open]="showForm()">
+    <!-- Header -->
+    <div class="drawer-header">
+      <h2 class="drawer-title">
+        {{ editingId() ? 'Редагування туру' : 'Новий тур' }}
+      </h2>
+      <button class="drawer-close" type="button" (click)="closeForm()">✕</button>
+    </div>
+
+    <!-- Form -->
+    <div class="drawer-body">
+      <form [formGroup]="tourForm" (ngSubmit)="submitForm()" novalidate autocomplete="off">
+
+        <!-- Section: Основне -->
+        <div class="form-section">
+          <div class="form-section-title">Основна інформація</div>
+
+          <div class="field-wrap">
+            <label class="field-label">Назва туру *</label>
+            <input class="field-input" [class.field-error]="hasError('title')"
+                   formControlName="title" placeholder="Туреччина — Rixos Premium Belek 5*">
+            @if (hasError('title')) {
+              <span class="field-hint-err">Назва обов'язкова (макс. 255 символів)</span>
+            }
+          </div>
+
+          <div class="form-row-2">
+            <div class="field-wrap">
+              <label class="field-label">Країна *</label>
+              <input class="field-input" [class.field-error]="hasError('country')"
+                     formControlName="country" placeholder="Туреччина">
+              @if (hasError('country')) {
+                <span class="field-hint-err">Країна обов'язкова</span>
+              }
+            </div>
+            <div class="field-wrap">
+              <label class="field-label">Місто / курорт</label>
+              <input class="field-input" formControlName="city" placeholder="Белек">
+            </div>
+          </div>
+
+          <div class="field-wrap">
+            <label class="field-label">Опис</label>
+            <textarea class="field-input field-textarea" formControlName="description"
+                      placeholder="Короткий опис туру…" rows="3"></textarea>
+          </div>
+        </div>
+
+        <!-- Section: Готель -->
+        <div class="form-section">
+          <div class="form-section-title">Готель та харчування</div>
+
+          <div class="field-wrap">
+            <label class="field-label">Назва готелю</label>
+            <input class="field-input" formControlName="hotelName" placeholder="Rixos Premium Belek">
+          </div>
+
+          <div class="form-row-2">
+            <div class="field-wrap">
+              <label class="field-label">Зірковість</label>
+              <select class="field-input field-select" formControlName="hotelStars">
+                <option [value]="null">— Не вказано</option>
+                @for (s of starOptions; track s) {
+                  <option [value]="s">{{ s }} ★</option>
+                }
+              </select>
+            </div>
+            <div class="field-wrap">
+              <label class="field-label">Харчування</label>
+              <select class="field-input field-select" formControlName="mealType">
+                <option value="">— Не вказано</option>
+                @for (m of mealOptions; track m.value) {
+                  <option [value]="m.value">{{ m.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Ціна та тривалість -->
+        <div class="form-section">
+          <div class="form-section-title">Ціна та тривалість</div>
+
+          <div class="form-row-2">
+            <div class="field-wrap">
+              <label class="field-label">Ціна від (₴) *</label>
+              <input class="field-input" [class.field-error]="hasError('priceFrom')"
+                     formControlName="priceFrom" type="number" min="1" placeholder="35000">
+              @if (hasError('priceFrom')) {
+                <span class="field-hint-err">Вкажіть ціну (мін. 1 ₴)</span>
+              }
+            </div>
+            <div class="field-wrap">
+              <label class="field-label">Стара ціна (₴)</label>
+              <input class="field-input" formControlName="oldPrice" type="number" min="1" placeholder="42000">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="field-wrap">
+              <label class="field-label">Тривалість (ночей) *</label>
+              <input class="field-input" [class.field-error]="hasError('durationNights')"
+                     formControlName="durationNights" type="number" min="1" placeholder="7">
+              @if (hasError('durationNights')) {
+                <span class="field-hint-err">Вкажіть кількість ночей</span>
+              }
+            </div>
+            <div class="field-wrap">
+              <label class="field-label">Бейдж</label>
+              <select class="field-input field-select" formControlName="badge">
+                @for (b of badgeOptions; track b.value) {
+                  <option [value]="b.value">{{ b.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Медіа -->
+        <div class="form-section">
+          <div class="form-section-title">Медіа</div>
+
+          <div class="field-wrap">
+            <label class="field-label">URL головного фото</label>
+            <input class="field-input" formControlName="imageUrl"
+                   placeholder="https://…/photo.jpg" type="url">
+          </div>
+
+          <div class="field-wrap">
+            <label class="field-label">URL галереї (кожен з нового рядка)</label>
+            <textarea class="field-input field-textarea" formControlName="galleryUrlsText"
+                      placeholder="https://…/img1.jpg&#10;https://…/img2.jpg" rows="3"></textarea>
+          </div>
+        </div>
+
+        <!-- Error -->
+        @if (submitError()) {
+          <div class="submit-error">⚠ {{ submitError() }}</div>
+        }
+
+        <!-- Footer -->
+        <div class="drawer-footer">
+          <button class="btn-cancel" type="button" (click)="closeForm()">Скасувати</button>
+          <button class="btn-submit" type="submit" [disabled]="submitting()">
+            @if (submitting()) { Збереження… } @else {
+              {{ editingId() ? 'Зберегти зміни' : 'Створити тур' }}
+            }
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </aside>
+}

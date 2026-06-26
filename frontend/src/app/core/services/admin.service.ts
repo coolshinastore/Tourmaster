@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { AdminBooking, AdminClient, AdminTour, SalesReport } from '../models/admin.models';
+import { AdminBooking, AdminClient, AdminTour, SalesReport, TourUpsertRequest } from '../models/admin.models';
 import { BookingStatus } from '../models/booking.models';
 import { PageResponse } from '../models/tour.models';
 
@@ -16,6 +16,14 @@ export class AdminService {
     if (q) params = params.set('q', q);
     if (status && status !== 'ALL') params = params.set('status', status);
     return this.http.get<PageResponse<AdminTour>>(`${this.base}/tours`, { params });
+  }
+
+  createTour(payload: TourUpsertRequest) {
+    return this.http.post<AdminTour>(`${this.base}/tours`, payload);
+  }
+
+  updateTour(id: number, payload: TourUpsertRequest) {
+    return this.http.put<AdminTour>(`${this.base}/tours/${id}`, payload);
   }
 
   archiveTour(id: number) {
