@@ -1,6 +1,5 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AdminLayoutComponent } from '../layout/admin-layout.component';
 
@@ -28,7 +27,7 @@ const MOCK_TOURS: AdminTour[] = [
 
 @Component({
   selector: 'app-admin-tours',
-  imports: [CommonModule, RouterLink, FormsModule, AdminLayoutComponent],
+  imports: [CommonModule, FormsModule, AdminLayoutComponent],
   templateUrl: './admin-tours.component.html',
   styleUrl: './admin-tours.component.scss',
 })

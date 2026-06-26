@@ -318,9 +318,15 @@ cd backend  && mvn clean package -DskipTests
 
 - [x] **Frontend: `/admin`** — AdminLayoutComponent (фіксований sidebar, nav), AdminDashboardComponent (stat cards, таблиця останніх броні, топ турів), AdminToursComponent (таблиця + пошук + фільтр + архівування), AdminBookingsComponent (таблиця + inline зміна статусу), AdminClientsComponent (таблиця + loyalty рівні)
 
+- [x] **Інтеграція** — `angular.json` fileReplacements для production env; `BookingDetailResponse` + mapper отримали `touristsCount`; SecurityConfig відкрив `/actuator/health`
+- [x] **Розгортання** — `backend/Dockerfile` (Maven multi-stage), `frontend/Dockerfile` (Node 22 + nginx:1.27-alpine), `docker-compose.yml` (4 сервіси: db/backend/frontend/nginx), `nginx.conf` (reverse proxy), `.env.example`, `.gitignore`, actuator dependency + config
+
+- [x] **Unit-тести Backend** — 39 тестів, `@ExtendWith(MockitoExtension.class)`, без Spring контексту та БД: `AuthServiceTest` (8), `BookingServiceTest` (10), `TourServiceTest` (4), `AdminTourServiceTest` (5), `AdminBookingServiceTest` (7), `JwtServiceTest` (5)
+
+- [x] **Виправлення помилок компіляції Frontend** — `greeting()` → `greeting` у `cabinet-layout.component.html` (getter не є функцією); видалено невикористаний `RouterLink` з `admin-tours.component.ts`
+
 ### В роботі / Наступні кроки
-- [ ] Інтеграційне тестування (backend ↔ frontend)
-- [ ] Розгортання (Docker + Nginx)
+- [ ] Написання пояснювальної записки — технічний розділ
 
 ---
 
@@ -340,5 +346,5 @@ cd backend  && mvn clean package -DskipTests
 
 ---
 
-*Останнє оновлення: сесія розробки frontend (2026-06-12)*  
-*Поточний крок: інтеграційне тестування (backend ↔ frontend) та розгортання*
+*Останнє оновлення: виправлення помилок компіляції frontend (2026-06-26)*  
+*Поточний крок: написання пояснювальної записки — технічний розділ*

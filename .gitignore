@@ -1,0 +1,26 @@
+# Environment secrets
+.env
+
+# Backend
+backend/target/
+backend/.mvn/
+*.class
+*.jar
+!**/test-resources/**/*.jar
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/src/tailwind-out.css
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db

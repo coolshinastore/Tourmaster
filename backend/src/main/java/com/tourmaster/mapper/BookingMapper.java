@@ -36,6 +36,7 @@ public interface BookingMapper {
     @Mapping(target = "returnDate",    expression = "java(b.getTourDate().getReturnDate())")
     @Mapping(target = "departureCity", expression = "java(b.getTourDate().getDepartureCity())")
     @Mapping(target = "status",        expression = "java(b.getStatus().name())")
+    @Mapping(target = "touristsCount", expression = "java(b.getItems().size())")
     @Mapping(target = "tourists",      source = "items")
     @Mapping(target = "extraServices", expression = "java(b.getExtraServices().stream().map(this::toExtraServiceResponse).toList())")
     BookingDetailResponse toDetailResponse(Booking b);

@@ -20,6 +20,7 @@ public record BookingDetailResponse(
         String status,
         BigDecimal totalPrice,
         BigDecimal discount,
+        int touristsCount,
         List<BookingItemResponse> tourists,
         List<ExtraServiceResponse> extraServices,
         LocalDateTime createdAt,
