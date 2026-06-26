@@ -22,7 +22,8 @@ public class DataSeeder implements ApplicationRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private static final String CLIENT_PASSWORD = "Client@2025";
+    private static final String MANAGER_PASSWORD = "Manager@2025";
+    private static final String CLIENT_PASSWORD  = "Client@2025";
 
     @Override
     public void run(ApplicationArguments args) {
@@ -31,6 +32,18 @@ public class DataSeeder implements ApplicationRunner {
 
     private void seedUsers() {
         List<User> users = List.of(
+            // ── Managers ──────────────────────────────────────────────
+            User.builder()
+                .email("manager@tourmaster.ua")
+                .password(passwordEncoder.encode(MANAGER_PASSWORD))
+                .firstName("Адмін")
+                .lastName("Менеджер")
+                .phone("+380991234567")
+                .role(Role.MANAGER)
+                .loyaltyPoints(0)
+                .build(),
+
+            // ── Clients ───────────────────────────────────────────────
             User.builder()
                 .email("client@tourmaster.ua")
                 .password(passwordEncoder.encode(CLIENT_PASSWORD))
@@ -78,12 +91,12 @@ public class DataSeeder implements ApplicationRunner {
         }
 
         if (created > 0) {
-            log.info("DataSeeder: created {} demo user(s). Password for all clients: {}",
-                    created, CLIENT_PASSWORD);
-            log.info("  client@tourmaster.ua  — звичайний клієнт (0 балів)");
-            log.info("  anna@tourmaster.ua    — срібний рівень (1240 балів)");
-            log.info("  mykola@tourmaster.ua  — золотий рівень (5800 балів)");
-            log.info("  olena@tourmaster.ua   — платиновий рівень (12500 балів)");
+            log.info("DataSeeder: created {} demo user(s).", created);
+            log.info("  manager@tourmaster.ua — менеджер          / {}", MANAGER_PASSWORD);
+            log.info("  client@tourmaster.ua  — клієнт (0 балів)  / {}", CLIENT_PASSWORD);
+            log.info("  anna@tourmaster.ua    — срібний (1240 б.)  / {}", CLIENT_PASSWORD);
+            log.info("  mykola@tourmaster.ua  — золотий (5800 б.)  / {}", CLIENT_PASSWORD);
+            log.info("  olena@tourmaster.ua   — платина (12500 б.) / {}", CLIENT_PASSWORD);
         }
     }
 }
