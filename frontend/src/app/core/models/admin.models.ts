@@ -41,3 +41,15 @@ export interface AdminClient {
   loyaltyPoints: number;
   totalBookings: number;
 }
+
+export interface SalesReport {
+  totalRevenue: number;
+  totalBookings: number;
+  newBookings: number;
+  confirmedBookings: number;
+  paidBookings: number;
+  completedBookings: number;
+  cancelledBookings: number;
+  dailyRevenue: { date: string; revenue: number; bookings: number }[];
+  topTours: { tourId: number; title: string; bookings: number; revenue: number }[];
+}

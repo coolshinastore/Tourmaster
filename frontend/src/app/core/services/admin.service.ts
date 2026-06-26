@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { AdminBooking, AdminClient, AdminTour } from '../models/admin.models';
+import { AdminBooking, AdminClient, AdminTour, SalesReport } from '../models/admin.models';
 import { BookingStatus } from '../models/booking.models';
 import { PageResponse } from '../models/tour.models';
 
@@ -36,5 +36,10 @@ export class AdminService {
     let params = new HttpParams().set('page', page).set('size', size);
     if (q) params = params.set('q', q);
     return this.http.get<PageResponse<AdminClient>>(`${this.base}/clients`, { params });
+  }
+
+  getSalesReport(from: string, to: string) {
+    const params = new HttpParams().set('from', from).set('to', to);
+    return this.http.get<SalesReport>(`${this.base}/reports/sales`, { params });
   }
 }

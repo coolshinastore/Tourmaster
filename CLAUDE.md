@@ -351,9 +351,42 @@ cd backend  && mvn clean package -DskipTests
   - `auth.service.ts` — додано `patchUser()` для оновлення сигналу після збереження профілю
   - `CabinetLayoutComponent` — wishlist count тепер завантажується всередині layout (не передається як Input)
 
-### В роботі / Наступні кроки
-- [ ] PDF-ваучер (`GET /api/bookings/{id}/pdf`) — backend ендпоінт + кнопка у MyBookings
-- [ ] Форма відгуку (`POST /api/reviews`) — після завершення туру у MyBookings
+### Аудит готовності сторінок (2026-06-26)
+
+| Сторінка | Готовність | Що залишилось |
+|---|---|---|
+| `/` Home | ✅ 100% | — |
+| `/tours` Каталог | ✅ 100% | — |
+| `/tours/:id` Деталі туру | ✅ 100% | — |
+| `/auth/login` | ✅ ~95% | "Забули пароль?" (немає flow), Google OAuth |
+| `/auth/register` | ✅ ~95% | Google OAuth |
+| `/booking` Wizard | ✅ ~95% | Apple Pay / Розстрочка — UI only, реального шлюзу немає |
+| `/booking/success` | ✅ 100% | — |
+| `/cabinet/wishlist` | ✅ 100% | — |
+| `/cabinet/profile` | ✅ ~95% | "Видалити акаунт" — кнопка без дії |
+| `/cabinet/bookings` | ⚠️ ~90% | "⤓ Ваучер" і "★ Відгук" — кнопки без дії |
+| `/admin/bookings` | ⚠️ ~90% | "👁 Деталі" — кнопка без modal |
+| `/admin/clients` | ⚠️ ~90% | "👁 Деталі" — кнопка без modal |
+| `/admin` Dashboard | ⚠️ ~80% | Stat cards і "Топ турів" — хардкодовані значення, не API |
+| `/admin/tours` | ⚠️ ~75% | "➕ Додати тур" і "✏️ Редагувати" — кнопки без форми |
+
+### В роботі / Наступні кроки (пріоритет)
+
+**Критичні:**
+- [ ] **Admin Dashboard stats** — підключити stat cards і топ-тури до реального API (`/api/admin/reports/sales` або окремий ендпоінт)
+- [ ] **Форма створення/редагування туру** (`/admin/tours`) — modal/сторінка з полями: title, country, city, hotel, price, dates, etc.
+- [ ] **Форма відгуку** (`POST /api/reviews`) — modal у MyBookings після `status === COMPLETED`
+
+**Другорядні:**
+- [ ] **PDF-ваучер** (`GET /api/bookings/{id}/pdf`) — backend + кнопка "⤓ Ваучер" у MyBookings
+- [ ] **Modal деталей** клієнта та бронювання в адмін-панелі
+- [ ] **"Забули пароль?"** — flow для скидання пароля через email
+- [ ] **Видалення акаунта** — `DELETE /api/users/me` з підтвердженням
+
+**Навмисні заглушки (не потребують реалізації для MVP):**
+- Apple Pay / Google Pay / Розстрочка — оплата через реальний платіжний шлюз (Stripe / LiqPay) виходить за межі курсової роботи
+- Google OAuth — виходить за межі курсової роботи
+- `MOCK_TOUR` у `tour-detail` та `booking-wizard` — graceful fallback при недоступності API, залишається навмисно
 
 ---
 
@@ -373,4 +406,4 @@ cd backend  && mvn clean package -DskipTests
 
 ---
 
-*Останнє оновлення: підключення реальних API до всіх frontend-компонентів (2026-06-26)*  
+*Останнє оновлення: аудит готовності сторінок (2026-06-26)*  

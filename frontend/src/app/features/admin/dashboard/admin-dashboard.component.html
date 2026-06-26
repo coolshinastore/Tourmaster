@@ -4,24 +4,37 @@
   <div class="page-header">
     <div>
       <h1 class="page-title">Дашборд</h1>
-      <p class="page-sub">Аналітика за червень 2026</p>
+      <p class="page-sub">Аналітика за {{ monthLabel() }}</p>
     </div>
     <a routerLink="/admin/bookings" class="btn-primary">+ Нове бронювання</a>
   </div>
 
   <!-- ── Stat cards ──────────────────────────────────────── -->
-  <div class="stats-grid">
-    @for (s of stats; track s.label) {
-      <div class="stat-card">
-        <div class="stat-icon">{{ s.icon }}</div>
-        <div class="stat-value">{{ s.value }}</div>
-        <div class="stat-label">{{ s.label }}</div>
-        <div class="stat-delta" [class.delta-positive]="s.positive" [class.delta-negative]="!s.positive">
-          {{ s.delta }}
+  @if (loadingStats()) {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="stat-card">
+          <div class="skeleton w-8 h-8 rounded-lg mb-3"></div>
+          <div class="skeleton w-24 h-7 rounded mb-2"></div>
+          <div class="skeleton w-32 h-4 rounded mb-1"></div>
+          <div class="skeleton w-28 h-3 rounded"></div>
         </div>
-      </div>
-    }
-  </div>
+      }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      @for (s of stats(); track s.label) {
+        <div class="stat-card">
+          <div class="stat-icon">{{ s.icon }}</div>
+          <div class="stat-value">{{ s.value }}</div>
+          <div class="stat-label">{{ s.label }}</div>
+          <div class="stat-delta" [class.delta-positive]="s.positive" [class.delta-negative]="!s.positive">
+            {{ s.delta }}
+          </div>
+        </div>
+      }
+    </div>
+  }
 
   <!-- ── Two-column section ──────────────────────────────── -->
   <div class="dash-cols">
@@ -61,6 +74,11 @@
                 <td class="text-right price-cell">{{ formatPrice(b.totalPrice) }}</td>
               </tr>
             }
+            @if (recentBookings().length === 0) {
+              <tr>
+                <td colspan="6" class="text-center text-sm text-ink-2 py-6">Бронювань ще немає</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -72,17 +90,28 @@
         <h2 class="dash-card-title">Топ турів</h2>
         <a routerLink="/admin/tours" class="dash-card-link">Всі тури →</a>
       </div>
-      <div class="flex flex-col gap-3">
-        @for (t of topTours; track t.title; let i = $index) {
-          <div class="top-tour-row">
-            <div class="top-tour-rank">{{ i + 1 }}</div>
-            <div class="top-tour-info">
-              <div class="top-tour-title">{{ t.title }}</div>
-              <div class="top-tour-meta">{{ t.bookings }} бронювань · {{ formatPrice(t.revenue) }}</div>
+
+      @if (loadingStats()) {
+        <div class="flex flex-col gap-3">
+          @for (i of [1,2,3,4]; track i) {
+            <div class="skeleton w-full rounded-lg" style="height:52px"></div>
+          }
+        </div>
+      } @else if (topTours().length === 0) {
+        <p class="text-sm text-ink-2 py-4 text-center">Немає даних за поточний місяць</p>
+      } @else {
+        <div class="flex flex-col gap-3">
+          @for (t of topTours(); track t.tourId; let i = $index) {
+            <div class="top-tour-row">
+              <div class="top-tour-rank">{{ i + 1 }}</div>
+              <div class="top-tour-info">
+                <div class="top-tour-title">{{ t.title }}</div>
+                <div class="top-tour-meta">{{ t.bookings }} бронювань · {{ formatPrice(t.revenue) }}</div>
+              </div>
             </div>
-          </div>
-        }
-      </div>
+          }
+        </div>
+      }
     </div>
 
   </div>
