@@ -1,8 +1,9 @@
 package com.tourmaster.service;
 
 import com.tourmaster.entity.Booking;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -10,13 +11,19 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class NotificationService {
 
-    private final JavaMailSender mailSender;
+    @Setter
+    @Autowired(required = false)
+    private JavaMailSender mailSender;
 
     @Async
     public void sendBookingStatusChanged(Booking booking) {
+        if (mailSender == null) {
+            log.warn("Mail sender not configured — skipping notification for booking {}", booking.getId());
+            return;
+        }
+
         String email = booking.getUser().getEmail();
         String status = booking.getStatus().name();
         String tourTitle = booking.getTourDate().getTour().getTitle();
