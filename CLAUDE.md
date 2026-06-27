@@ -64,9 +64,10 @@
 | ОС сервера | Ubuntu Server 22.04 LTS |
 | Контейнеризація | Docker + Docker Compose |
 | Reverse proxy | Nginx |
-| Хмара | (за вибором: VPS / DigitalOcean / AWS EC2) |
+| Хмара | Kamatera VPS |
+| SSL | Let's Encrypt (certbot standalone) |
 | CI/CD | GitHub Actions |
-| Резервне копіювання | Автоматичний pg_dump раз на добу |
+| Резервне копіювання | Автоматичний pg_dump раз на добу (`deploy/backup.sh`) |
 
 ---
 

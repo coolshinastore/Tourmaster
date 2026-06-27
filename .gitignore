@@ -24,3 +24,6 @@ frontend/src/tailwind-out.css
 # OS
 .DS_Store
 Thumbs.db
+
+# Deployment
+backups/
