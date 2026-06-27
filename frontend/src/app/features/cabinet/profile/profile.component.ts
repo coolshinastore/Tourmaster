@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { CabinetLayoutComponent } from '../layout/cabinet-layout.component';
 import { AuthService } from '../../../core/services/auth.service';
@@ -22,6 +23,7 @@ export class ProfileComponent implements OnInit {
   private auth = inject(AuthService);
   private userService = inject(UserService);
   private fb = inject(FormBuilder);
+  private router = inject(Router);
 
   readonly user = this.auth.user;
 
@@ -30,6 +32,8 @@ export class ProfileComponent implements OnInit {
   passwordSaved = signal(false);
   passwordSaving = signal(false);
   passwordError = signal('');
+  showDeleteConfirm = signal(false);
+  deleteError = signal('');
 
   profileForm = this.fb.group({
     firstName: [this.user()?.firstName ?? '', [Validators.required, Validators.minLength(2)]],
@@ -87,6 +91,20 @@ export class ProfileComponent implements OnInit {
       error: (err) => {
         this.passwordSaving.set(false);
         this.passwordError.set(err?.error?.message ?? 'Не вдалося змінити пароль');
+      },
+    });
+  }
+
+  deleteAccount() {
+    this.deleteError.set('');
+    this.userService.deleteAccount().subscribe({
+      next: () => {
+        this.auth.logout();
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        this.showDeleteConfirm.set(false);
+        this.deleteError.set(err?.error?.message ?? 'Не вдалося видалити акаунт. Спробуйте пізніше.');
       },
     });
   }

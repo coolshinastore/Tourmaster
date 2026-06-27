@@ -69,7 +69,8 @@
                 </span>
               </td>
               <td class="actions-cell">
-                <button class="btn-icon" type="button" title="Деталі">👁</button>
+                <button class="btn-icon" type="button" title="Деталі"
+                        (click)="openDetails(c)">👁</button>
               </td>
             </tr>
           }
@@ -79,3 +80,46 @@
   </div>
 
 </app-admin-layout>
+
+<!-- ── Client details modal ───────────────────────────────── -->
+@if (viewClient(); as c) {
+  <div class="modal-overlay" (click)="closeDetails()"></div>
+  <div class="detail-modal">
+    <div class="modal-header">
+      <div class="modal-avatar">{{ (c.firstName.charAt(0) + c.lastName.charAt(0)).toUpperCase() }}</div>
+      <div class="modal-header-info">
+        <div class="modal-title">{{ c.firstName }} {{ c.lastName }}</div>
+        <div class="modal-sub">{{ c.email }}</div>
+      </div>
+      <button class="modal-close" type="button" (click)="closeDetails()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section-title">Контакти</div>
+      <div class="detail-grid">
+        <span class="dl">Email</span>     <span class="dv">{{ c.email }}</span>
+        <span class="dl">Телефон</span>   <span class="dv">{{ c.phone || '—' }}</span>
+      </div>
+
+      <div class="detail-section-title">Програма лояльності</div>
+      <div class="detail-grid">
+        <span class="dl">Бали</span>      <span class="dv">{{ c.loyaltyPoints }}</span>
+        <span class="dl">Рівень</span>
+        <span class="dv">
+          <span class="loyalty-pill"
+                [style.background]="loyaltyConfig(loyaltyLevel(c.loyaltyPoints)).bg"
+                [style.color]="loyaltyConfig(loyaltyLevel(c.loyaltyPoints)).color">
+            {{ loyaltyConfig(loyaltyLevel(c.loyaltyPoints)).icon }} {{ loyaltyConfig(loyaltyLevel(c.loyaltyPoints)).label }}
+          </span>
+        </span>
+      </div>
+
+      <div class="detail-section-title">Активність</div>
+      <div class="detail-grid">
+        <span class="dl">Бронювань</span> <span class="dv booking-count">{{ c.totalBookings }}</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" type="button" (click)="closeDetails()">Закрити</button>
+    </div>
+  </div>
+}

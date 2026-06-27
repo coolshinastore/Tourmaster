@@ -45,4 +45,11 @@ public class UserController {
     ) {
         userService.changePassword(user, request);
     }
+
+    @DeleteMapping("/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Видалити акаунт (незворотня дія)")
+    public void deleteAccount(@AuthenticationPrincipal User user) {
+        userService.deleteAccount(user);
+    }
 }

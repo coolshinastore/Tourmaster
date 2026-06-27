@@ -47,6 +47,14 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
+  forgotPassword(email: string) {
+    return this.http.post<void>(`${this.api}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post<void>(`${this.api}/reset-password`, { token, newPassword });
+  }
+
   getAccessToken(): string | null {
     return localStorage.getItem(ACCESS_KEY);
   }

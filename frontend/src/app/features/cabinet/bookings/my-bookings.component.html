@@ -68,10 +68,16 @@
 
                 <div class="flex gap-2">
                   @if (b.status === 'PAID' || b.status === 'CONFIRMED') {
-                    <button class="btn-outline" type="button">⤓ Ваучер</button>
+                    <button class="btn-outline" type="button"
+                            (click)="downloadVoucher(b)">⤓ Ваучер</button>
                   }
                   @if (isCompleted(b)) {
-                    <button class="btn-review" type="button">★ Відгук</button>
+                    @if (isReviewed(b)) {
+                      <span class="review-done">★ Відгук залишено</span>
+                    } @else {
+                      <button class="btn-review" type="button"
+                              (click)="openReview(b)">★ Відгук</button>
+                    }
                     <a [routerLink]="['/tours', b.tourId]" class="btn-outline">Повторити</a>
                   }
                   @if (canCancel(b)) {
@@ -91,3 +97,63 @@
   }
 
 </app-cabinet-layout>
+
+<!-- ── Review modal ───────────────────────────────────────── -->
+@if (reviewBooking(); as b) {
+  <div class="modal-overlay" (click)="closeReview()"></div>
+
+  <div class="review-modal">
+    <!-- Header -->
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Ваш відгук</div>
+        <div class="modal-sub">{{ b.tourTitle }}</div>
+      </div>
+      <button class="modal-close" type="button" (click)="closeReview()">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+      <!-- Star rating -->
+      <div class="rating-label">Оцінка *</div>
+      <div class="star-row">
+        @for (s of stars; track s) {
+          <button type="button"
+                  class="star-btn"
+                  [class]="starClass(s)"
+                  (mouseenter)="reviewHover.set(s)"
+                  (mouseleave)="reviewHover.set(0)"
+                  (click)="reviewRating.set(s)">★</button>
+        }
+        @if (reviewRating() > 0) {
+          <span class="rating-hint">{{ ['', 'Жахливо', 'Погано', 'Нормально', 'Добре', 'Чудово'][reviewRating()] }}</span>
+        }
+      </div>
+
+      <!-- Comment -->
+      <div class="comment-label">Коментар</div>
+      <textarea class="comment-input"
+                [ngModel]="reviewComment()"
+                (ngModelChange)="reviewComment.set($event)"
+                placeholder="Розкажіть про враження від туру, готелю, організації…"
+                rows="4"
+                maxlength="1000"></textarea>
+      <div class="char-count">{{ reviewComment().length }} / 1000</div>
+
+      <!-- Error -->
+      @if (reviewError()) {
+        <div class="modal-error">⚠ {{ reviewError() }}</div>
+      }
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn-cancel" type="button" (click)="closeReview()">Скасувати</button>
+      <button class="btn-submit" type="button"
+              [disabled]="reviewSubmitting() || reviewRating() === 0"
+              (click)="submitReview()">
+        @if (reviewSubmitting()) { Збереження… } @else { Надіслати відгук }
+      </button>
+    </div>
+  </div>
+}

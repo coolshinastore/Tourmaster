@@ -1,11 +1,14 @@
 package com.tourmaster.controller;
 
+import com.tourmaster.dto.request.ForgotPasswordRequest;
 import com.tourmaster.dto.request.LoginRequest;
 import com.tourmaster.dto.request.RefreshRequest;
 import com.tourmaster.dto.request.RegisterRequest;
+import com.tourmaster.dto.request.ResetPasswordRequest;
 import com.tourmaster.dto.response.AuthResponse;
 import com.tourmaster.entity.User;
 import com.tourmaster.service.AuthService;
+import com.tourmaster.service.PasswordResetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -48,5 +52,19 @@ public class AuthController {
     public ResponseEntity<Void> logout(@AuthenticationPrincipal User user) {
         authService.logout(user);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/forgot-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Запит на скидання пароля (надсилає email з посиланням)")
+    public void forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        passwordResetService.requestReset(request.email());
+    }
+
+    @PostMapping("/reset-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Скидання пароля за токеном з email")
+    public void resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request.token(), request.newPassword());
     }
 }

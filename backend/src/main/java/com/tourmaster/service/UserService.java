@@ -40,6 +40,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void deleteAccount(User user) {
+        userRepository.deleteById(user.getId());
+    }
+
     private UserProfileResponse toResponse(User u) {
         return new UserProfileResponse(
                 u.getId(), u.getEmail(), u.getFirstName(), u.getLastName(),

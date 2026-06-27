@@ -82,6 +82,13 @@
 			<version>${springdoc.version}</version>
 		</dependency>
 
+		<!-- Apache PDFBox — PDF generation -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>3.0.3</version>
+		</dependency>
+
 		<!-- MapStruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>

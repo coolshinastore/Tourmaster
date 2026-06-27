@@ -7,14 +7,20 @@ import com.tourmaster.dto.response.ExtraServiceResponse;
 import com.tourmaster.dto.response.PageResponse;
 import com.tourmaster.entity.User;
 import com.tourmaster.service.BookingService;
+import com.tourmaster.service.VoucherPdfService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,6 +30,7 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final VoucherPdfService voucherPdfService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -69,5 +76,24 @@ public class BookingController {
     @Operation(summary = "Список доступних додаткових послуг")
     public List<ExtraServiceResponse> getExtraServices() {
         return bookingService.getExtraServices();
+    }
+
+    @GetMapping("/{id}/pdf")
+    @Operation(summary = "Завантажити PDF-ваучер для бронювання")
+    public ResponseEntity<byte[]> downloadVoucher(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
+        BookingDetailResponse booking = bookingService.getById(id, user);
+        try {
+            byte[] pdf = voucherPdfService.generate(booking);
+            String filename = "voucher-TM-" + String.format("%05d", id) + ".pdf";
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                    .body(pdf);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Не вдалося згенерувати PDF");
+        }
     }
 }

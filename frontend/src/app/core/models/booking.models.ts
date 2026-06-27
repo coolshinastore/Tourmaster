@@ -42,6 +42,12 @@ export interface BookingDetail extends BookingSummary {
   updatedAt: string;
 }
 
+export interface CreateReviewRequest {
+  bookingId: number;
+  rating: number;
+  comment: string;
+}
+
 export interface CreateBookingRequest {
   tourDateId: number;
   tourists: {

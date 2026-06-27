@@ -129,10 +129,27 @@
     <!-- ── Danger zone ─────────────────────────────────────── -->
     <div class="profile-card danger-card mt-5">
       <h2 class="card-title danger-title">Небезпечна зона</h2>
-      <p class="text-sm text-ink-2 mt-1">Видалення акаунта — незворотна операція. Всі дані буде втрачено.</p>
-      <button class="btn-danger mt-4" type="button">Видалити акаунт</button>
+      <p class="text-sm text-ink-2 mt-1">Видалення акаунта — незворотна операція. Всі бронювання, відгуки та дані буде видалено.</p>
+      @if (deleteError()) {
+        <div class="save-error mt-3">⚠ {{ deleteError() }}</div>
+      }
+      <button class="btn-danger mt-4" type="button" (click)="showDeleteConfirm.set(true)">Видалити акаунт</button>
     </div>
 
   </div>
 
 </app-cabinet-layout>
+
+<!-- ── Delete confirm modal ──────────────────────────────── -->
+@if (showDeleteConfirm()) {
+  <div class="modal-overlay" (click)="showDeleteConfirm.set(false)"></div>
+  <div class="confirm-modal">
+    <div class="confirm-icon">🗑</div>
+    <h3 class="confirm-title">Видалити акаунт?</h3>
+    <p class="confirm-body">Ця дія незворотна. Всі ваші бронювання, відгуки та особисті дані буде назавжди видалено.</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" type="button" (click)="showDeleteConfirm.set(false)">Скасувати</button>
+      <button class="btn-danger-confirm" type="button" (click)="deleteAccount()">Так, видалити</button>
+    </div>
+  </div>
+}

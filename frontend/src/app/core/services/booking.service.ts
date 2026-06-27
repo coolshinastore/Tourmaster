@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { BookingDetail, BookingSummary, CreateBookingRequest, ExtraService } from '../models/booking.models';
+import { BookingDetail, BookingSummary, CreateBookingRequest, CreateReviewRequest, ExtraService } from '../models/booking.models';
 import { PageResponse } from '../models/tour.models';
 
 @Injectable({ providedIn: 'root' })
@@ -30,5 +30,13 @@ export class BookingService {
 
   getExtraServices() {
     return this.http.get<ExtraService[]>(`${this.api}/extra-services`);
+  }
+
+  createReview(request: CreateReviewRequest) {
+    return this.http.post<void>(`${environment.apiUrl}/reviews`, request);
+  }
+
+  downloadVoucher(id: number) {
+    return this.http.get(`${this.api}/${id}/pdf`, { responseType: 'blob' });
   }
 }

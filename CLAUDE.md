@@ -351,37 +351,39 @@ cd backend  && mvn clean package -DskipTests
   - `auth.service.ts` — додано `patchUser()` для оновлення сигналу після збереження профілю
   - `CabinetLayoutComponent` — wishlist count тепер завантажується всередині layout (не передається як Input)
 
-### Аудит готовності сторінок (2026-06-26)
+- [x] **Backend: ReviewController + ReviewService** — `POST /api/reviews`; валідація: статус COMPLETED, власник бронювання, відсутність дубліката; `CreateReviewRequest` DTO
+- [x] **Frontend: форма відгуку** — modal у MyBookingsComponent (зірковий рейтинг 1–5 з hover, textarea, лічильник символів, pop-in анімація); після успіху кнопка змінюється на "★ Відгук залишено"
+- [x] **Admin Dashboard stats** — `SalesReport` інтерфейс, `getSalesReport()` у AdminService, stat cards і топ-тури з реального API через `forkJoin`; skeleton-лоадери; динамічна назва місяця
+- [x] **Форма створення/редагування туру** — slide-in drawer з 4 секціями (основне, готель, ціна/тривалість, медіа); `createTour()` / `updateTour()` у AdminService; `TourUpsertRequest` інтерфейс; валідація
+
+### Аудит готовності сторінок (2026-06-26, оновлено)
 
 | Сторінка | Готовність | Що залишилось |
 |---|---|---|
 | `/` Home | ✅ 100% | — |
 | `/tours` Каталог | ✅ 100% | — |
 | `/tours/:id` Деталі туру | ✅ 100% | — |
-| `/auth/login` | ✅ ~95% | "Забули пароль?" (немає flow), Google OAuth |
+| `/auth/login` | ✅ ~97% | Google OAuth — навмисна заглушка |
 | `/auth/register` | ✅ ~95% | Google OAuth |
 | `/booking` Wizard | ✅ ~95% | Apple Pay / Розстрочка — UI only, реального шлюзу немає |
 | `/booking/success` | ✅ 100% | — |
 | `/cabinet/wishlist` | ✅ 100% | — |
-| `/cabinet/profile` | ✅ ~95% | "Видалити акаунт" — кнопка без дії |
-| `/cabinet/bookings` | ⚠️ ~90% | "⤓ Ваучер" і "★ Відгук" — кнопки без дії |
-| `/admin/bookings` | ⚠️ ~90% | "👁 Деталі" — кнопка без modal |
-| `/admin/clients` | ⚠️ ~90% | "👁 Деталі" — кнопка без modal |
-| `/admin` Dashboard | ⚠️ ~80% | Stat cards і "Топ турів" — хардкодовані значення, не API |
-| `/admin/tours` | ⚠️ ~75% | "➕ Додати тур" і "✏️ Редагувати" — кнопки без форми |
+| `/cabinet/profile` | ✅ 100% | — |
+| `/cabinet/bookings` | ✅ 100% | — |
+| `/admin` Dashboard | ✅ 100% | — |
+| `/admin/tours` | ✅ ~95% | Управління датами вильоту — окрема форма не реалізована |
+| `/admin/bookings` | ✅ 100% | — |
+| `/admin/clients` | ✅ 100% | — |
 
-### В роботі / Наступні кроки (пріоритет)
+- [x] **PDF-ваучер** — `VoucherPdfService` (PDFBox, транслітерація), `GET /api/bookings/{id}/pdf`, кнопка "⤓ Ваучер" у MyBookings (PAID/CONFIRMED)
+- [x] **Modal деталей** бронювання (admin-bookings) та клієнта (admin-clients) — slide-up modal з сіткою полів, overlay-click-to-close
 
-**Критичні:**
-- [ ] **Admin Dashboard stats** — підключити stat cards і топ-тури до реального API (`/api/admin/reports/sales` або окремий ендпоінт)
-- [ ] **Форма створення/редагування туру** (`/admin/tours`) — modal/сторінка з полями: title, country, city, hotel, price, dates, etc.
-- [ ] **Форма відгуку** (`POST /api/reviews`) — modal у MyBookings після `status === COMPLETED`
+- [x] **"Забули пароль?"** — `PasswordResetService` (in-memory tokens, 30-хв TTL, автопурж @Scheduled); `POST /api/auth/forgot-password` + `POST /api/auth/reset-password`; `ForgotPasswordComponent` (success screen запобігає email enumeration), `ResetPasswordComponent` (token з queryParam, auto-redirect після успіху); посилання з login форми
+- [x] **Видалення акаунта** — `DELETE /api/users/me`; V4 Flyway міграція (ON DELETE CASCADE для bookings/reviews/notifications); `UserService.deleteAccount()`; confirm modal у ProfileComponent з pop-in анімацією; після успіху → logout → головна
 
-**Другорядні:**
-- [ ] **PDF-ваучер** (`GET /api/bookings/{id}/pdf`) — backend + кнопка "⤓ Ваучер" у MyBookings
-- [ ] **Modal деталей** клієнта та бронювання в адмін-панелі
-- [ ] **"Забули пароль?"** — flow для скидання пароля через email
-- [ ] **Видалення акаунта** — `DELETE /api/users/me` з підтвердженням
+### В роботі / Наступні кроки
+
+Всі функціональні вимоги MVP виконано. Залишаються навмисні заглушки:
 
 **Навмисні заглушки (не потребують реалізації для MVP):**
 - Apple Pay / Google Pay / Розстрочка — оплата через реальний платіжний шлюз (Stripe / LiqPay) виходить за межі курсової роботи
@@ -406,4 +408,4 @@ cd backend  && mvn clean package -DskipTests
 
 ---
 
-*Останнє оновлення: аудит готовності сторінок (2026-06-26)*  
+*Останнє оновлення: PDF-ваучер + модалі адміна + видалення акаунта + забули пароль (2026-06-27)*

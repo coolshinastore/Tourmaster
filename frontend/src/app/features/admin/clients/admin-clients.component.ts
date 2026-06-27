@@ -18,6 +18,7 @@ export class AdminClientsComponent implements OnInit {
   loading = signal(true);
   searchQuery = signal('');
   filterLoyalty = signal<'ALL' | 'GOLD' | 'SILVER' | 'BRONZE'>('ALL');
+  viewClient = signal<AdminClient | null>(null);
 
   filteredClients = computed(() => {
     const q = this.searchQuery().toLowerCase();
@@ -43,6 +44,9 @@ export class AdminClientsComponent implements OnInit {
       error: () => this.loading.set(false),
     });
   }
+
+  openDetails(c: AdminClient) { this.viewClient.set(c); }
+  closeDetails()              { this.viewClient.set(null); }
 
   loyaltyLevel(points: number): 'GOLD' | 'SILVER' | 'BRONZE' {
     if (points >= 3000) return 'GOLD';

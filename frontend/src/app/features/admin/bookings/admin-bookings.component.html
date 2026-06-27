@@ -82,7 +82,8 @@
               <td class="actions-cell">
                 <button class="btn-icon" type="button" title="Змінити статус"
                         (click)="openEditStatus(b)">✏️</button>
-                <button class="btn-icon" type="button" title="Деталі">👁</button>
+                <button class="btn-icon" type="button" title="Деталі"
+                        (click)="openDetails(b)">👁</button>
               </td>
             </tr>
           }
@@ -92,3 +93,47 @@
   </div>
 
 </app-admin-layout>
+
+<!-- ── Booking details modal ──────────────────────────────── -->
+@if (viewBooking(); as b) {
+  <div class="modal-overlay" (click)="closeDetails()"></div>
+  <div class="detail-modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">{{ bookingNum(b.id) }}</div>
+        <span class="status-pill"
+              [style.background]="statusConfig(b.status).bg"
+              [style.color]="statusConfig(b.status).color">
+          {{ statusConfig(b.status).label }}
+        </span>
+      </div>
+      <button class="modal-close" type="button" (click)="closeDetails()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section-title">Клієнт</div>
+      <div class="detail-grid">
+        <span class="dl">Ім'я</span>      <span class="dv">{{ b.clientFullName }}</span>
+        <span class="dl">Email</span>     <span class="dv">{{ b.clientEmail }}</span>
+        <span class="dl">Телефон</span>   <span class="dv">{{ b.clientPhone || '—' }}</span>
+      </div>
+
+      <div class="detail-section-title">Тур</div>
+      <div class="detail-grid">
+        <span class="dl">Назва</span>     <span class="dv">{{ b.tourTitle }}</span>
+        <span class="dl">Країна</span>    <span class="dv">{{ b.country }}</span>
+        <span class="dl">Виліт</span>     <span class="dv">{{ b.departureDate }}</span>
+        <span class="dl">Повернення</span><span class="dv">{{ b.returnDate }}</span>
+        <span class="dl">Туристів</span>  <span class="dv">{{ b.touristsCount }}</span>
+      </div>
+
+      <div class="detail-section-title">Фінанси</div>
+      <div class="detail-grid">
+        <span class="dl">Сума</span>      <span class="dv price-highlight">{{ formatPrice(b.totalPrice) }}</span>
+        <span class="dl">Дата</span>      <span class="dv">{{ b.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-close" type="button" (click)="closeDetails()">Закрити</button>
+    </div>
+  </div>
+}

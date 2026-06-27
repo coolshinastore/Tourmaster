@@ -23,6 +23,7 @@ export class AdminBookingsComponent implements OnInit {
   filterStatus = signal<BookingStatus | 'ALL'>('ALL');
   editStatusId = signal<number | null>(null);
   editStatusValue = signal<BookingStatus>('NEW');
+  viewBooking = signal<AdminBooking | null>(null);
 
   readonly statusOptions: BookingStatus[] = STATUS_ORDER;
 
@@ -78,6 +79,9 @@ export class AdminBookingsComponent implements OnInit {
     };
     return map[status];
   }
+
+  openDetails(b: AdminBooking) { this.viewBooking.set(b); }
+  closeDetails()               { this.viewBooking.set(null); }
 
   bookingNum(id: number): string {
     return `TM-${String(id).padStart(5, '0')}`;

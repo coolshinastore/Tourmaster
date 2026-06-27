@@ -23,6 +23,10 @@ export class UserService {
     return this.http.patch<void>(`${this.usersApi}/me/password`, request);
   }
 
+  deleteAccount() {
+    return this.http.delete<void>(`${this.usersApi}/me`);
+  }
+
   getWishlist() {
     return this.http.get<TourSummary[]>(this.wishlistApi);
   }
