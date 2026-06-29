@@ -102,7 +102,7 @@ export class FooterComponent {
     { label: 'Про нас', path: '/about' },
     { label: 'Відгуки', path: '/reviews' },
     { label: 'Контакти', path: '/contacts' },
-    { label: 'Блог', path: '/' },
+
   ];
 
   protected contacts = [
