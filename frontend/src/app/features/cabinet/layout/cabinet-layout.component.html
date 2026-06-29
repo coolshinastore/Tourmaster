@@ -41,6 +41,13 @@
              [class.cabinet-nav-active]="activeSection === 'profile'">
             👤 Мій профіль
           </a>
+          @if (user()?.role === 'MANAGER') {
+            <a routerLink="/admin"
+               class="cabinet-nav-item"
+               style="color:#F97316; font-weight:700">
+              ⚙ Адмін-панель
+            </a>
+          }
           <button class="cabinet-nav-item cabinet-nav-logout" (click)="logout()">
             ↩ Вийти
           </button>
