@@ -99,9 +99,9 @@ export class FooterComponent {
   ];
 
   protected companyLinks = [
-    { label: 'Про нас', path: '/' },
-    { label: 'Відгуки', path: '/' },
-    { label: 'Контакти', path: '/' },
+    { label: 'Про нас', path: '/about' },
+    { label: 'Відгуки', path: '/reviews' },
+    { label: 'Контакти', path: '/contacts' },
     { label: 'Блог', path: '/' },
   ];
 

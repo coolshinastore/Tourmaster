@@ -81,5 +81,17 @@ export const routes: Routes = [
     canActivate: [managerGuard],
     loadComponent: () => import('./features/admin/clients/admin-clients.component').then(m => m.AdminClientsComponent),
   },
+  {
+    path: 'about',
+    loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent),
+  },
+  {
+    path: 'contacts',
+    loadComponent: () => import('./features/contacts/contacts.component').then(m => m.ContactsComponent),
+  },
+  {
+    path: 'reviews',
+    loadComponent: () => import('./features/reviews/reviews-page.component').then(m => m.ReviewsPageComponent),
+  },
   { path: '**', redirectTo: '' },
 ];

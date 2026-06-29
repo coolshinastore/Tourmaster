@@ -119,8 +119,8 @@ export class HeaderComponent {
     { label: 'Гарячі тури', path: '/tours' },
     { label: 'Напрямки',    path: '/tours' },
     { label: 'Готелі',      path: '/tours' },
-    { label: 'Про нас',     path: '/' },
-    { label: 'Контакти',    path: '/' },
+    { label: 'Про нас',     path: '/about' },
+    { label: 'Контакти',    path: '/contacts' },
   ];
 
   @HostListener('window:scroll')
