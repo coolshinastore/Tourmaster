@@ -117,8 +117,6 @@ export class HeaderComponent {
 
   protected navLinks = [
     { label: 'Гарячі тури', path: '/tours' },
-    { label: 'Напрямки',    path: '/tours' },
-    { label: 'Готелі',      path: '/tours' },
     { label: 'Про нас',     path: '/about' },
     { label: 'Контакти',    path: '/contacts' },
   ];
