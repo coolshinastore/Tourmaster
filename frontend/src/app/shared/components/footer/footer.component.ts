@@ -36,7 +36,7 @@ import { RouterLink } from '@angular/router';
             <ul class="flex flex-col gap-2">
               @for (link of tourLinks; track link.label) {
                 <li>
-                  <a [routerLink]="link.path" class="text-sm hover:text-white transition-colors">
+                  <a [routerLink]="link.path" [queryParams]="link.params" class="text-sm hover:text-white transition-colors">
                     {{ link.label }}
                   </a>
                 </li>
@@ -91,11 +91,11 @@ export class FooterComponent {
   ];
 
   protected tourLinks = [
-    { label: 'Гарячі тури', path: '/tours' },
-    { label: 'Тури в Туреччину', path: '/tours' },
-    { label: 'Тури в Єгипет', path: '/tours' },
-    { label: 'Тури в ОАЕ', path: '/tours' },
-    { label: 'Тури в Таїланд', path: '/tours' },
+    { label: 'Гарячі тури',    path: '/tours', params: { badge: 'HIT' } },
+    { label: 'Тури в Туреччину', path: '/tours', params: { country: 'Туреччина' } },
+    { label: 'Тури в Єгипет',  path: '/tours', params: { country: 'Єгипет' } },
+    { label: 'Тури в ОАЕ',     path: '/tours', params: { country: 'ОАЕ' } },
+    { label: 'Тури в Таїланд', path: '/tours', params: { country: 'Таїланд' } },
   ];
 
   protected companyLinks = [
